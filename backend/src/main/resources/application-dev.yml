@@ -3,3 +3,7 @@ spring:
     url: jdbc:mysql://localhost:3306/issue_tracker
     username: common
     password: asdf1234
+
+  sql:
+    init:
+      mode: always
