@@ -87,6 +87,9 @@ export const lightMode = {
     text: {
       default: colors.red,
     },
+    surface: {
+      default: colors.red,
+    },
     border: {
       default: colors.red,
     },
@@ -143,6 +146,9 @@ export const darkMode = {
   },
   danger: {
     text: {
+      default: colors.red,
+    },
+    surface: {
       default: colors.red,
     },
     border: {
