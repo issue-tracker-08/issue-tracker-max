@@ -8,9 +8,9 @@ export default function DropdownPanel({
   dropdownPanel: DropdownPanelType;
 }) {
   const generatePanel = (dropdownPanel: DropdownPanelType) => {
-    const { panelType, dropdownName, dropdownList } = dropdownPanel;
+    const { variant, dropdownName, dropdownList } = dropdownPanel;
 
-    switch (panelType) {
+    switch (variant) {
       case "filter":
         return (
           <>
@@ -21,7 +21,7 @@ export default function DropdownPanel({
               {dropdownName !== "author" && (
                 <DropdownItem
                   item={{
-                    type: "onlyContent",
+                    variant: "plain",
                     name: dropdownName,
                     content: `${DropdownNameKOR[dropdownName]}${
                       dropdownName === "assignee" ? "가" : "이"
@@ -67,6 +67,7 @@ const StyledDropdownPanel = styled.div`
   border: ${({ theme: { border } }) => border.default};
   border-radius: ${({ theme: { radius } }) => radius.l};
   overflow: hidden;
+  box-shadow: ${({ theme: { boxShadow } }) => boxShadow};
 `;
 
 const Header = styled.header`

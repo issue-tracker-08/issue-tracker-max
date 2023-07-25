@@ -27,24 +27,28 @@ export default function App() {
         dropdownName="assignee"
         dropdownList={[
           {
-            type: "withImg",
+            variant: "withImg",
             name: "assignee",
             content: "Kakamotobiscuitcookie",
             imgSrc: "https://avatars.githubusercontent.com/u/79886384?v=4",
           },
           {
-            type: "withImg",
+            variant: "withImg",
             name: "assignee",
             content: "Zoey",
             imgSrc: "https://avatars.githubusercontent.com/u/111998760?v=4",
           },
           {
-            type: "withColor",
+            variant: "withColor",
             name: "label",
             content: "documentation",
             colorFill: "blue",
           },
-          { type: "onlyContent", name: "milestone", content: "FE Sprint #1" },
+          {
+            variant: "plain",
+            name: "milestone",
+            content: "FE Sprint #1",
+          },
         ]}
       />
     </ThemeProvider>

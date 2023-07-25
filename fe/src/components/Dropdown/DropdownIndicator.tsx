@@ -27,7 +27,7 @@ export default function DropdownIndicator({
       {isOpen && (
         <DropdownPanel
           dropdownPanel={{
-            panelType: "filter",
+            variant: "filter",
             dropdownName,
             dropdownList,
           }}
@@ -64,6 +64,7 @@ const Button = styled.button<{ $isOpen: boolean }>`
   img {
     width: 16px;
     height: 16px;
+    filter: ${({ theme: { iconFilter } }) => iconFilter};
     transform: ${({ $isOpen }) => ($isOpen ? "rotate(180deg)" : "")};
   }
 `;

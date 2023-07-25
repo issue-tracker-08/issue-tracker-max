@@ -8,17 +8,17 @@ export enum DropdownNameKOR {
 export type DropdownName = keyof typeof DropdownNameKOR;
 
 export type DropdownPanelType = {
-  panelType: "filter" | "select";
+  variant: "filter" | "select";
   dropdownName: DropdownName;
   dropdownList: DropdownItemType[];
 };
 
 export type DropdownItemType =
   | {
-      type: "withImg";
+      variant: "withImg";
       name: string;
       content: string;
       imgSrc: string;
     }
-  | { type: "withColor"; name: string; content: string; colorFill: string }
-  | { type: "onlyContent"; name: string; content: string };
+  | { variant: "withColor"; name: string; content: string; colorFill: string }
+  | { variant: "plain"; name: string; content: string };

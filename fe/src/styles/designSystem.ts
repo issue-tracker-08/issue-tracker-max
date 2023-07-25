@@ -16,6 +16,13 @@ const colors = {
   red: "#FF3B30",
 };
 
+const filter = {
+  grey400:
+    "brightness(0) saturate(100%) invert(87%) sepia(6%) saturate(631%) hue-rotate(195deg) brightness(90%) contrast(90%)",
+  grey700:
+    "brightness(0) saturate(100%) invert(29%) sepia(8%) saturate(1851%) hue-rotate(207deg) brightness(92%) contrast(84%)",
+};
+
 const opacity = {
   hover: 0.8,
   press: 0.64,
@@ -27,12 +34,6 @@ const radius = {
   m: "12px",
   l: "16px",
   half: "50%",
-};
-
-const border = {
-  default: `1px solid ${colors.grey300}`,
-  icon: `1.6px solid ${colors.grey300}`,
-  dash: `1px dash ${colors.grey300}`,
 };
 
 const font = {
@@ -95,11 +96,16 @@ export const lightMode = {
     navy: colors.navy,
     red: colors.red,
   },
+  border: {
+    default: `1px solid ${colors.grey300}`,
+    icon: `1.6px solid ${colors.grey300}`,
+    dash: `1px dash ${colors.grey300}`,
+  },
+  iconFilter: `${filter.grey700}`,
   boxShadow: `0px 0px 8px 0px ${colors.grey900}${decToHex(
     opacity.transparent
   )}`,
   colors,
-  border,
   radius,
   opacity,
   font,
@@ -148,9 +154,14 @@ export const darkMode = {
     navy: colors.navy,
     red: colors.red,
   },
+  border: {
+    default: `1px solid ${colors.grey600}`,
+    icon: `1.6px solid ${colors.grey600}`,
+    dash: `1px dash ${colors.grey600}`,
+  },
+  iconFilter: `${filter.grey400}`,
   boxShadow: `0px 0px 16px 0px ${colors.grey900}${decToHex(opacity.hover)}`,
   colors,
-  border,
   radius,
   opacity,
   font,

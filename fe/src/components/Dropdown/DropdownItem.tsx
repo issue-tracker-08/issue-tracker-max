@@ -5,11 +5,14 @@ import { DropdownItemType } from "./types";
 
 export default function DropdownItem({ item }: { item: DropdownItemType }) {
   const generateItem = (item: DropdownItemType) => {
-    switch (item.type) {
+    switch (item.variant) {
       case "withImg":
         return (
           <Label htmlFor={item.content}>
-            <Avatar src={item.imgSrc} alt={`${item.type}: ${item.content}`} />
+            <Avatar
+              src={item.imgSrc}
+              alt={`${item.variant}: ${item.content}`}
+            />
             <Content>{item.content}</Content>
             <input
               className="radio-input"
@@ -34,7 +37,7 @@ export default function DropdownItem({ item }: { item: DropdownItemType }) {
             <img className="radio-img" src={checkOffCircle} alt="" />
           </Label>
         );
-      case "onlyContent":
+      case "plain":
         return (
           <Label htmlFor={item.content}>
             <Content>{item.content}</Content>
@@ -48,7 +51,7 @@ export default function DropdownItem({ item }: { item: DropdownItemType }) {
           </Label>
         );
       default:
-        throw Error("Invalid dropdown type");
+        throw Error("Invalid dropdown item variant");
     }
   };
 
@@ -57,6 +60,7 @@ export default function DropdownItem({ item }: { item: DropdownItemType }) {
 
 const StyledDropdownItem = styled.li`
   width: 100%;
+  background-color: ${({ theme: { neutral } }) => neutral.surface.strong};
 
   &:not(:last-child) {
     border-bottom: ${({ theme: { border } }) => border.default};
@@ -84,7 +88,8 @@ const Label = styled.label`
     content: url(${checkOnCircle});
   }
 
-  .radio-input:checked {
+  .radio-img {
+    filter: ${({ theme: { iconFilter } }) => iconFilter};
   }
 `;
 
