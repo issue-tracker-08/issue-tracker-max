@@ -55,7 +55,7 @@ const font = {
 export const lightMode = {
   neutral: {
     text: {
-      weak: colors.grey400,
+      weak: colors.grey600,
       default: colors.grey700,
       strong: colors.grey900,
     },
