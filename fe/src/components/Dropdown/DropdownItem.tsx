@@ -62,6 +62,10 @@ const StyledDropdownItem = styled.li`
   width: 100%;
   background-color: ${({ theme: { neutral } }) => neutral.surface.strong};
 
+  &:hover {
+    background-color: ${({ theme: { neutral } }) => neutral.surface.bold};
+  }
+
   &:not(:last-child) {
     border-bottom: ${({ theme: { border } }) => border.default};
   }
