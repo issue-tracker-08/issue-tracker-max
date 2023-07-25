@@ -11,4 +11,5 @@ public class Milestone {
 	private String name;
 	private String description;
 	private LocalDateTime dueDate;
+	private Boolean isDeleted;
 }

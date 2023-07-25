@@ -12,6 +12,7 @@ public class Issue {
 	private String content;
 	private Boolean isOpen;
 	private LocalDateTime createdAt;
+	private Boolean isDeleted;
 	private Integer userAccountId;
 	private Integer milestoneId;
 }

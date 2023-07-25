@@ -10,4 +10,5 @@ public class Label {
 	private String description;
 	private String fontColor;
 	private String backgroundColor;
+	private Boolean isDeleted;
 }

@@ -9,4 +9,5 @@ public class UserAccount {
 	private String loginId;
 	private String password;
 	private String profileUrl;
+	private Boolean isDeleted;
 }
