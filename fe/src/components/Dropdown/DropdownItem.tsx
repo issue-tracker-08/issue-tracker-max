@@ -67,7 +67,8 @@ const StyledDropdownItem = styled.li`
   }
 
   &:not(:last-child) {
-    border-bottom: ${({ theme: { border } }) => border.default};
+    border-bottom: ${({ theme: { border, neutral } }) =>
+      `${border.default} ${neutral.border.default}`};
   }
 `;
 
@@ -93,7 +94,7 @@ const Label = styled.label`
   }
 
   .radio-img {
-    filter: ${({ theme: { iconFilter } }) => iconFilter};
+    filter: ${({ theme: { filter } }) => filter.neutralTextDefault};
   }
 `;
 

@@ -16,13 +16,6 @@ const colors = {
   red: "#FF3B30",
 };
 
-const filter = {
-  grey400:
-    "brightness(0) saturate(100%) invert(87%) sepia(6%) saturate(631%) hue-rotate(195deg) brightness(90%) contrast(90%)",
-  grey700:
-    "brightness(0) saturate(100%) invert(29%) sepia(8%) saturate(1851%) hue-rotate(207deg) brightness(92%) contrast(84%)",
-};
-
 const opacity = {
   hover: 0.8,
   press: 0.64,
@@ -34,6 +27,12 @@ const radius = {
   m: "12px",
   l: "16px",
   half: "50%",
+};
+
+const border = {
+  default: `1px solid`,
+  icon: `1.6px solid`,
+  dash: `1px dash`,
 };
 
 const font = {
@@ -87,9 +86,6 @@ export const lightMode = {
     text: {
       default: colors.red,
     },
-    surface: {
-      default: colors.red,
-    },
     border: {
       default: colors.red,
     },
@@ -99,19 +95,24 @@ export const lightMode = {
     navy: colors.navy,
     red: colors.red,
   },
-  border: {
-    default: `1px solid ${colors.grey300}`,
-    icon: `1.6px solid ${colors.grey300}`,
-    dash: `1px dash ${colors.grey300}`,
-  },
-  iconFilter: `${filter.grey700}`,
   boxShadow: `0px 0px 8px 0px ${colors.grey900}${decToHex(
     opacity.transparent
   )}`,
   colors,
+  border,
   radius,
   opacity,
   font,
+  filter: {
+    neutralTextStrong:
+      "brightness(0) saturate(100%) invert(7%) sepia(32%) saturate(1177%) hue-rotate(201deg) brightness(95%) contrast(97%);",
+    neutralTextDefault:
+      "brightness(0) saturate(100%) invert(28%) sepia(15%) saturate(1004%) hue-rotate(207deg) brightness(91%) contrast(82%);",
+    brandTextDefault:
+      "brightness(0) saturate(100%) invert(100%) sepia(0%) saturate(0%) hue-rotate(45deg) brightness(103%) contrast(103%);",
+    brandTextWeak:
+      "brightness(0) saturate(100%) invert(29%) sepia(66%) saturate(2882%) hue-rotate(201deg) brightness(103%) contrast(105%);",
+  },
 };
 
 export const darkMode = {
@@ -148,9 +149,6 @@ export const darkMode = {
     text: {
       default: colors.red,
     },
-    surface: {
-      default: colors.red,
-    },
     border: {
       default: colors.red,
     },
@@ -160,15 +158,20 @@ export const darkMode = {
     navy: colors.navy,
     red: colors.red,
   },
-  border: {
-    default: `1px solid ${colors.grey600}`,
-    icon: `1.6px solid ${colors.grey600}`,
-    dash: `1px dash ${colors.grey600}`,
-  },
-  iconFilter: `${filter.grey400}`,
   boxShadow: `0px 0px 16px 0px ${colors.grey900}${decToHex(opacity.hover)}`,
   colors,
+  border,
   radius,
   opacity,
   font,
+  filter: {
+    neutralTextStrong:
+      "brightness(0) saturate(100%) invert(100%) sepia(2%) saturate(469%) hue-rotate(289deg) brightness(120%) contrast(99%);",
+    neutralTextDefault:
+      "brightness(0) saturate(100%) invert(90%) sepia(4%) saturate(1252%) hue-rotate(196deg) brightness(89%) contrast(85%);      ",
+    brandTextDefault:
+      "brightness(0) saturate(100%) invert(92%) sepia(1%) saturate(5034%) hue-rotate(193deg) brightness(82%) contrast(104%);",
+    brandTextWeak:
+      "brightness(0) saturate(100%) invert(39%) sepia(89%) saturate(4222%) hue-rotate(199deg) brightness(100%) contrast(112%);",
+  },
 };

@@ -85,7 +85,7 @@ const Button = styled.button<{ $isOpen: boolean }>`
   img {
     width: 16px;
     height: 16px;
-    filter: ${({ theme: { iconFilter } }) => iconFilter};
+    filter: ${({ theme: { filter } }) => filter.neutralTextDefault};
     transform: ${({ $isOpen }) => ($isOpen ? "rotate(180deg)" : "")};
   }
 `;

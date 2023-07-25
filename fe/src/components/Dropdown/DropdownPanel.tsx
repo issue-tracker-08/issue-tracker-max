@@ -77,7 +77,8 @@ const StyledDropdownPanel = styled.div`
   flex-direction: column;
   position: absolute;
   right: 0;
-  border: ${({ theme: { border } }) => border.default};
+  border: ${({ theme: { border, neutral } }) =>
+    `${border.default} ${neutral.border.default}`};
   border-radius: ${({ theme: { radius } }) => radius.l};
   overflow: hidden;
   box-shadow: ${({ theme: { boxShadow } }) => boxShadow};
@@ -87,7 +88,8 @@ const Header = styled.header`
   width: 100%;
   padding: 8px 16px;
   background-color: ${({ theme: { neutral } }) => neutral.surface.default};
-  border-bottom: ${({ theme: { border } }) => border.default};
+  border-bottom: ${({ theme: { border, neutral } }) =>
+    `${border.default} ${neutral.border.default}`};
   font: ${({ theme: { font } }) => font.displayMD12};
 
   h4 {
