@@ -1,0 +1,9 @@
+spring:
+  datasource:
+    url: jdbc:mysql://localhost:3307/issue_tracker
+    username: common
+    password: asdf1234
+
+  sql:
+    init:
+      mode: always
