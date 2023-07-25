@@ -56,6 +56,18 @@ const Button = styled.button<{ $isOpen: boolean }>`
   border: none;
   cursor: pointer;
 
+  &:hover {
+    opacity: ${({ theme: { opacity } }) => opacity.hover};
+  }
+
+  &:active {
+    opacity: ${({ theme: { opacity } }) => opacity.press};
+  }
+
+  &:disabled {
+    opacity: ${({ theme: { opacity } }) => opacity.disabled};
+  }
+
   span {
     color: ${({ theme: { neutral } }) => neutral.text.default};
     font: ${({ theme: { font } }) => font.availableMD16};
