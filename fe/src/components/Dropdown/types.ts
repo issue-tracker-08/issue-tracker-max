@@ -7,6 +7,12 @@ export enum DropdownNameKOR {
 
 export type DropdownName = keyof typeof DropdownNameKOR;
 
+export type DropdownPanelType = {
+  panelType: "filter" | "select";
+  dropdownName: DropdownName;
+  dropdownList: DropdownItemType[];
+};
+
 export type DropdownItemType =
   | {
       type: "withImg";

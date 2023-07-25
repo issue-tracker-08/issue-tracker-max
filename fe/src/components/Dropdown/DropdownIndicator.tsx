@@ -24,7 +24,15 @@ export default function DropdownIndicator({
         <img src={chevronDown} alt={`Filter by ${dropdownName}`} />
       </Button>
 
-      {isOpen && <DropdownPanel {...{ dropdownName, dropdownList }} />}
+      {isOpen && (
+        <DropdownPanel
+          dropdownPanel={{
+            panelType: "filter",
+            dropdownName,
+            dropdownList,
+          }}
+        />
+      )}
     </StyledDropdownIndicator>
   );
 }
