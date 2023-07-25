@@ -99,6 +99,10 @@ const Content = styled.div`
   color: ${({ theme: { neutral } }) => neutral.text.default};
   overflow: hidden;
   text-overflow: ellipsis;
+
+  &:has(+ .radio-input:checked) {
+    font: ${({ theme: { font } }) => font.selectedBold16};
+  }
 `;
 
 const Avatar = styled.img`
