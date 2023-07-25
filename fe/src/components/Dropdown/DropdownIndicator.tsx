@@ -2,12 +2,19 @@ import { useState } from "react";
 import { styled } from "styled-components";
 import DropdownPanel from "@components/Dropdown/DropdownPanel";
 import chevronDown from "@assets/icon/chevronDown.svg";
-import { DropdownNameKOR, DropdownName, DropdownItemType } from "./types";
+import {
+  DropdownNameKOR,
+  DropdownName,
+  DropdownPanelVariant,
+  DropdownItemType,
+} from "./types";
 
 export default function DropdownIndicator({
+  dropdownPanelVariant,
   dropdownName,
   dropdownList,
 }: {
+  dropdownPanelVariant: DropdownPanelVariant;
   dropdownName: DropdownName;
   dropdownList: DropdownItemType[];
 }) {
@@ -20,14 +27,16 @@ export default function DropdownIndicator({
   return (
     <StyledDropdownIndicator>
       <Button type="button" $isOpen={isOpen} onClick={onDropdownClick}>
-        <span>{DropdownNameKOR[dropdownName]}</span>
+        <span>{`${DropdownNameKOR[dropdownName]} ${
+          dropdownPanelVariant === "modify" ? "수정" : ""
+        }`}</span>
         <img src={chevronDown} alt={`Filter by ${dropdownName}`} />
       </Button>
 
       {isOpen && (
         <DropdownPanel
           dropdownPanel={{
-            variant: "filter",
+            variant: dropdownPanelVariant,
             dropdownName,
             dropdownList,
           }}
@@ -41,7 +50,7 @@ const StyledDropdownIndicator = styled.div`
   width: 80px;
   height: 32px;
   position: relative;
-  margin-left: 300px; // Remove this!
+  margin-left: 200px; // Remove this!
 `;
 
 const Button = styled.button<{ $isOpen: boolean }>`

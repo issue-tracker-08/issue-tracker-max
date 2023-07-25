@@ -3,12 +3,15 @@ export enum DropdownNameKOR {
   author = "작성자",
   label = "레이블",
   milestone = "마일스톤",
+  issueState = "상태",
 }
 
 export type DropdownName = keyof typeof DropdownNameKOR;
 
+export type DropdownPanelVariant = "filter" | "select" | "modify";
+
 export type DropdownPanelType = {
-  variant: "filter" | "select";
+  variant: DropdownPanelVariant;
   dropdownName: DropdownName;
   dropdownList: DropdownItemType[];
 };

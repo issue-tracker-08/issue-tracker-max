@@ -43,6 +43,19 @@ export default function DropdownPanel({
             </Header>
             <DropdownList>
               {dropdownList.map((item) => {
+                return <DropdownItem {...{ key: item.content, item }} />; // TODO: change the `key` value!
+              })}
+            </DropdownList>
+          </>
+        );
+      case "modify":
+        return (
+          <>
+            <Header>
+              <h4>{DropdownNameKOR[dropdownName]} 변경</h4>
+            </Header>
+            <DropdownList>
+              {dropdownList.map((item) => {
                 return <DropdownItem {...{ key: item.content, item }} />;
               })}
             </DropdownList>

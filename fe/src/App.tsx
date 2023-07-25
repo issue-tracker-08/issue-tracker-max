@@ -23,34 +23,98 @@ export default function App() {
         Theme Mode
       </button>
 
-      <DropdownIndicator
-        dropdownName="assignee"
-        dropdownList={[
-          {
-            variant: "withImg",
-            name: "assignee",
-            content: "Kakamotobiscuitcookie",
-            imgSrc: "https://avatars.githubusercontent.com/u/79886384?v=4",
-          },
-          {
-            variant: "withImg",
-            name: "assignee",
-            content: "Zoey",
-            imgSrc: "https://avatars.githubusercontent.com/u/111998760?v=4",
-          },
-          {
-            variant: "withColor",
-            name: "label",
-            content: "documentation",
-            colorFill: "blue",
-          },
-          {
-            variant: "plain",
-            name: "milestone",
-            content: "FE Sprint #1",
-          },
-        ]}
-      />
+      <div style={{ display: "flex" }}>
+        <DropdownIndicator
+          dropdownPanelVariant="filter"
+          dropdownName="assignee"
+          dropdownList={[
+            {
+              variant: "withImg",
+              name: "assignee",
+              content: "Kakamotobiscuitcookie",
+              imgSrc: "https://avatars.githubusercontent.com/u/79886384?v=4",
+            },
+            {
+              variant: "withImg",
+              name: "assignee",
+              content: "Zoey",
+              imgSrc: "https://avatars.githubusercontent.com/u/111998760?v=4",
+            },
+          ]}
+        />
+
+        <DropdownIndicator
+          dropdownPanelVariant="filter"
+          dropdownName="label"
+          dropdownList={[
+            {
+              variant: "withColor",
+              name: "label",
+              content: "documentation",
+              colorFill: "blue",
+            },
+            {
+              variant: "withColor",
+              name: "label",
+              content: "bug",
+              colorFill: "red",
+            },
+          ]}
+        />
+
+        <DropdownIndicator
+          dropdownPanelVariant="filter"
+          dropdownName="milestone"
+          dropdownList={[
+            {
+              variant: "plain",
+              name: "milestone",
+              content: "FE Sprint#1",
+            },
+            {
+              variant: "plain",
+              name: "milestone",
+              content: "BE Sprint#1",
+            },
+          ]}
+        />
+
+        <DropdownIndicator
+          dropdownPanelVariant="filter"
+          dropdownName="author"
+          dropdownList={[
+            {
+              variant: "withImg",
+              name: "assignee",
+              content: "Kakamotobiscuitcookie",
+              imgSrc: "https://avatars.githubusercontent.com/u/79886384?v=4",
+            },
+            {
+              variant: "withImg",
+              name: "assignee",
+              content: "Zoey",
+              imgSrc: "https://avatars.githubusercontent.com/u/111998760?v=4",
+            },
+          ]}
+        />
+
+        <DropdownIndicator
+          dropdownPanelVariant="modify"
+          dropdownName="issueState"
+          dropdownList={[
+            {
+              variant: "plain",
+              name: "issueState",
+              content: "선택한 이슈 열기",
+            },
+            {
+              variant: "plain",
+              name: "issueState",
+              content: "선택한 이슈 닫기",
+            },
+          ]}
+        />
+      </div>
     </ThemeProvider>
   );
 }
