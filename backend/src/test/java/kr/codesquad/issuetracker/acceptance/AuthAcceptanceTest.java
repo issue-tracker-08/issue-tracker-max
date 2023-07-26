@@ -45,8 +45,8 @@ public class AuthAcceptanceTest {
 		assertThat(response.statusCode()).isEqualTo(HttpStatus.SC_CREATED);
 	}
 
-	@MethodSource("provideSignupInfo")
-	@ParameterizedTest
+	@MethodSource("provideInvalidSignupInfo")
+	@ParameterizedTest(name = "[{index}] 아이디: {0} 비밀번호: {1}")
 	void 잘못된_형식으로_회원가입을_실패한다(String loginId, String password) {
 		// given
 		var given = 잘못된_회원가입_정보가_주어지면(loginId, password);
@@ -94,7 +94,7 @@ public class AuthAcceptanceTest {
 				"password", password));
 	}
 
-	private static Stream<Arguments> provideSignupInfo() {
+	private static Stream<Arguments> provideInvalidSignupInfo() {
 		return Stream.of(
 			Arguments.of("short", "asdf1234!"),
 			Arguments.of("not-short", "11111"),
