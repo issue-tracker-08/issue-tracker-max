@@ -16,7 +16,8 @@ public class GlobalExceptionHandler {
 	}
 
 	@ExceptionHandler(ApplicationException.class)
-	public ResponseEntity<String> handleApplicationException(ApplicationException e) {
-		return ResponseEntity.status(e.getErrorCode().getStatusCode()).body(e.getErrorCode().getMessage());
+	public ResponseEntity<ErrorResponse> handleApplicationException(ApplicationException e) {
+		int errorCode = e.getErrorCode().getStatusCode();
+		return ResponseEntity.status(errorCode).body(new ErrorResponse(errorCode, e.getMessage()));
 	}
 }
