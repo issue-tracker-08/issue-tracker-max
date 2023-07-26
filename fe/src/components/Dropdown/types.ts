@@ -4,6 +4,7 @@ export enum DropdownNameKOR {
   label = "레이블",
   milestone = "마일스톤",
   issueState = "상태",
+  issue = "이슈",
 }
 
 export type DropdownName = keyof typeof DropdownNameKOR;
@@ -14,6 +15,8 @@ export type DropdownPanelType = {
   variant: DropdownPanelVariant;
   dropdownName: DropdownName;
   dropdownList: DropdownItemType[];
+  position: "left" | "right";
+  onOutsideClick: (evt: MouseEvent) => void;
 };
 
 export type DropdownItemType =

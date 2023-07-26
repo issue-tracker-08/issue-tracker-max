@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { styled } from "styled-components";
 import DropdownItem from "./DropdownItem";
 import { DropdownNameKOR, DropdownPanelType } from "./types";
@@ -7,8 +8,20 @@ export default function DropdownPanel({
 }: {
   dropdownPanel: DropdownPanelType;
 }) {
+  useEffect(() => {
+    document.addEventListener("click", dropdownPanel.onOutsideClick);
+
+    return () => {
+      document.removeEventListener("click", dropdownPanel.onOutsideClick);
+    };
+  });
+
   const generatePanel = (dropdownPanel: DropdownPanelType) => {
     const { variant, dropdownName, dropdownList } = dropdownPanel;
+
+    const canBeNegatory = dropdownName !== "author" && dropdownName !== "issue";
+    const suffixKOR =
+      dropdownName === "assignee" || dropdownName === "issue" ? "가" : "이";
 
     switch (variant) {
       case "filter":
@@ -18,14 +31,12 @@ export default function DropdownPanel({
               <h4>{DropdownNameKOR[dropdownName]} 필터</h4>
             </Header>
             <DropdownList>
-              {dropdownName !== "author" && (
+              {canBeNegatory && (
                 <DropdownItem
                   item={{
                     variant: "plain",
                     name: dropdownName,
-                    content: `${DropdownNameKOR[dropdownName]}${
-                      dropdownName === "assignee" ? "가" : "이"
-                    } 없는 이슈`,
+                    content: `${DropdownNameKOR[dropdownName]}${suffixKOR} 없는 이슈`,
                   }}
                 />
               )}
@@ -43,7 +54,7 @@ export default function DropdownPanel({
             </Header>
             <DropdownList>
               {dropdownList.map((item) => {
-                return <DropdownItem {...{ key: item.content, item }} />; // TODO: change the `key` value!
+                return <DropdownItem {...{ key: item.content, item }} />;
               })}
             </DropdownList>
           </>
@@ -67,21 +78,25 @@ export default function DropdownPanel({
   };
 
   return (
-    <StyledDropdownPanel>{generatePanel(dropdownPanel)}</StyledDropdownPanel>
+    <StyledDropdownPanel $position={dropdownPanel.position}>
+      {generatePanel(dropdownPanel)}
+    </StyledDropdownPanel>
   );
 }
 
-const StyledDropdownPanel = styled.div`
+const StyledDropdownPanel = styled.div<{ $position: "left" | "right" }>`
   width: 240px;
   display: flex;
   flex-direction: column;
   position: absolute;
-  right: 0;
+  top: 40px;
+  left: ${({ $position }) => $position === "left" && "-24px"};
+  right: ${({ $position }) => $position === "right" && 0};
   border: ${({ theme: { border, neutral } }) =>
     `${border.default} ${neutral.border.default}`};
   border-radius: ${({ theme: { radius } }) => radius.l};
-  overflow: hidden;
   box-shadow: ${({ theme: { boxShadow } }) => boxShadow};
+  overflow: hidden;
 `;
 
 const Header = styled.header`

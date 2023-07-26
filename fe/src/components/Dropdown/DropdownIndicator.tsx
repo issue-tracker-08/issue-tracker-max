@@ -2,21 +2,20 @@ import chevronDown from "@assets/icon/chevronDown.svg";
 import DropdownPanel from "@components/Dropdown/DropdownPanel";
 import { useState } from "react";
 import { styled } from "styled-components";
-import {
-  DropdownItemType,
-  DropdownName,
-  DropdownNameKOR,
-  DropdownPanelVariant,
-} from "./types";
+import { DropdownItemType, DropdownName, DropdownPanelVariant } from "./types";
 
 export default function DropdownIndicator({
+  displayName,
   dropdownPanelVariant,
   dropdownName,
   dropdownList,
+  dropdownPanelPosition,
 }: {
+  displayName: string;
   dropdownPanelVariant: DropdownPanelVariant;
   dropdownName: DropdownName;
   dropdownList: DropdownItemType[];
+  dropdownPanelPosition: "left" | "right";
 }) {
   const [isOpen, setIsOpen] = useState(true);
 
@@ -24,10 +23,20 @@ export default function DropdownIndicator({
     setIsOpen((prev) => !prev);
   };
 
+  const onOutsideClick = (evt: MouseEvent) => {
+    if (
+      !(evt.target as HTMLElement).closest(
+        `#dropdown-indicator-${dropdownName}`
+      )
+    ) {
+      setIsOpen(false);
+    }
+  };
+
   return (
-    <StyledDropdownIndicator>
+    <StyledDropdownIndicator id={`dropdown-indicator-${dropdownName}`}>
       <Button type="button" $isOpen={isOpen} onClick={onDropdownClick}>
-        <span>{`${DropdownNameKOR[dropdownName]} ${
+        <span>{`${displayName} ${
           dropdownPanelVariant === "modify" ? "수정" : ""
         }`}</span>
         <img src={chevronDown} alt={`Filter by ${dropdownName}`} />
@@ -39,6 +48,8 @@ export default function DropdownIndicator({
             variant: dropdownPanelVariant,
             dropdownName,
             dropdownList,
+            position: dropdownPanelPosition,
+            onOutsideClick,
           }}
         />
       )}
@@ -50,7 +61,6 @@ const StyledDropdownIndicator = styled.div`
   width: 80px;
   height: 32px;
   position: relative;
-  margin-left: 200px; // Remove this!
 `;
 
 const Button = styled.button<{ $isOpen: boolean }>`
