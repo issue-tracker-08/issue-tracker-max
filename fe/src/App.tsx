@@ -1,4 +1,5 @@
 import DropdownIndicator from "@components/Dropdown/DropdownIndicator";
+import FilterBar from "@components/FilterBar";
 import Logo from "@components/common/Logo";
 import GlobalStyle from "@styles/GlobalStyle";
 import { darkMode, lightMode } from "@styles/designSystem";
@@ -23,8 +24,13 @@ export default function App() {
         Theme Mode
       </button>
 
-      <div style={{ display: "flex" }}>
+      <div style={{ marginLeft: "200px", marginBottom: "250px" }}>
+        <FilterBar />
+      </div>
+
+      <div style={{ marginLeft: "200px", display: "flex", gap: "200px" }}>
         <DropdownIndicator
+          displayName="담당자"
           dropdownPanelVariant="filter"
           dropdownName="assignee"
           dropdownList={[
@@ -41,9 +47,11 @@ export default function App() {
               imgSrc: "https://avatars.githubusercontent.com/u/111998760?v=4",
             },
           ]}
+          dropdownPanelPosition="right"
         />
 
         <DropdownIndicator
+          displayName="레이블"
           dropdownPanelVariant="filter"
           dropdownName="label"
           dropdownList={[
@@ -60,9 +68,11 @@ export default function App() {
               colorFill: "red",
             },
           ]}
+          dropdownPanelPosition="right"
         />
 
         <DropdownIndicator
+          displayName="마일스톤"
           dropdownPanelVariant="filter"
           dropdownName="milestone"
           dropdownList={[
@@ -77,9 +87,11 @@ export default function App() {
               content: "BE Sprint#1",
             },
           ]}
+          dropdownPanelPosition="right"
         />
 
         <DropdownIndicator
+          displayName="작성자"
           dropdownPanelVariant="filter"
           dropdownName="author"
           dropdownList={[
@@ -96,9 +108,11 @@ export default function App() {
               imgSrc: "https://avatars.githubusercontent.com/u/111998760?v=4",
             },
           ]}
+          dropdownPanelPosition="right"
         />
 
         <DropdownIndicator
+          displayName="상태"
           dropdownPanelVariant="modify"
           dropdownName="issueState"
           dropdownList={[
@@ -113,6 +127,7 @@ export default function App() {
               content: "선택한 이슈 닫기",
             },
           ]}
+          dropdownPanelPosition="right"
         />
       </div>
     </ThemeProvider>
