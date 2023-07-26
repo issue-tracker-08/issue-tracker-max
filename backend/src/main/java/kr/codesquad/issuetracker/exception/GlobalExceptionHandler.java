@@ -10,9 +10,10 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 public class GlobalExceptionHandler {
 
 	@ExceptionHandler(MethodArgumentNotValidException.class)
-	public ResponseEntity<String> handleValidException(MethodArgumentNotValidException e) {
+	public ResponseEntity<ErrorResponse> handleValidException(MethodArgumentNotValidException e) {
 		String exMessage = e.getBindingResult().getFieldError().getDefaultMessage();
-		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(exMessage);
+		return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+			.body(new ErrorResponse(HttpStatus.BAD_REQUEST.value(), exMessage));
 	}
 
 	@ExceptionHandler(ApplicationException.class)
