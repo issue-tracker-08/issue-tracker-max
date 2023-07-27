@@ -44,7 +44,7 @@ export default function DropdownIndicator({
 
       {isOpen && (
         <DropdownPanel
-          dropdownPanel={{
+          {...{
             variant: dropdownPanelVariant,
             dropdownName,
             dropdownList,

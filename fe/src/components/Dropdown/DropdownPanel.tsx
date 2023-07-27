@@ -4,21 +4,21 @@ import DropdownItem from "./DropdownItem";
 import { DropdownNameKOR, DropdownPanelType } from "./types";
 
 export default function DropdownPanel({
-  dropdownPanel,
-}: {
-  dropdownPanel: DropdownPanelType;
-}) {
+  variant,
+  dropdownName,
+  dropdownList,
+  onOutsideClick,
+  position,
+}: DropdownPanelType) {
   useEffect(() => {
-    document.addEventListener("click", dropdownPanel.onOutsideClick);
+    document.addEventListener("click", onOutsideClick);
 
     return () => {
-      document.removeEventListener("click", dropdownPanel.onOutsideClick);
+      document.removeEventListener("click", onOutsideClick);
     };
   });
 
-  const generatePanel = (dropdownPanel: DropdownPanelType) => {
-    const { variant, dropdownName, dropdownList } = dropdownPanel;
-
+  const generatePanel = () => {
     const canBeNegatory = dropdownName !== "author" && dropdownName !== "issue";
     const suffixKOR =
       dropdownName === "assignee" || dropdownName === "issue" ? "가" : "이";
@@ -78,8 +78,8 @@ export default function DropdownPanel({
   };
 
   return (
-    <StyledDropdownPanel $position={dropdownPanel.position}>
-      {generatePanel(dropdownPanel)}
+    <StyledDropdownPanel $position={position}>
+      {generatePanel()}
     </StyledDropdownPanel>
   );
 }
