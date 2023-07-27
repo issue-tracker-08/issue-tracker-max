@@ -5,10 +5,13 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import kr.codesquad.config.JwtConfig;
 import kr.codesquad.issuetracker.infrastructure.security.hash.PasswordEncoder;
 import kr.codesquad.issuetracker.infrastructure.security.hash.SHA256;
 import kr.codesquad.issuetracker.infrastructure.security.jwt.JwtProvider;
+import kr.codesquad.issuetracker.presentation.filter.ExceptionHandlerFilter;
 import kr.codesquad.issuetracker.presentation.filter.JwtFilter;
 import lombok.RequiredArgsConstructor;
 
@@ -18,6 +21,7 @@ import lombok.RequiredArgsConstructor;
 public class SecurityConfig {
 
 	private final JwtProvider jwtProvider;
+	private final ObjectMapper objectMapper;
 
 	@Bean
 	public PasswordEncoder passwordEncoder() {
@@ -29,6 +33,16 @@ public class SecurityConfig {
 		FilterRegistrationBean<JwtFilter> jwtFilter = new FilterRegistrationBean<>();
 		jwtFilter.setFilter(new JwtFilter(jwtProvider));
 		jwtFilter.addUrlPatterns("/api/*");
+		jwtFilter.setOrder(2);
 		return jwtFilter;
+	}
+
+	@Bean
+	public FilterRegistrationBean<ExceptionHandlerFilter> exceptionHandlerFilter() {
+		FilterRegistrationBean<ExceptionHandlerFilter> exceptionHandlerFilter = new FilterRegistrationBean<>();
+		exceptionHandlerFilter.setFilter(new ExceptionHandlerFilter(objectMapper));
+		exceptionHandlerFilter.addUrlPatterns("/api/*");
+		exceptionHandlerFilter.setOrder(1);
+		return exceptionHandlerFilter;
 	}
 }
