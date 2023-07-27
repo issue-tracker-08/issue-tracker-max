@@ -42,7 +42,7 @@ const StyledFilterBar = styled.div`
   display: flex;
   border: ${({ theme: { border, neutral } }) =>
     `${border.default} ${neutral.border.default}`};
-  border-radius: ${({ theme: { radius } }) => radius.l};
+  border-radius: ${({ theme: { radius } }) => radius.m};
 
   &:focus-within {
     border: ${({ theme: { border, neutral } }) =>
@@ -66,8 +66,8 @@ const FilterButtonContainer = styled.div`
   background-color: ${({ theme: { neutral } }) => neutral.surface.default};
   border-right: ${({ theme: { border, neutral } }) =>
     `${border.default} ${neutral.border.default}`};
-  border-top-left-radius: ${({ theme: { radius } }) => radius.l};
-  border-bottom-left-radius: ${({ theme: { radius } }) => radius.l};
+  border-top-left-radius: ${({ theme: { radius } }) => radius.m};
+  border-bottom-left-radius: ${({ theme: { radius } }) => radius.m};
 `;
 
 const FilterForm = styled.form`
@@ -77,8 +77,8 @@ const FilterForm = styled.form`
   flex-grow: 1;
   gap: 8px;
   background-color: ${({ theme: { neutral } }) => neutral.surface.bold};
-  border-top-right-radius: ${({ theme: { radius } }) => radius.l};
-  border-bottom-right-radius: ${({ theme: { radius } }) => radius.l};
+  border-top-right-radius: ${({ theme: { radius } }) => radius.m};
+  border-bottom-right-radius: ${({ theme: { radius } }) => radius.m};
 
   img {
     width: 16px;
@@ -93,5 +93,6 @@ const FilterInput = styled.input`
   background: none;
   border: none;
   color: ${({ theme: { neutral } }) => neutral.text.weak};
+  font: ${({ theme: { font } }) => font.displayMD16};
   outline: none;
 `;
