@@ -8,9 +8,13 @@ import javax.crypto.SecretKey;
 
 import org.springframework.stereotype.Component;
 
+import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
+import kr.codesquad.issuetracker.exception.ApplicationException;
+import kr.codesquad.issuetracker.exception.ErrorCode;
 import kr.codesquad.issuetracker.infrastructure.config.jwt.Jwt;
 
 @Component
@@ -32,5 +36,18 @@ public class JwtProvider {
 			.setExpiration(new Date(now.getTime() + expirationMilliseconds))
 			.setClaims(Map.of("userId", payload))
 			.compact();
+	}
+
+	public void validateToken(final String token) {
+		try {
+			Jwts.parserBuilder()
+				.setSigningKey(secretKey)
+				.build()
+				.parseClaimsJws(token);
+		} catch (ExpiredJwtException e) {
+			throw new ApplicationException(ErrorCode.EXPIRED_JWT);
+		} catch (JwtException e) {
+			throw new ApplicationException(ErrorCode.INVALID_JWT);
+		}
 	}
 }
