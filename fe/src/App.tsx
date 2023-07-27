@@ -29,6 +29,7 @@ const router = createBrowserRouter(
     </>
   )
 );
+
 export default function App() {
   const [themeMode, setThemeMode] = useState<"light" | "dark">("light");
 
