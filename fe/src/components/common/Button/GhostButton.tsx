@@ -9,5 +9,5 @@ export default function GhostButton({ variant, ...props }: ButtonProps) {
 const StyledGhostButton = styled(BaseButton)<{
   $variant: ButtonVariant;
 }>`
-  padding: 0 24px;
+  // padding: 0 24px;
 `;
