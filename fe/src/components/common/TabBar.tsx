@@ -11,8 +11,8 @@ export default function TabBar({
   labelCount: number;
   milestoneCount: number;
 }) {
-  const [selectedTab, setSelectedTab] = useState<"label" | "milestone">(
-    "label"
+  const [selectedTab, setSelectedTab] = useState<"label" | "milestone" | null>(
+    null
   );
   const onLabelButtonClick = () => setSelectedTab("label");
   const onMilestoneButtonClick = () => setSelectedTab("milestone");
