@@ -1,12 +1,34 @@
-import DropdownIndicator from "@components/Dropdown/DropdownIndicator";
-import FilterBar from "@components/FilterBar";
-import Logo from "@components/common/Logo";
-import TextInput from "@components/common/TextInput";
+import AuthPage from "@pages/AuthPage";
+import Dashboard from "@pages/Dashboard";
+import HomePage from "@pages/HomePage";
+import LoginPage from "@pages/LoginPage";
+import SignupPage from "@pages/SignupPage";
 import GlobalStyle from "@styles/GlobalStyle";
 import { darkMode, lightMode } from "@styles/designSystem";
 import { useState } from "react";
-import styled, { ThemeProvider } from "styled-components";
+import {
+  Route,
+  RouterProvider,
+  createBrowserRouter,
+  createRoutesFromElements,
+} from "react-router-dom";
+import { ThemeProvider } from "styled-components";
 
+const router = createBrowserRouter(
+  createRoutesFromElements(
+    <>
+      <Route path="/auth" element={<AuthPage />}>
+        <Route path="login" element={<LoginPage />} />
+        <Route path="signup" element={<SignupPage />} />
+      </Route>
+
+      <Route path="/" element={<HomePage />}>
+        {/* <Header /> */}
+        <Route path="dashboard" element={<Dashboard />} />
+      </Route>
+    </>
+  )
+);
 export default function App() {
   const [themeMode, setThemeMode] = useState<"light" | "dark">("light");
 
@@ -19,136 +41,7 @@ export default function App() {
   return (
     <ThemeProvider theme={themeMode === "light" ? lightMode : darkMode}>
       <GlobalStyle />
-      <Logo size="large" />
-      <H1>적용 되니?</H1>
-      <button type="button" onClick={toggleThemeMode}>
-        Theme Mode
-      </button>
-
-      <div style={{ marginLeft: "200px", marginBottom: "250px" }}>
-        <FilterBar />
-      </div>
-
-      <div style={{ marginLeft: "200px", display: "flex", gap: "200px" }}>
-        <DropdownIndicator
-          displayName="담당자"
-          dropdownPanelVariant="filter"
-          dropdownName="assignee"
-          dropdownList={[
-            {
-              variant: "withImg",
-              name: "assignee",
-              content: "Kakamotobiscuitcookie",
-              imgSrc: "https://avatars.githubusercontent.com/u/79886384?v=4",
-            },
-            {
-              variant: "withImg",
-              name: "assignee",
-              content: "Zoey",
-              imgSrc: "https://avatars.githubusercontent.com/u/111998760?v=4",
-            },
-          ]}
-          dropdownPanelPosition="right"
-        />
-
-        <DropdownIndicator
-          displayName="레이블"
-          dropdownPanelVariant="filter"
-          dropdownName="label"
-          dropdownList={[
-            {
-              variant: "withColor",
-              name: "label",
-              content: "documentation",
-              colorFill: "blue",
-            },
-            {
-              variant: "withColor",
-              name: "label",
-              content: "bug",
-              colorFill: "red",
-            },
-          ]}
-          dropdownPanelPosition="right"
-        />
-
-        <DropdownIndicator
-          displayName="마일스톤"
-          dropdownPanelVariant="filter"
-          dropdownName="milestone"
-          dropdownList={[
-            {
-              variant: "plain",
-              name: "milestone",
-              content: "FE Sprint#1",
-            },
-            {
-              variant: "plain",
-              name: "milestone",
-              content: "BE Sprint#1",
-            },
-          ]}
-          dropdownPanelPosition="right"
-        />
-
-        <DropdownIndicator
-          displayName="작성자"
-          dropdownPanelVariant="filter"
-          dropdownName="author"
-          dropdownList={[
-            {
-              variant: "withImg",
-              name: "assignee",
-              content: "Kakamotobiscuitcookie",
-              imgSrc: "https://avatars.githubusercontent.com/u/79886384?v=4",
-            },
-            {
-              variant: "withImg",
-              name: "assignee",
-              content: "Zoey",
-              imgSrc: "https://avatars.githubusercontent.com/u/111998760?v=4",
-            },
-          ]}
-          dropdownPanelPosition="right"
-        />
-
-        <DropdownIndicator
-          displayName="상태"
-          dropdownPanelVariant="modify"
-          dropdownName="issueState"
-          dropdownList={[
-            {
-              variant: "plain",
-              name: "issueState",
-              content: "선택한 이슈 열기",
-            },
-            {
-              variant: "plain",
-              name: "issueState",
-              content: "선택한 이슈 닫기",
-            },
-          ]}
-          dropdownPanelPosition="right"
-        />
-      </div>
-      <div style={{ width: "500px" }}>
-        <TextInput
-          variant="tall"
-          name="아이디"
-          helpText="영문 숫자 조합 6자 이상"
-          hasError={false}
-        />
-        <TextInput
-          variant="short"
-          name="설명(선택)"
-          placeholderText="마일스톤에 대한 설명을 입력하세요"
-        />
-      </div>
+      <RouterProvider router={router} />
     </ThemeProvider>
   );
 }
-
-const H1 = styled.h1`
-  color: ${({ theme: { neutral } }) => neutral.text.strong};
-  font: ${({ theme: { font } }) => font.displayMD12};
-`;
