@@ -23,11 +23,9 @@ export default function DropdownIndicator({
     setIsOpen((prev) => !prev);
   };
 
-  const onOutsideClick = (evt: MouseEvent) => {
+  const onOutsideClick = (e: MouseEvent) => {
     if (
-      !(evt.target as HTMLElement).closest(
-        `#dropdown-indicator-${dropdownName}`
-      )
+      !(e.target as HTMLElement).closest(`#dropdown-indicator-${dropdownName}`)
     ) {
       setIsOpen(false);
     }
