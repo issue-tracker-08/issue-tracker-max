@@ -6,7 +6,7 @@ export default function InputCheckbox(
   props: React.InputHTMLAttributes<HTMLInputElement>
 ) {
   return (
-    <StyledInputCheckbox>
+    <StyledInputCheckbox className="input-checkbox">
       <input type="checkbox" {...props} />
       <img className="checkbox-img" src={checkboxInitialIcon} alt="Checkbox" />
     </StyledInputCheckbox>
@@ -18,7 +18,7 @@ const StyledInputCheckbox = styled.label`
   height: 16px;
   cursor: pointer;
 
-  input {
+  input[type="checkbox"] {
     width: inherit;
     height: inherit;
     display: none;

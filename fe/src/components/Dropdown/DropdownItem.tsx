@@ -1,5 +1,4 @@
-import checkOffCircle from "@assets/icon/checkOffCircle.svg";
-import checkOnCircle from "@assets/icon/checkOnCircle.svg";
+import InputRadio from "@components/common/Input/InputRadio";
 import { styled } from "styled-components";
 import { DropdownItemType } from "./types";
 
@@ -9,18 +8,9 @@ export default function DropdownItem({ item }: { item: DropdownItemType }) {
       case "withImg":
         return (
           <Label htmlFor={item.content}>
-            <Avatar
-              src={item.imgSrc}
-              alt={`${item.variant}: ${item.content}`}
-            />
+            <Avatar src={item.imgSrc} alt={`${item.name}: ${item.content}`} />
             <Content>{item.content}</Content>
-            <input
-              className="radio-input"
-              type="radio"
-              name={item.name}
-              id={item.content}
-            />
-            <img className="radio-img" src={checkOffCircle} alt="" />
+            <InputRadio name={item.name} id={item.content} />
           </Label>
         );
       case "withColor":
@@ -28,26 +18,14 @@ export default function DropdownItem({ item }: { item: DropdownItemType }) {
           <Label htmlFor={item.content}>
             <ColorSwatch $colorFill={item.colorFill} />
             <Content>{item.content}</Content>
-            <input
-              className="radio-input"
-              type="radio"
-              name={item.name}
-              id={item.content}
-            />
-            <img className="radio-img" src={checkOffCircle} alt="" />
+            <InputRadio name={item.name} id={item.content} />
           </Label>
         );
       case "plain":
         return (
           <Label htmlFor={item.content}>
             <Content>{item.content}</Content>
-            <input
-              className="radio-input"
-              type="radio"
-              name={item.name}
-              id={item.content}
-            />
-            <img className="radio-img" src={checkOffCircle} alt="" />
+            <InputRadio name={item.name} id={item.content} />
           </Label>
         );
       default:
@@ -80,22 +58,6 @@ const Label = styled.label`
   justify-content: space-between;
   gap: 8px;
   cursor: pointer;
-
-  .radio-input {
-    display: none;
-  }
-
-  .radio-input:not(:checked) + .radio-img {
-    content: url(${checkOffCircle});
-  }
-
-  .radio-input:checked + .radio-img {
-    content: url(${checkOnCircle});
-  }
-
-  .radio-img {
-    filter: ${({ theme: { filter } }) => filter.neutralTextDefault};
-  }
 `;
 
 const Content = styled.div`
@@ -105,7 +67,7 @@ const Content = styled.div`
   overflow: hidden;
   text-overflow: ellipsis;
 
-  &:has(+ .radio-input:checked) {
+  &:has(+ .input-radio input[type="radio"]:checked) {
     font: ${({ theme: { font } }) => font.selectedBold16};
   }
 `;
