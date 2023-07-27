@@ -1,4 +1,5 @@
 import logo from "@assets/icon/logo.svg";
+import { styled } from "styled-components";
 
 type Props = {
   size?: "large" | "medium";
@@ -17,7 +18,7 @@ const SIZE = {
 
 export default function Logo({ size = "medium" }: Props) {
   return (
-    <img
+    <StyledLogo
       src={logo}
       alt="logo"
       width={SIZE[size].width}
@@ -25,3 +26,7 @@ export default function Logo({ size = "medium" }: Props) {
     />
   );
 }
+
+const StyledLogo = styled.img`
+  filter: ${({ theme: { filter } }) => filter.neutralTextStrong};
+`;
