@@ -17,7 +17,7 @@ export default function DropdownIndicator({
   dropdownList: DropdownItemType[];
   dropdownPanelPosition: "left" | "right";
 }) {
-  const [isOpen, setIsOpen] = useState(true);
+  const [isOpen, setIsOpen] = useState(false);
 
   const onDropdownClick = () => {
     setIsOpen((prev) => !prev);
