@@ -15,7 +15,9 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 @RestController
 public class IssueController {
+
 	private final IssueService issueService;
+
 	@GetMapping
 	public ResponseEntity<List<IssueSimpleMapper>> findAll() {
 		return ResponseEntity.ok(issueService.findAll());
