@@ -1,7 +1,8 @@
-package kr.codesquad.issuetracker.infrastructure;
+package kr.codesquad.issuetracker.infrastructure.persistence.mapper;
 
 import java.time.LocalDateTime;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -16,14 +17,14 @@ import lombok.NoArgsConstructor;
 
 @AllArgsConstructor
 @Getter
-public class IssueSimpleEntity {
+public class IssueSimpleMapper {
 	private Integer issueNumber;
 	private boolean isOpen;
 	private List<LabelSimpleEntity> labelSimpleEntities;
 	private String title;
 	private String milestone;
 	private List<AssigneeSimpleEntity> assigneeSimpleEntities;
-	private LocalDateTime createAt;
+	private LocalDateTime createdAt;
 
 	@AllArgsConstructor
 	@NoArgsConstructor
@@ -50,18 +51,19 @@ public class IssueSimpleEntity {
 		}
 	}
 
-	public static IssueSimpleEntity of(Integer issueNumber, boolean isOpen, String labels, String title,
+	public static IssueSimpleMapper of(Integer issueNumber, boolean isOpen, String labels, String title,
 		String milestone, String assignees, LocalDateTime createdAt) {
 		final ObjectMapper objectMapper = new ObjectMapper();
 		try {
 			var labelEntities = Arrays.stream(objectMapper.readValue(labels, LabelSimpleEntity[].class))
 				.filter(LabelSimpleEntity::hasValue)
+				.sorted(Comparator.comparing(LabelSimpleEntity::getName))
 				.collect(Collectors.toList());
 			var assigneeEntities = Arrays.stream(objectMapper.readValue(assignees, AssigneeSimpleEntity[].class))
 				.filter(AssigneeSimpleEntity::hasValue)
 				.collect(Collectors.toList());
 
-			return new IssueSimpleEntity(issueNumber, isOpen, labelEntities, title,
+			return new IssueSimpleMapper(issueNumber, isOpen, labelEntities, title,
 				milestone, assigneeEntities, createdAt);
 		} catch (JsonProcessingException e) {
 			throw new RuntimeException(e);

@@ -9,7 +9,7 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 
-import kr.codesquad.issuetracker.infrastructure.IssueSimpleEntity;
+import kr.codesquad.issuetracker.infrastructure.persistence.mapper.IssueSimpleMapper;
 
 @Repository
 public class IssueRepository {
@@ -20,16 +20,13 @@ public class IssueRepository {
 		this.jdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
 	}
 
-	public List<IssueSimpleEntity> findAll() {
+	public List<IssueSimpleMapper> findAll() {
 		String sql = "SELECT i.id, i.is_open, i.title, i.created_at, m.name as milestone, "
 			+ "CONCAT('[', GROUP_CONCAT(DISTINCT JSON_OBJECT( "
-			+ "'name', l.name, "
-			+ "'fontColor', l.font_color, "
-			+ "'backgroundColor', l.background_color)), ']') as labels, "
+			+ "'name', l.name, 'fontColor', l.font_color, 'backgroundColor', l.background_color)), ']') as labels, "
 			+ "IFNULL(ua2.login_id, '(알수없음)') as author_name, "
 			+ "CONCAT('[', GROUP_CONCAT(DISTINCT JSON_OBJECT( "
-			+ "'loginId', ua.login_id, "
-			+ "'profileUrl', ua.profile_url)), ']') as assignee "
+			+ "'loginId', ua.login_id, 'profileUrl', ua.profile_url)), ']') as assignee "
 			+ "FROM issue i "
 			+ "LEFT JOIN issue_label il ON i.id = il.issue_id "
 			+ "LEFT JOIN label l ON l.id = il.label_id AND l.is_deleted = false "
@@ -44,8 +41,8 @@ public class IssueRepository {
 		return jdbcTemplate.query(sql, Collections.emptyMap(), mapSimpleIssue());
 	}
 
-	private static RowMapper<IssueSimpleEntity> mapSimpleIssue() {
-		return (rs, rowNum) -> IssueSimpleEntity.of(
+	private static RowMapper<IssueSimpleMapper> mapSimpleIssue() {
+		return (rs, rowNum) -> IssueSimpleMapper.of(
 			rs.getInt("id"),
 			rs.getBoolean("is_open"),
 			rs.getString("labels"),
