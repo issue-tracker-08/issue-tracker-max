@@ -16,12 +16,12 @@ import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
 import kr.codesquad.issuetracker.exception.ApplicationException;
 import kr.codesquad.issuetracker.exception.ErrorCode;
-import kr.codesquad.issuetracker.infrastructure.config.jwt.Jwt;
+import kr.codesquad.issuetracker.infrastructure.config.jwt.JwtProperties;
 
 class JwtProviderTest {
 
 	private final String secretKey = "1A3A06151A7154CA3ABD2CEF80F97769BBFC14FF69E9B5E61C75341255BDCE28";
-	private final JwtProvider jwtProvider = new JwtProvider(new Jwt(secretKey, 3600000));
+	private final JwtProvider jwtProvider = new JwtProvider(new JwtProperties(secretKey, 3600000));
 
 	@DisplayName("토큰 생성에 성공한다.")
 	@Test

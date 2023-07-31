@@ -15,7 +15,7 @@ import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
 import kr.codesquad.issuetracker.exception.ApplicationException;
 import kr.codesquad.issuetracker.exception.ErrorCode;
-import kr.codesquad.issuetracker.infrastructure.config.jwt.Jwt;
+import kr.codesquad.issuetracker.infrastructure.config.jwt.JwtProperties;
 
 @Component
 public class JwtProvider {
@@ -23,7 +23,7 @@ public class JwtProvider {
 	private final SecretKey secretKey;
 	private final long expirationMilliseconds;
 
-	public JwtProvider(Jwt jwt) {
+	public JwtProvider(JwtProperties jwt) {
 		this.secretKey = Keys.hmacShaKeyFor(jwt.getSecretKey().getBytes(StandardCharsets.UTF_8));
 		this.expirationMilliseconds = jwt.getExpirationMilliseconds();
 	}
