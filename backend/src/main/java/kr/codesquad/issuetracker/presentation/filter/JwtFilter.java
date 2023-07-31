@@ -23,7 +23,6 @@ public class JwtFilter extends OncePerRequestFilter {
 
 	private static final String AUTHORIZATION = "Authorization";
 	private static final String BEARER = "bearer";
-	private static final int TOKEN_INDEX = 1;
 
 	private static final AntPathMatcher pathMatcher = new AntPathMatcher();
 	private static final List<String> excludeUrlPatterns = List.of("/api/auth/**");
@@ -54,6 +53,6 @@ public class JwtFilter extends OncePerRequestFilter {
 			return Optional.empty();
 		}
 
-		return Optional.of(header.split(" ")[TOKEN_INDEX]);
+		return Optional.of(header.split(" ")[1]);
 	}
 }
