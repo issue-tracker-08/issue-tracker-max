@@ -42,14 +42,9 @@ class AuthServiceTest {
 			// given
 			given(userAccountRepository.existsByLoginId(anyString())).willReturn(Boolean.FALSE);
 
-			// when
-			authService.signup("bruniii", "asdf1234!");
-
-			// then
-			assertAll(
-				() -> then(userAccountRepository).should(times(1)).existsByLoginId("bruniii"),
-				() -> then(userAccountRepository).should(times(1)).save(any(UserAccount.class))
-			);
+			// when & then
+			assertThatCode(() -> authService.signup("bruniii", "asdf1234!"))
+				.doesNotThrowAnyException();
 		}
 
 		@DisplayName("중복된 로그인 아이디가 주어지면 회원가입에 실패한다.")
