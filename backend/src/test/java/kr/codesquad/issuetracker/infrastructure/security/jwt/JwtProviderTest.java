@@ -1,7 +1,6 @@
 package kr.codesquad.issuetracker.infrastructure.security.jwt;
 
 import static org.assertj.core.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.*;
 
 import java.nio.charset.StandardCharsets;
 import java.util.Date;
@@ -9,8 +8,6 @@ import java.util.Date;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
@@ -32,15 +29,7 @@ class JwtProviderTest {
 		String token = jwtProvider.createToken("1");
 
 		// then
-		Jws<Claims> claimsJws = Jwts.parserBuilder()
-			.setSigningKey(Keys.hmacShaKeyFor(secretKey.getBytes(StandardCharsets.UTF_8)))
-			.build()
-			.parseClaimsJws(token);
-
-		assertAll(
-			() -> assertThat(token).isNotNull().isNotEmpty(),
-			() -> assertThat(String.valueOf(claimsJws.getBody().get("userId"))).isEqualTo("1")
-		);
+		assertThat(token).isNotNull().isNotEmpty();
 	}
 
 	@DisplayName("유효하지 않은 토큰이면 예외가 발생한다.")
@@ -70,5 +59,18 @@ class JwtProviderTest {
 		assertThatThrownBy(() -> jwtProvider.validateToken(token))
 			.isInstanceOf(ApplicationException.class)
 			.extracting("errorCode").isEqualTo(ErrorCode.EXPIRED_JWT);
+	}
+
+	@DisplayName("토큰에서 userId를 추출한다.")
+	@Test
+	void givenToken_thenExtractUserId() {
+		// given
+		String token = jwtProvider.createToken("13");
+
+		// when
+		String userId = jwtProvider.extractUserId(token);
+
+		// then
+		assertThat(userId).isEqualTo("13");
 	}
 }
