@@ -45,7 +45,11 @@ export default function IssueItem({ issue }: { issue: IssueItemType }) {
           </span>
           {milestone && (
             <span>
-              <img src={milestoneIcon} alt="마일스톤" />
+              <img
+                className="milestone-icon"
+                src={milestoneIcon}
+                alt="마일스톤"
+              />
               {milestone}
             </span>
           )}
@@ -135,8 +139,9 @@ const IssueDetails = styled.div`
   font: ${({ theme: { font } }) => font.availableMD16};
 
   span {
-    img {
+    .milestone-icon {
       margin-right: 8px;
+      filter: ${({ theme: { filter } }) => filter.neutralTextDefault};
     }
   }
 `;

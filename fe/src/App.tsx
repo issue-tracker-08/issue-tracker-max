@@ -5,7 +5,8 @@ import IssuesPage from "@pages/MainPage/IssuesPage";
 import MainPage from "@pages/MainPage/MainPage";
 import GlobalStyle from "@styles/GlobalStyle";
 import { darkMode, lightMode } from "@styles/designSystem";
-import { useState } from "react";
+import { ThemeModeContext } from "context/themeModeContext";
+import { useContext } from "react";
 import {
   Route,
   RouterProvider,
@@ -30,13 +31,7 @@ const router = createBrowserRouter(
 );
 
 export default function App() {
-  const [themeMode, setThemeMode] = useState<"light" | "dark">("light");
-
-  const toggleThemeMode = () => {
-    setThemeMode((prev) => {
-      return prev === "light" ? "dark" : "light";
-    });
-  };
+  const { themeMode } = useContext(ThemeModeContext);
 
   return (
     <ThemeProvider theme={themeMode === "light" ? lightMode : darkMode}>

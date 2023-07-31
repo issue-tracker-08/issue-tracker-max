@@ -1,10 +1,14 @@
 import moonIcon from "@assets/icon/moon.svg";
 import sunIcon from "@assets/icon/sun.svg";
+import { ThemeModeContext } from "context/themeModeContext";
+import { useContext } from "react";
 import { styled } from "styled-components";
 import Logo from "./common/Logo";
 import ToggleSwitch from "./common/ToggleSwitch";
 
 export default function Header() {
+  const { toggleThemeMode } = useContext(ThemeModeContext);
+
   return (
     <StyledHeader>
       <Logo size="large" />
@@ -12,7 +16,7 @@ export default function Header() {
         <ToggleSwitch
           onImg={moonIcon}
           offImg={sunIcon}
-          onToggle={() => console.log("toggle dark mode")}
+          onToggle={toggleThemeMode}
         />
 
         {/* TODO: user object에서 사진 정보 가져오기 */}
