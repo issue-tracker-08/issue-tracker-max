@@ -88,7 +88,7 @@ public class AuthServiceTest {
 				.extracting("errorCode").isEqualTo(ErrorCode.FAILED_LOGIN);
 		}
 
-		@DisplayName("존재하지 안흔 로그인 아이디가 주어지면 예외를 던진다.")
+		@DisplayName("존재하지 않는 로그인 아이디가 주어지면 예외를 던진다.")
 		@Test
 		void givenNotExistsLoginId_thenThrowsException() {
 			// given

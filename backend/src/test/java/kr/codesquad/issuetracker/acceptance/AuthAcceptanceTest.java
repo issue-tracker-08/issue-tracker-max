@@ -8,6 +8,7 @@ import java.util.stream.Stream;
 
 import org.apache.http.HttpStatus;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -17,7 +18,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 
 import io.restassured.RestAssured;
-import io.restassured.specification.RequestSpecification;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
 public class AuthAcceptanceTest {
@@ -31,10 +31,16 @@ public class AuthAcceptanceTest {
 		databaseInitializer.initTables();
 	}
 
+	@DisplayName("회원가입에 성공한다.")
 	@Test
-	void 회원가입을_한다() {
+	void signupSuccess() {
 		// given
-		var given = 올바른_회원가입_정보가_주어지면();
+		var given = RestAssured
+			.given().log().all()
+			.contentType(MediaType.APPLICATION_JSON_VALUE)
+			.body(Map.of(
+				"loginId", "bruni_login_id",
+				"password", "asdf1234!"));
 
 		// when
 		var response = given
@@ -46,53 +52,47 @@ public class AuthAcceptanceTest {
 		assertThat(response.statusCode()).isEqualTo(HttpStatus.SC_CREATED);
 	}
 
+	@DisplayName("형식에 맞지 않는 회원가입 정보로 인해 회원가입에 실패한다.")
 	@MethodSource("provideInvalidSignupInfo")
 	@ParameterizedTest(name = "[{index}] 아이디: {0} 비밀번호: {1}")
-	void 잘못된_형식으로_회원가입을_실패한다(String loginId, String password) {
+	void givenInvalidSignupInfo_thenFailsSignup(String loginId, String password) {
 		// given
-		var given = 잘못된_회원가입_정보가_주어지면(loginId, password);
-
-		// when
-		var response = given
-			.when().post("/api/auth/signup")
-			.then().log().all()
-			.extract();
-
-		// then
-		assertThat(response.statusCode()).isEqualTo(HttpStatus.SC_BAD_REQUEST);
-	}
-
-	@Test
-	void 아이디가_이미_존재해_회원가입에_실패한다() {
-		// given
-		var given = 중복된_아이디의_회원가입_정보가_주어지면();
-
-		// when
-		var response = given
-			.when().post("/api/auth/signup")
-			.then().log().all()
-			.extract();
-
-		// then
-		assertThat(response.statusCode()).isEqualTo(HttpStatus.SC_BAD_REQUEST);
-	}
-
-	private RequestSpecification 올바른_회원가입_정보가_주어지면() {
-		return RestAssured
-			.given().log().all()
-			.contentType(MediaType.APPLICATION_JSON_VALUE)
-			.body(Map.of(
-				"loginId", "bruni_login_id",
-				"password", "asdf1234!"));
-	}
-
-	private RequestSpecification 잘못된_회원가입_정보가_주어지면(String loginId, String password) {
-		return RestAssured
+		var given = RestAssured
 			.given().log().all()
 			.contentType(MediaType.APPLICATION_JSON_VALUE)
 			.body(Map.of(
 				"loginId", loginId,
 				"password", password));
+
+		// when
+		var response = given
+			.when().post("/api/auth/signup")
+			.then().log().all()
+			.extract();
+
+		// then
+		assertThat(response.statusCode()).isEqualTo(HttpStatus.SC_BAD_REQUEST);
+	}
+
+	@DisplayName("중복된 로그인 아이디가 이미 존재해 회원가입에 실패한다.")
+	@Test
+	void givenDuplicatedLoginId_thenFailsSignup() {
+		// given
+		var given = RestAssured
+			.given().log().all()
+			.contentType(MediaType.APPLICATION_JSON_VALUE)
+			.body(Map.of(
+				"loginId", "iambruni",
+				"password", "asdf123444!"));
+
+		// when
+		var response = given
+			.when().post("/api/auth/signup")
+			.then().log().all()
+			.extract();
+
+		// then
+		assertThat(response.statusCode()).isEqualTo(HttpStatus.SC_BAD_REQUEST);
 	}
 
 	private static Stream<Arguments> provideInvalidSignupInfo() {
@@ -104,19 +104,16 @@ public class AuthAcceptanceTest {
 		);
 	}
 
-	private RequestSpecification 중복된_아이디의_회원가입_정보가_주어지면() {
-		return RestAssured
+	@DisplayName("로그인에 성공한다.")
+	@Test
+	void loginSuccess() {
+		// given
+		var given = RestAssured
 			.given().log().all()
 			.contentType(MediaType.APPLICATION_JSON_VALUE)
 			.body(Map.of(
 				"loginId", "iambruni",
-				"password", "asdf123444!"));
-	}
-
-	@Test
-	void 로그인을_성공한다() {
-		// given
-		var given = 올바른_로그인_정보가_주어지면();
+				"password", "asdf1234"));
 
 		// when
 		var response = given
@@ -132,10 +129,17 @@ public class AuthAcceptanceTest {
 		);
 	}
 
+	@DisplayName("존재하지 않는 로그인 아이돌 인해 로그인에 실패한다.")
 	@Test
-	void 로그인_아이디가_없어_로그인에_실패한다() {
+	void givenNotExistsLoginId_thenFailsLogin() {
 		// given
-		var given = 존재하지_않는_로그인_아이디가_주어지면();
+		var given = RestAssured
+			.given().log().all()
+			.contentType(MediaType.APPLICATION_JSON_VALUE)
+			.body(Map.of(
+				"loginId", "iamnotbruni",
+				"password", "asdf1234"
+			));
 
 		// when
 		var response = given
@@ -147,10 +151,17 @@ public class AuthAcceptanceTest {
 		assertThat(response.statusCode()).isEqualTo(HttpStatus.SC_NOT_FOUND);
 	}
 
+	@DisplayName("비밀번호가 일치하지 않아 로그인에 실패한다.")
 	@Test
-	void 비밀번호가_일치하지_않아_로그인에_실패한다() {
+	void givenNotMatchPassword_thenFailsLogin() {
 		// given
-		var given = 일치하지_않는_비밀번호가_주어지면();
+		var given = RestAssured
+			.given().log().all()
+			.contentType(MediaType.APPLICATION_JSON_VALUE)
+			.body(Map.of(
+				"loginId", "iambruni",
+				"password", "asdf12345"
+			));
 
 		// when
 		var response = given
@@ -160,34 +171,5 @@ public class AuthAcceptanceTest {
 
 		// then
 		assertThat(response.statusCode()).isEqualTo(HttpStatus.SC_BAD_REQUEST);
-	}
-
-	private RequestSpecification 올바른_로그인_정보가_주어지면() {
-		return RestAssured
-			.given().log().all()
-			.contentType(MediaType.APPLICATION_JSON_VALUE)
-			.body(Map.of(
-				"loginId", "iambruni",
-				"password", "asdf1234"));
-	}
-
-	private RequestSpecification 존재하지_않는_로그인_아이디가_주어지면() {
-		return RestAssured
-			.given().log().all()
-			.contentType(MediaType.APPLICATION_JSON_VALUE)
-			.body(Map.of(
-				"loginId", "iamnotbruni",
-				"password", "asdf1234"
-			));
-	}
-
-	private RequestSpecification 일치하지_않는_비밀번호가_주어지면() {
-		return RestAssured
-			.given().log().all()
-			.contentType(MediaType.APPLICATION_JSON_VALUE)
-			.body(Map.of(
-				"loginId", "iambruni",
-				"password", "asdf12345"
-			));
 	}
 }
