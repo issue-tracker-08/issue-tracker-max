@@ -177,6 +177,49 @@ export const handlers = [
       ])
     );
   }),
+
+  rest.get("/api/labels", async (_req, res, ctx) => {
+    return res(
+      ctx.status(200),
+      ctx.json([
+        {
+          name: "bug",
+          fontColor: "#FFF",
+          backgroundColor: "#D73A4A",
+        },
+        {
+          name: "docs",
+          fontColor: "#FFF",
+          backgroundColor: "#2675CA",
+        },
+        {
+          name: "feat",
+          fontColor: "#000",
+          backgroundColor: "#FACA02",
+        },
+      ])
+    );
+  }),
+
+  rest.get("/api/milestones", async (_req, res, ctx) => {
+    return res(
+      ctx.status(200),
+      ctx.json([
+        {
+          milestoneId: 1,
+          milestoneName: "Sprint #1",
+          openIssueCount: 1,
+          closedIssueCount: 0,
+        },
+        {
+          milestoneId: 2,
+          milestoneName: "Sprint #2",
+          openIssueCount: 2,
+          closedIssueCount: 0,
+        },
+      ])
+    );
+  }),
 ];
 
 // TODO: 만료된 토큰에 대한 응답 처리

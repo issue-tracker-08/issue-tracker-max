@@ -4,12 +4,19 @@ export type Label = {
   backgroundColor: string;
 };
 
+export type Milestone = {
+  milestoneId: number;
+  milestoneName: string;
+  openIssueCount: number;
+  closedIssueCount: number;
+};
+
 export type Assignee = {
   username: string;
   profileUrl: string;
 };
 
-export type IssueItemType = {
+export type IssueItem = {
   issueNumber: number;
   isOpen: boolean;
   title: string;
