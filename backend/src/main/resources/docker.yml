@@ -1,7 +1,7 @@
 version: '3.8'
 
 services:
-  mysql-prod:
+  mysql-app: # 애플리케이션 환경에서 동작시킬 DB
     image: mysql:latest
     ports:
       - 3306:3306
@@ -13,7 +13,7 @@ services:
     command:
       - --character-set-server=utf8mb4
       - --collation-server=utf8mb4_unicode_ci
-  mysql-dev:
+  mysql-test: # 테스트 환경에서 동작시킬 DB
     image: mysql:latest
     ports:
       - 3307:3306
