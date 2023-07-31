@@ -50,4 +50,14 @@ public class JwtProvider {
 			throw new ApplicationException(ErrorCode.INVALID_JWT);
 		}
 	}
+
+	public String extractUserId(final String token) {
+		return Jwts.parserBuilder()
+			.setSigningKey(secretKey)
+			.build()
+			.parseClaimsJws(token)
+			.getBody()
+			.get("userId")
+			.toString();
+	}
 }
