@@ -6,7 +6,13 @@ import InputCheckbox from "@components/common/Input/InputCheckbox";
 import { styled } from "styled-components";
 import TableHeader from "./TableHeader";
 
-export default function TableHeaderIssues() {
+export default function TableHeaderIssues({
+  numOpen,
+  numClosed,
+}: {
+  numOpen: number;
+  numClosed: number;
+}) {
   return (
     <TableHeader>
       <TableHeaderContents>
@@ -16,14 +22,15 @@ export default function TableHeaderIssues() {
           {/* TODO: TabBar로 변경 */}
           <Button size="M" variant="ghost">
             <img src={alertIcon} alt="열린 이슈" />
-            열린 이슈 (2)
+            열린 이슈 ({numOpen})
           </Button>
           <Button size="M" variant="ghost">
             <img src={archiveIcon} alt="닫힌 이슈" />
-            닫힌 이슈 (0)
+            닫힌 이슈 ({numClosed})
           </Button>
         </div>
 
+        {/* TODO: dropdownList */}
         <div className="right-wrapper">
           <DropdownIndicator
             displayName="담당자"

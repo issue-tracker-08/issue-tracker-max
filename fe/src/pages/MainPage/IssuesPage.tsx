@@ -3,16 +3,29 @@ import FilterBar from "@components/FilterBar";
 import { Table, TableBodyIssues, TableHeaderIssues } from "@components/Table";
 import Button from "@components/common/Button";
 import TabBar from "@components/common/TabBar";
+import { IssueItem, Label, Milestone } from "@customTypes/index";
+import useFetch from "@hooks/useFetch";
+import { getIssues, getLabels, getMilestones } from "api";
 import { styled } from "styled-components";
 
 export default function IssuesPage() {
+  const issuesList = useFetch<IssueItem[]>([], getIssues);
+  const labelsList = useFetch<Label[]>([], getLabels);
+  const milestonesList = useFetch<Milestone[]>([], getMilestones);
+
+  const numOpen = issuesList.filter((issue) => issue.isOpen).length;
+  const numClosed = issuesList.length - numOpen;
+
   return (
     <div>
       <IssuesNavBar>
         <FilterBar />
 
         <div className="right-wrapper">
-          <TabBar labelCount={3} milestoneCount={2} />
+          <TabBar
+            labelCount={labelsList.length}
+            milestoneCount={milestonesList.length}
+          />
           <Button size="S" variant="container">
             <img src={plusIcon} alt="이슈 작성" />
             이슈 작성
@@ -21,8 +34,8 @@ export default function IssuesPage() {
       </IssuesNavBar>
 
       <Table>
-        <TableHeaderIssues />
-        <TableBodyIssues issuesList={[{ title: "이슈 제목" }]} />
+        <TableHeaderIssues {...{ numOpen, numClosed }} />
+        <TableBodyIssues issuesList={issuesList} />
       </Table>
     </div>
   );
