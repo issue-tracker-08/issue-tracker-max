@@ -13,4 +13,10 @@ public class Comment {
 	private Boolean isDeleted;
 	private Integer userAccountId;
 	private Integer issueId;
+
+	public Comment(String content, Integer userAccountId, Integer issueId) {
+		this.content = content;
+		this.userAccountId = userAccountId;
+		this.issueId = issueId;
+	}
 }

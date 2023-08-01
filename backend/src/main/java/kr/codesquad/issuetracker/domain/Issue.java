@@ -15,4 +15,12 @@ public class Issue {
 	private Boolean isDeleted;
 	private Integer userAccountId;
 	private Integer milestoneId;
+
+	public Issue(String title, String content, Boolean isOpen, Integer userAccountId, Integer milestoneId) {
+		this.title = title;
+		this.content = content;
+		this.isOpen = isOpen;
+		this.userAccountId = userAccountId;
+		this.milestoneId = milestoneId;
+	}
 }

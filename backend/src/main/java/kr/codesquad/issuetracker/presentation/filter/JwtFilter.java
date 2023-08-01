@@ -13,6 +13,7 @@ import org.springframework.util.AntPathMatcher;
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 
+import kr.codesquad.issuetracker.domain.AuthenticationContext;
 import kr.codesquad.issuetracker.exception.ApplicationException;
 import kr.codesquad.issuetracker.exception.ErrorCode;
 import kr.codesquad.issuetracker.infrastructure.security.jwt.JwtProvider;
@@ -28,6 +29,7 @@ public class JwtFilter extends OncePerRequestFilter {
 	private static final List<String> excludeUrlPatterns = List.of("/api/auth/**");
 
 	private final JwtProvider jwtProvider;
+	private final AuthenticationContext authenticationContext;
 
 	@Override
 	protected boolean shouldNotFilter(HttpServletRequest request) {
@@ -39,9 +41,9 @@ public class JwtFilter extends OncePerRequestFilter {
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
 		FilterChain filterChain) throws ServletException, IOException {
 
-		extractJwt(request).ifPresentOrElse(jwtProvider::validateToken, () -> {
-			throw new ApplicationException(ErrorCode.EMPTY_JWT);
-		});
+		String token = extractJwt(request).orElseThrow(() -> new ApplicationException(ErrorCode.EMPTY_JWT));
+		jwtProvider.validateToken(token);
+		authenticationContext.setPrincipal(jwtProvider.extractUserId(token));
 
 		filterChain.doFilter(request, response);
 	}

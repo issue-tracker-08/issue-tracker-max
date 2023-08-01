@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.Comparator;
+import java.util.List;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -13,13 +14,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import kr.codesquad.issuetracker.ApplicationTest;
 import kr.codesquad.issuetracker.acceptance.DatabaseInitializer;
+import kr.codesquad.issuetracker.fixture.FixtureFactory;
 import kr.codesquad.issuetracker.exception.ApplicationException;
 import kr.codesquad.issuetracker.exception.ErrorCode;
 import kr.codesquad.issuetracker.infrastructure.persistence.mapper.IssueSimpleMapper;
+import kr.codesquad.issuetracker.presentation.request.IssueRegisterRequest;
 import kr.codesquad.issuetracker.presentation.request.AssigneeRequest;
 
 @ApplicationTest
 class IssueServiceTest {
+
 	@Autowired
 	private DatabaseInitializer databaseInitializer;
 
@@ -29,6 +33,25 @@ class IssueServiceTest {
 	@BeforeEach
 	void setUp() {
 		databaseInitializer.initTables();
+	}
+
+	@DisplayName("이슈 등록에 성공한다.")
+	@Test
+	void registerIssueTest() {
+		// given
+		IssueRegisterRequest request = FixtureFactory
+			.createIssueRegisterRequest("프로젝트 세팅하기", List.of(1, 2), List.of(1, 2));
+
+		// when
+		issueService.register(1, request);
+
+		// then
+		List<IssueSimpleMapper> result = issueService.findAll();
+		assertAll(
+			() -> assertThat(result.get(0).getIssueNumber()).isEqualTo(4),
+			() -> assertThat(result.get(0).isOpen()).isTrue(),
+			() -> assertThat(result.get(0).getTitle()).isEqualTo("프로젝트 세팅하기")
+		);
 	}
 
 	@DisplayName("전체 이슈 목록을 조회시")

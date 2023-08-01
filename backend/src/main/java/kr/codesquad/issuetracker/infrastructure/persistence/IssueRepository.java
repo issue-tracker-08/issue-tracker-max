@@ -7,38 +7,26 @@ import java.util.Map;
 import javax.sql.DataSource;
 
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
-import org.springframework.jdbc.core.namedparam.SqlParameterSourceUtils;
+import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
 
-import kr.codesquad.issuetracker.domain.IssueAssignee;
+import kr.codesquad.issuetracker.domain.Issue;
 import kr.codesquad.issuetracker.infrastructure.persistence.mapper.IssueSimpleMapper;
 
 @Repository
 public class IssueRepository {
 
 	private final NamedParameterJdbcTemplate jdbcTemplate;
+	private final SimpleJdbcInsert jdbcInsert;
 
 	public IssueRepository(DataSource dataSource) {
 		this.jdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
-	}
-
-	public boolean existsById(Integer issueId) {
-		String sql = "SELECT EXISTS (SELECT 1 FROM issue WHERE id = :issueId)";
-
-		return Boolean.TRUE.equals(jdbcTemplate.queryForObject(sql, Map.of("issueId", issueId), Boolean.class));
-	}
-
-	public void saveAssignees(List<IssueAssignee> issueAssignees) {
-		String sql = "INSERT INTO issue_assignee (issue_id, user_account_id) VALUES (:issueId, :userAccountId)";
-
-		jdbcTemplate.batchUpdate(sql, SqlParameterSourceUtils.createBatch(issueAssignees));
-	}
-
-	public void deleteAssignees(List<IssueAssignee> issueAssignees) {
-		String sql = "DELETE FROM issue_assignee WHERE issue_id = :issueId AND user_account_id = :userAccountId";
-
-		jdbcTemplate.batchUpdate(sql, SqlParameterSourceUtils.createBatch(issueAssignees));
+		this.jdbcInsert = new SimpleJdbcInsert(dataSource)
+			.withTableName("issue")
+			.usingGeneratedKeyColumns("id")
+			.usingColumns("title", "is_open", "content", "user_account_id", "milestone_id");
 	}
 
 	public List<IssueSimpleMapper> findAll() {
@@ -71,5 +59,15 @@ public class IssueRepository {
 			rs.getString("milestone"),
 			rs.getString("assignee"),
 			rs.getTimestamp("created_at").toLocalDateTime());
+	}
+
+	public Integer save(Issue issue) {
+		return jdbcInsert.executeAndReturnKey(new BeanPropertySqlParameterSource(issue)).intValue();
+	}
+
+	public boolean existsById(Integer issueId) {
+		String sql = "SELECT EXISTS (SELECT 1 FROM issue WHERE id = : issueId";
+
+		return Boolean.TRUE.equals(jdbcTemplate.queryForObject(sql, Map.of("issueId", issueId), Boolean.class));
 	}
 }
