@@ -22,11 +22,17 @@ public class IssueRegisterRequest {
 	private Integer milestone;
 
 	public Optional<List<Integer>> getAssignees() {
-		return Optional.ofNullable(assignees);
+		if (assignees == null || assignees.isEmpty()) {
+			return Optional.empty();
+		}
+		return Optional.of(assignees);
 	}
 
 	public Optional<List<Integer>> getLabels() {
-		return Optional.ofNullable(labels);
+		if (labels == null || labels.isEmpty()) {
+			return Optional.empty();
+		}
+		return Optional.of(labels);
 	}
 
 	public Optional<Integer> getMilestone() {
