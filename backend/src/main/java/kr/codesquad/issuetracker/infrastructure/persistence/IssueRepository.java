@@ -6,18 +6,26 @@ import java.util.List;
 import javax.sql.DataSource;
 
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
 
+import kr.codesquad.issuetracker.domain.Issue;
 import kr.codesquad.issuetracker.infrastructure.persistence.mapper.IssueSimpleMapper;
 
 @Repository
 public class IssueRepository {
 
 	private final NamedParameterJdbcTemplate jdbcTemplate;
+	private final SimpleJdbcInsert jdbcInsert;
 
 	public IssueRepository(DataSource dataSource) {
 		this.jdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
+		this.jdbcInsert = new SimpleJdbcInsert(dataSource)
+			.withTableName("issue")
+			.usingGeneratedKeyColumns("id")
+			.usingColumns("title", "is_open", "content", "user_account_id", "milestone_id");
 	}
 
 	public List<IssueSimpleMapper> findAll() {
@@ -50,5 +58,9 @@ public class IssueRepository {
 			rs.getString("milestone"),
 			rs.getString("assignee"),
 			rs.getTimestamp("created_at").toLocalDateTime());
+	}
+
+	public Integer save(Issue issue) {
+		return jdbcInsert.executeAndReturnKey(new BeanPropertySqlParameterSource(issue)).intValue();
 	}
 }
