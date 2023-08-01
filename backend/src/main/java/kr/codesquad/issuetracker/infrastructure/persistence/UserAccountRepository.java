@@ -1,5 +1,6 @@
 package kr.codesquad.issuetracker.infrastructure.persistence;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -42,5 +43,13 @@ public class UserAccountRepository {
 			Map.of("loginId", loginId), (rs, rowNum) -> new UserAccount(rs.getInt("id"),
 				rs.getString("login_id"),
 				rs.getString("password")))));
+	}
+
+	public List<UserAccount> findAll() {
+		String sql = "SELECT id, login_id, profile_url FROM user_account WHERE is_deleted = FALSE";
+
+		return jdbcTemplate.query(sql, (rs, rowNum) -> UserAccount.createUserProfile(rs.getInt("id"),
+			rs.getString("login_id"),
+			rs.getString("profile_url")));
 	}
 }

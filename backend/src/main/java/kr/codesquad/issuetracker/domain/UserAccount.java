@@ -1,7 +1,10 @@
 package kr.codesquad.issuetracker.domain;
 
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Getter
 public class UserAccount {
 
@@ -25,5 +28,9 @@ public class UserAccount {
 
 	public boolean isSamePassword(String password) {
 		return this.password.equals(password);
+	}
+
+	public static UserAccount createUserProfile(Integer id, String loginId, String profileUrl) {
+		return new UserAccount(id, loginId, null, profileUrl, false);
 	}
 }
