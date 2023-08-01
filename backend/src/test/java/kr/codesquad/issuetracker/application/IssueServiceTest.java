@@ -30,7 +30,7 @@ class IssueServiceTest {
 		databaseInitializer.initTables();
 	}
 
-	@DisplayName("")
+	@DisplayName("이슈 등록에 성공한다.")
 	@Test
 	void registerIssueTest() {
 		// given
