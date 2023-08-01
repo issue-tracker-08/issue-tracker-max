@@ -29,7 +29,7 @@ class JwtProviderTest {
 		String token = jwtProvider.createToken("1");
 
 		// then
-		assertThat(token).isNotNull().isNotEmpty();
+		assertThat(token).isNotBlank();
 	}
 
 	@DisplayName("유효하지 않은 토큰이면 예외가 발생한다.")
