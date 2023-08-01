@@ -1,18 +1,3 @@
-const months = [
-  "Jan",
-  "Feb",
-  "Mar",
-  "Apr",
-  "May",
-  "Jun",
-  "Jul",
-  "Aug",
-  "Sep",
-  "Oct",
-  "Nov",
-  "Dec",
-];
-
 const minuteInMs = 1000 * 60;
 const hourInMs = minuteInMs * 60;
 const dayInMs = hourInMs * 24;
@@ -52,11 +37,11 @@ export const convertPastTimestamp = (timestamp: string) => {
   ) {
     const month = startDate.getMonth();
     const date = startDate.getDate();
-    return `${months[month]} ${date}`;
+    return `${month + 1}/${date}`;
   } else {
+    const year = startDate.getFullYear();
     const month = startDate.getMonth();
     const date = startDate.getDate();
-    const year = startDate.getFullYear();
-    return `${months[month]} ${date}, ${year}`;
+    return `${year}/${month + 1}/${date}`;
   }
 };
