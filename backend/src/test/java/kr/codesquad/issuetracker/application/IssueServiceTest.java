@@ -5,7 +5,6 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.List;
 
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -13,10 +12,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import kr.codesquad.issuetracker.ApplicationTest;
 import kr.codesquad.issuetracker.acceptance.DatabaseInitializer;
+import kr.codesquad.issuetracker.fixture.FixtureFactory;
 import kr.codesquad.issuetracker.infrastructure.persistence.mapper.IssueSimpleMapper;
+import kr.codesquad.issuetracker.presentation.request.IssueRegisterRequest;
 
 @ApplicationTest
 class IssueServiceTest {
+
 	@Autowired
 	private DatabaseInitializer databaseInitializer;
 
@@ -26,6 +28,25 @@ class IssueServiceTest {
 	@BeforeEach
 	void setUp() {
 		databaseInitializer.initTables();
+	}
+
+	@DisplayName("")
+	@Test
+	void registerIssueTest() {
+		// given
+		IssueRegisterRequest request = FixtureFactory
+			.createIssueRegisterRequest("프로젝트 세팅하기", List.of(1, 2), List.of(1, 2));
+
+		// when
+		issueService.register(1, request);
+
+		// then
+		List<IssueSimpleMapper> result = issueService.findAll();
+		assertAll(
+			() -> assertThat(result.get(0).getIssueNumber()).isEqualTo(4),
+			() -> assertThat(result.get(0).isOpen()).isTrue(),
+			() -> assertThat(result.get(0).getTitle()).isEqualTo("프로젝트 세팅하기")
+		);
 	}
 
 	@DisplayName("전체 이슈 목록을 조회할 수 있다.")
