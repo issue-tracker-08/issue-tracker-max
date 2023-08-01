@@ -2,13 +2,16 @@ package kr.codesquad.issuetracker.infrastructure.persistence;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 import javax.sql.DataSource;
 
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.jdbc.core.namedparam.SqlParameterSourceUtils;
 import org.springframework.stereotype.Repository;
 
+import kr.codesquad.issuetracker.domain.IssueAssignee;
 import kr.codesquad.issuetracker.infrastructure.persistence.mapper.IssueSimpleMapper;
 
 @Repository
@@ -18,6 +21,24 @@ public class IssueRepository {
 
 	public IssueRepository(DataSource dataSource) {
 		this.jdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
+	}
+
+	public boolean existsById(Integer issueId) {
+		String sql = "SELECT EXISTS (SELECT 1 FROM issue WHERE id = :issueId)";
+
+		return Boolean.TRUE.equals(jdbcTemplate.queryForObject(sql, Map.of("issueId", issueId), Boolean.class));
+	}
+
+	public void saveAssignees(List<IssueAssignee> issueAssignees) {
+		String sql = "INSERT INTO issue_assignee (issue_id, user_account_id) VALUES (:issueId, :userAccountId)";
+
+		jdbcTemplate.batchUpdate(sql, SqlParameterSourceUtils.createBatch(issueAssignees));
+	}
+
+	public void deleteAssignees(List<IssueAssignee> issueAssignees) {
+		String sql = "DELETE FROM issue_assignee WHERE issue_id = :issueId AND user_account_id = :userAccountId";
+
+		jdbcTemplate.batchUpdate(sql, SqlParameterSourceUtils.createBatch(issueAssignees));
 	}
 
 	public List<IssueSimpleMapper> findAll() {

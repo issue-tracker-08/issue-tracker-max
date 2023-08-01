@@ -14,7 +14,10 @@ public enum ErrorCode {
 	// JWT
 	EMPTY_JWT(401, "헤더에 토큰값이 존재하지 않거나 유효하지 않습니다."),
 	INVALID_JWT(401, "유효한 토큰이 아닙니다."),
-	EXPIRED_JWT(401, "만료된 토큰입니다");
+	EXPIRED_JWT(401, "만료된 토큰입니다"),
+
+	// ISSUE
+	ISSUE_NOT_FOUND(404, "존재하지 않는 이슈입니다.");
 
 	private final int statusCode;
 	private final String message;
