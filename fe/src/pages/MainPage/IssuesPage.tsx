@@ -1,5 +1,3 @@
-import labelIcon from "@assets/icon/label.svg";
-import milestoneIcon from "@assets/icon/milestone.svg";
 import plusIcon from "@assets/icon/plus.svg";
 import FilterBar from "@components/FilterBar";
 import { Table, TableBodyIssues, TableHeaderIssues } from "@components/Table";
@@ -8,7 +6,6 @@ import TabBar from "@components/common/TabBar";
 import { IssueItem, Label, Milestone } from "@customTypes/index";
 import useFetch from "@hooks/useFetch";
 import { getIssues, getLabels, getMilestones } from "api";
-import { useNavigate } from "react-router-dom";
 import { styled } from "styled-components";
 
 export default function IssuesPage() {
@@ -19,20 +16,6 @@ export default function IssuesPage() {
   const numOpen = issuesList.filter((issue) => issue.isOpen).length;
   const numClosed = issuesList.length - numOpen;
 
-  const navigate = useNavigate();
-  const tabBarLeftInfo = {
-    name: "레이블",
-    count: labelsList.length,
-    iconSrc: labelIcon,
-    callback: () => navigate("/labels"),
-  };
-  const tabBarRightInfo = {
-    name: "마일스톤",
-    count: milestonesList.length,
-    iconSrc: milestoneIcon,
-    callback: () => navigate("/milestones"),
-  };
-
   return (
     <div>
       <IssuesNavBar>
@@ -40,9 +23,8 @@ export default function IssuesPage() {
 
         <div className="right-wrapper">
           <TabBar
-            left={tabBarLeftInfo}
-            right={tabBarRightInfo}
-            borderStyle="outline"
+            labelCount={labelsList.length}
+            milestoneCount={milestonesList.length}
           />
           <Button size="S" variant="container">
             <img src={plusIcon} alt="이슈 작성" />
