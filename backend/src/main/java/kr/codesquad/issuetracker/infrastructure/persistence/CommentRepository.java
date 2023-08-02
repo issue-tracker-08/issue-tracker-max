@@ -37,7 +37,7 @@ public class CommentRepository {
 			.addValue("commentId", commentId);
 
 		return Optional.ofNullable(DataAccessUtils.singleResult(jdbcTemplate.query(sql, params, (rs, rowNum) ->
-			new Comment(rs.getString("content")))));
+			new Comment(rs.getInt("id"), rs.getString("content")))));
 	}
 
 	public void update(Comment comment) {
