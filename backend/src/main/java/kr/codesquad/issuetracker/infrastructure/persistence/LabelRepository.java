@@ -15,7 +15,10 @@ public class LabelRepository {
 	private final NamedParameterJdbcTemplate jdbcTemplate;
 
 	public List<Label> findAll() {
-		String sql = "SELECT id, name, font_color, background_color FROM label WHERE is_deleted = false";
+		String sql = "SELECT id, name, font_color, background_color "
+			+ "FROM label "
+			+ "WHERE is_deleted = false "
+			+ "ORDER BY name";
 
 		return jdbcTemplate.query(sql, (rs, rowNum) -> new Label(
 			rs.getInt("id"),

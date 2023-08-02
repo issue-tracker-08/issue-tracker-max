@@ -1,6 +1,5 @@
 package kr.codesquad.issuetracker.application;
 
-import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -23,7 +22,6 @@ public class LabelService {
 			.map(label -> new LabelResponse(
 				label.getId(), label.getName(), label.getFontColor(), label.getBackgroundColor()
 			))
-			.sorted(Comparator.comparing(LabelResponse::getName))
 			.collect(Collectors.toList());
 	}
 }
