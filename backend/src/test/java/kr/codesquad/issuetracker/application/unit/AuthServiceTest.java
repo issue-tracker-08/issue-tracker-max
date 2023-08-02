@@ -71,7 +71,7 @@ class AuthServiceTest {
 			// when & then
 			assertThatThrownBy(() -> authService.login("applePIE", "12341234"))
 				.isInstanceOf(ApplicationException.class)
-				.extracting("errorCode").isEqualTo(ErrorCode.NOT_FOUND);
+				.extracting("errorCode").isEqualTo(ErrorCode.USER_NOT_FOUND);
 		}
 	}
 }
