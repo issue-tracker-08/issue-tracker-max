@@ -31,8 +31,9 @@ public class CommentController {
 	}
 
 	@PutMapping("/{commentId}")
-	public ResponseEntity<Void> modify(@RequestBody CommentRequest request, @PathVariable Integer commentId) {
-		commentService.modify(request.getContent(), commentId);
+	public ResponseEntity<Void> modify(@RequestBody CommentRequest request, @PathVariable Integer commentId,
+		@AuthPrincipal Integer userId) {
+		commentService.modify(request.getContent(), commentId, userId);
 		return ResponseEntity.status(HttpStatus.OK).build();
 	}
 }

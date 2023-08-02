@@ -24,9 +24,10 @@ public class Comment {
 		this.content = content;
 	}
 
-	public Comment(Integer id, String content) {
+	public Comment(Integer id, String content, Integer userAccountId) {
 		this.id = id;
 		this.content = content;
+		this.userAccountId = userAccountId;
 	}
 
 	public void modifyContent(String content) {

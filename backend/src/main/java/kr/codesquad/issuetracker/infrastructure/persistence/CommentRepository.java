@@ -32,12 +32,12 @@ public class CommentRepository {
 	}
 
 	public Optional<Comment> findById(Integer commentId) {
-		String sql = "SELECT id, content FROM comment WHERE id = :commentId AND is_deleted = false";
+		String sql = "SELECT id, content, user_account_id FROM comment WHERE id = :commentId AND is_deleted = false";
 		MapSqlParameterSource params = new MapSqlParameterSource()
 			.addValue("commentId", commentId);
 
 		return Optional.ofNullable(DataAccessUtils.singleResult(jdbcTemplate.query(sql, params, (rs, rowNum) ->
-			new Comment(rs.getInt("id"), rs.getString("content")))));
+			new Comment(rs.getInt("id"), rs.getString("content"), rs.getInt("user_account_id")))));
 	}
 
 	public void update(Comment comment) {

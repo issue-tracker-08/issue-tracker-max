@@ -11,6 +11,7 @@ public enum ErrorCode {
 	INVALID_INPUT(400, "입력 형식이 잘못되었습니다."),
 	FAILED_LOGIN(400, "비밀번호가 일치하지 않습니다."),
 	FAILED_ENCRYPTION(500, "해싱 인코딩에 실패했습니다."),
+	NO_AUTHORIZATION(403, "접근 권한이 없습니다."),
 
 	// JWT
 	EMPTY_JWT(401, "헤더에 토큰값이 존재하지 않거나 유효하지 않습니다."),
