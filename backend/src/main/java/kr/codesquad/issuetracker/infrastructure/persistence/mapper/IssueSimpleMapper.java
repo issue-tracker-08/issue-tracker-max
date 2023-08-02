@@ -21,10 +21,10 @@ public class IssueSimpleMapper {
 
 	private Integer issueNumber;
 	private boolean isOpen;
-	private List<LabelSimpleMapper> labelSimpleEntities;
+	private List<LabelSimpleMapper> labels;
 	private String title;
 	private String milestone;
-	private List<AssigneeSimpleMapper> assigneeSimpleEntities;
+	private List<AssigneeSimpleMapper> assignees;
 	private LocalDateTime createdAt;
 
 	@AllArgsConstructor
@@ -44,11 +44,11 @@ public class IssueSimpleMapper {
 	@NoArgsConstructor
 	@Getter
 	public static class AssigneeSimpleMapper {
-		private String loginId;
+		private String username;
 		private String profileUrl;
 
 		public boolean hasValue() {
-			return StringUtils.hasText(loginId);
+			return StringUtils.hasText(username);
 		}
 	}
 

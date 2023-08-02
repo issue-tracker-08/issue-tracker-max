@@ -77,10 +77,10 @@ class IssueServiceTest {
 
 			assertAll(
 				() -> assertThat(issueSimpleMappers.size()).isEqualTo(3),
-				() -> assertThat(firstIssue.getLabelSimpleEntities().size()).isEqualTo(0),
-				() -> assertThat(firstIssue.getAssigneeSimpleEntities().size()).isEqualTo(2),
-				() -> assertThat(lastIssue.getLabelSimpleEntities().size()).isEqualTo(3),
-				() -> assertThat(lastIssue.getAssigneeSimpleEntities().size()).isEqualTo(3)
+				() -> assertThat(firstIssue.getLabels().size()).isEqualTo(0),
+				() -> assertThat(firstIssue.getAssignees().size()).isEqualTo(2),
+				() -> assertThat(lastIssue.getLabels().size()).isEqualTo(3),
+				() -> assertThat(lastIssue.getAssignees().size()).isEqualTo(3)
 			);
 		}
 	}
