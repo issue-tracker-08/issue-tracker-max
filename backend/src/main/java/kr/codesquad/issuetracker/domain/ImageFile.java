@@ -36,8 +36,8 @@ public class ImageFile {
     public String getRandomName() {
         StringBuilder randomName = new StringBuilder();
         randomName.append(UUID.randomUUID())
-                .append(".")
-                .append(StringUtils.getFilenameExtension(originalFilename));
+                .append("_")
+                .append(originalFilename);
         return randomName.toString();
     }
 
