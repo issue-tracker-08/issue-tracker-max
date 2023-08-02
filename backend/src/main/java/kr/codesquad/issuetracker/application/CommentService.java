@@ -24,7 +24,7 @@ public class CommentService {
 	@Transactional
 	public void modify(String modifiedComment, Integer commentId, Integer issueId) {
 		Comment comment = commentRepository.findById(commentId, issueId)
-			.orElseThrow(() -> new ApplicationException(ErrorCode.NOT_FOUND));
+			.orElseThrow(() -> new ApplicationException(ErrorCode.COMMENT_NOT_FOUND));
 		comment.modifyContent(modifiedComment);
 		commentRepository.update(comment, commentId);
 	}
