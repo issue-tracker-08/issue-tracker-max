@@ -34,17 +34,13 @@ public class S3Service {
         metadata.setContentType(contentType);
         metadata.setContentLength(file.getSize());
 
-        // PutObjectRequest 이용하여 파일 생성 없이 바로 업로드
         amazonS3Client.putObject(new PutObjectRequest(bucket, fileName, file.getInputStream(), metadata)
                 .withCannedAcl(CannedAccessControlList.PublicRead));
-        // URL 받아올 때 한글 파일명 깨짐 방지
         fileUri = URLDecoder.decode(amazonS3Client.getUrl(bucket, fileName).toString(), StandardCharsets.UTF_8);
         return fileUri;
-        // 예시 -> http://s3주소/uuid-filename.jpg
     }
 
     public String getFileName(MultipartFile file) {
-        // Objects.requireNonNull 을 사용할 수도 있음
         if (Objects.isNull(file) || file.isEmpty()) {
             throw new IllegalArgumentException("file이 존재하지 않습니다.");
         }

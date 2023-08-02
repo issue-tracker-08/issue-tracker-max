@@ -18,8 +18,8 @@ public class FileController {
     private final S3Service s3Service;
 
     // 이미지 업로드
-    @PostMapping("/upload")
     public ResponseEntity<Map<String, String>> uploadImage(@RequestPart MultipartFile image) throws IOException {
         return ResponseEntity.status(HttpStatus.CREATED).body(Map.of("fileUrl" ,s3Service.uploadImage(image)));
+    @PostMapping("/images/upload")
     }
 }
