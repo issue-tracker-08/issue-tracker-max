@@ -32,7 +32,7 @@ public class CommentRepository {
 	}
 
 	public Optional<Comment> findById(Integer commentId) {
-		String sql = "SELECT content FROM comment WHERE id = :commentId AND is_deleted = false";
+		String sql = "SELECT id, content FROM comment WHERE id = :commentId AND is_deleted = false";
 		MapSqlParameterSource params = new MapSqlParameterSource()
 			.addValue("commentId", commentId);
 
