@@ -4,6 +4,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import kr.codesquad.issuetracker.domain.Comment;
+import kr.codesquad.issuetracker.exception.ApplicationException;
+import kr.codesquad.issuetracker.exception.ErrorCode;
 import kr.codesquad.issuetracker.infrastructure.persistence.CommentRepository;
 import lombok.RequiredArgsConstructor;
 
@@ -17,5 +19,13 @@ public class CommentService {
 	public void register(Integer userId, String content, Integer issueId) {
 		Comment comment = new Comment(content, userId, issueId);
 		commentRepository.save(comment);
+	}
+
+	@Transactional
+	public void modify(String modifiedComment, Integer commentId, Integer issueId) {
+		Comment comment = commentRepository.findById(commentId, issueId)
+			.orElseThrow(() -> new ApplicationException(ErrorCode.NOT_FOUND));
+		comment.modifyContent(modifiedComment);
+		commentRepository.update(comment, commentId);
 	}
 }
