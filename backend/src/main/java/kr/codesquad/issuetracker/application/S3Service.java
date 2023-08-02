@@ -4,71 +4,39 @@ import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
+import kr.codesquad.issuetracker.domain.ImageFile;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
-import java.util.Objects;
-import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
 public class S3Service {
+
+    private static final String UPLOADED_IMAGES = "public/uploaded-images/";
+    private static final String PROFILE_IMAGES = "public/profile-images/";
+
     private final AmazonS3Client amazonS3Client;
     @Value("${cloud.aws.s3.bucket}")
     private String bucket;
 
-    public String uploadImage(MultipartFile file) throws IOException {
-        // 업로드한 파일의 URL을 받아올 변수
-        String fileUri = null;
+    public String uploadImage(MultipartFile file) {
+
+        ImageFile imageFile = ImageFile.from(file);
+
         // 버킷에 저장할 파일 이름 생성
-        String dirName = "public/uploaded-images/";
-        String fileName = dirName + getFileName(file);
-        String contentType = getContentType(fileName.substring(fileName.lastIndexOf(".")));
+        String fileName = UPLOADED_IMAGES + imageFile.getRandomName();
 
         ObjectMetadata metadata = new ObjectMetadata();
-        metadata.setContentType(contentType);
+        metadata.setContentType(imageFile.getContentType());
         metadata.setContentLength(file.getSize());
 
-        amazonS3Client.putObject(new PutObjectRequest(bucket, fileName, file.getInputStream(), metadata)
+        amazonS3Client.putObject(new PutObjectRequest(bucket, fileName, imageFile.getImageInputStream(), metadata)
                 .withCannedAcl(CannedAccessControlList.PublicRead));
-        fileUri = URLDecoder.decode(amazonS3Client.getUrl(bucket, fileName).toString(), StandardCharsets.UTF_8);
-        return fileUri;
-    }
-
-    public String getFileName(MultipartFile file) {
-        if (Objects.isNull(file) || file.isEmpty()) {
-            throw new IllegalArgumentException("file이 존재하지 않습니다.");
-        }
-
-        String fileName = file.getOriginalFilename().toLowerCase();
-        String uuid = UUID.randomUUID().toString();
-        return uuid + "-" + fileName;
-    }
-
-    public String getContentType(String extension) {
-        String contentType = "";
-        // content type을 지정해서 올려주지 않으면 자동으로 "application/octet-stream"으로 고정이 되어
-        // 링크 클릭시 웹에서 열리는게 아니라 자동 다운이 시작됨
-        switch (extension) {
-            case ".png":
-                contentType = "image/png";
-                break;
-            case ".jpg":
-            case ".jpeg":
-                contentType = "image/jpeg";
-                break;
-            case ".bmp":
-                contentType = "image/bmp";
-                break;
-            default:
-                contentType = "application/octet-stream";
-                break;
-        }
-        return contentType;
+        return URLDecoder.decode(amazonS3Client.getUrl(bucket, fileName).toString(), StandardCharsets.UTF_8);
     }
 }
