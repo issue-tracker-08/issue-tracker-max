@@ -1,6 +1,7 @@
 package kr.codesquad.issuetracker.presentation;
 
 import static org.mockito.BDDMockito.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.request;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -13,9 +14,12 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 
 import kr.codesquad.issuetracker.application.IssueService;
+import kr.codesquad.issuetracker.exception.ApplicationException;
+import kr.codesquad.issuetracker.exception.ErrorCode;
 import kr.codesquad.issuetracker.fixture.FixtureFactory;
 import kr.codesquad.issuetracker.presentation.request.IssueRegisterRequest;
 
@@ -77,6 +81,51 @@ class IssueControllerTest extends ControllerTest {
 						.header(HttpHeaders.AUTHORIZATION, "Bearer " + jwtProvider.createToken("1"))
 						.content(objectMapper.writeValueAsString(request)))
 				.andExpect(status().isBadRequest())
+				.andDo(print());
+		}
+	}
+
+	@Nested
+	class IssueDetailTest {
+
+		@DisplayName("이슈 상세 페이지 조회에 성공한다.")
+		@Test
+		void getIssueDetail() throws Exception {
+			// given
+			given(issueService.getIssueDetails(anyInt())).willReturn(FixtureFactory.createIssueDetailResponse());
+
+			// when & then
+			mockMvc.perform(
+					request(HttpMethod.GET, "/api/issues/" + 1)
+						.contentType(MediaType.APPLICATION_JSON)
+						.header(HttpHeaders.AUTHORIZATION, "Bearer " + jwtProvider.createToken("1")))
+				.andExpect(status().isOk())
+				.andExpect(jsonPath("$.issueId").exists())
+				.andExpect(jsonPath("$.title").exists())
+				.andExpect(jsonPath("$.isOpen").exists())
+				.andExpect(jsonPath("$.createdAt").exists())
+				.andExpect(jsonPath("$.content").exists())
+				.andExpect(jsonPath("$.author.username").exists())
+				.andExpect(jsonPath("$.author.profileUrl").exists())
+				.andExpect(jsonPath("$.assignees").exists())
+				.andExpect(jsonPath("$.labels").exists())
+				.andExpect(jsonPath("$.milestone").exists())
+				.andDo(print());
+		}
+
+		@DisplayName("존재하지 않는 이슈 아이디가 주어지면 404 NOT FOUND를 응답한다.")
+		@Test
+		void givenNotExistsIssueId_thenResponse404() throws Exception {
+			// given
+			given(issueService.getIssueDetails(anyInt())).willThrow(
+				new ApplicationException(ErrorCode.ISSUE_NOT_FOUND));
+
+			// when & then
+			mockMvc.perform(
+					request(HttpMethod.GET, "/api/issues/" + 1)
+						.contentType(MediaType.APPLICATION_JSON)
+						.header(HttpHeaders.AUTHORIZATION, "Bearer " + jwtProvider.createToken("1")))
+				.andExpect(status().isNotFound())
 				.andDo(print());
 		}
 	}

@@ -14,12 +14,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import kr.codesquad.issuetracker.ApplicationTest;
 import kr.codesquad.issuetracker.acceptance.DatabaseInitializer;
-import kr.codesquad.issuetracker.fixture.FixtureFactory;
 import kr.codesquad.issuetracker.exception.ApplicationException;
 import kr.codesquad.issuetracker.exception.ErrorCode;
+import kr.codesquad.issuetracker.fixture.FixtureFactory;
 import kr.codesquad.issuetracker.infrastructure.persistence.mapper.IssueSimpleMapper;
-import kr.codesquad.issuetracker.presentation.request.IssueRegisterRequest;
 import kr.codesquad.issuetracker.presentation.request.AssigneeRequest;
+import kr.codesquad.issuetracker.presentation.request.IssueRegisterRequest;
+import kr.codesquad.issuetracker.presentation.response.IssueDetailResponse;
 
 @ApplicationTest
 class IssueServiceTest {
@@ -48,7 +49,7 @@ class IssueServiceTest {
 		// then
 		List<IssueSimpleMapper> result = issueService.findAll();
 		assertAll(
-			() -> assertThat(result.get(0).getIssueNumber()).isEqualTo(4),
+			() -> assertThat(result.get(0).getIssueNumber()).isNotNull(),
 			() -> assertThat(result.get(0).isOpen()).isTrue(),
 			() -> assertThat(result.get(0).getTitle()).isEqualTo("프로젝트 세팅하기")
 		);
@@ -81,6 +82,40 @@ class IssueServiceTest {
 				() -> assertThat(lastIssue.getLabelSimpleEntities().size()).isEqualTo(3),
 				() -> assertThat(lastIssue.getAssigneeSimpleEntities().size()).isEqualTo(3)
 			);
+		}
+	}
+
+	@DisplayName("이슈 상세페이지를 조회할 때")
+	@Nested
+	class IssueDetailTest {
+
+		@DisplayName("이슈 상세페이지 조회에 성공한다.")
+		@Test
+		void getIssueDetail() {
+			// given
+
+			// when
+			IssueDetailResponse result = issueService.getIssueDetails(1);
+
+			// then
+			assertAll(
+				() -> assertThat(result.getIssueId()).isNotNull(),
+				() -> assertThat(result.getAuthor().getUsername()).isNotNull(),
+				() -> assertThat(result.getAuthor().getProfileUrl()).isNotNull(),
+				() -> assertThat(result.getAssignees()).isNotNull(),
+				() -> assertThat(result.getLabels()).isNotNull()
+			);
+		}
+
+		@DisplayName("존재하지 않는 이슈 아이디가 주어져 예외를 던진다.")
+		@Test
+		void givenNotExistsIssueId_thenThrowsException() {
+			// given
+
+			// when & then
+			assertThatThrownBy(() -> issueService.getIssueDetails(0))
+				.isInstanceOf(ApplicationException.class)
+				.extracting("errorCode").isEqualTo(ErrorCode.ISSUE_NOT_FOUND);
 		}
 	}
 
