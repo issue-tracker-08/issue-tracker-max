@@ -14,12 +14,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import kr.codesquad.issuetracker.ApplicationTest;
 import kr.codesquad.issuetracker.acceptance.DatabaseInitializer;
-import kr.codesquad.issuetracker.fixture.FixtureFactory;
 import kr.codesquad.issuetracker.exception.ApplicationException;
 import kr.codesquad.issuetracker.exception.ErrorCode;
+import kr.codesquad.issuetracker.fixture.FixtureFactory;
 import kr.codesquad.issuetracker.infrastructure.persistence.mapper.IssueSimpleMapper;
-import kr.codesquad.issuetracker.presentation.request.IssueRegisterRequest;
 import kr.codesquad.issuetracker.presentation.request.AssigneeRequest;
+import kr.codesquad.issuetracker.presentation.request.IssueRegisterRequest;
 
 @ApplicationTest
 class IssueServiceTest {
@@ -87,10 +87,9 @@ class IssueServiceTest {
 	@DisplayName("존재하지 않는 이슈의 담당자를 수정하면 ISSUE_NOT_FOUND 예외가 발생한다.")
 	@Test
 	public void failedToUpdateAssignee_IfNoExistsIssue() {
-		var assigneeRequest = new AssigneeRequest();
-		assigneeRequest.setIssueId(-1);
+		var invalidIssueId = -1;
 
-		assertThatThrownBy(() -> issueService.updateAssignees(assigneeRequest))
+		assertThatThrownBy(() -> issueService.updateAssignees(invalidIssueId, new AssigneeRequest()))
 			.isInstanceOf(ApplicationException.class)
 			.extracting("errorCode").isEqualTo(ErrorCode.ISSUE_NOT_FOUND);
 	}
