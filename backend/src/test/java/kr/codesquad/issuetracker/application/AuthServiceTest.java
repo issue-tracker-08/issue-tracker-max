@@ -96,7 +96,7 @@ public class AuthServiceTest {
 			// when & then
 			assertThatThrownBy(() -> authService.login("loginId", "password"))
 				.isInstanceOf(ApplicationException.class)
-				.extracting("errorCode").isEqualTo(ErrorCode.USER_NOT_FOUND);
+				.extracting("errorCode").isEqualTo(ErrorCode.NOT_FOUND);
 		}
 	}
 }

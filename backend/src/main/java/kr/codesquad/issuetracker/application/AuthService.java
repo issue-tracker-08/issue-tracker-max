@@ -33,7 +33,7 @@ public class AuthService {
 	@Transactional(readOnly = true)
 	public TokenResponse login(final String loginId, final String password) {
 		UserAccount findUserAccount = userAccountRepository.findByLoginId(loginId)
-			.orElseThrow(() -> new ApplicationException(ErrorCode.USER_NOT_FOUND));
+			.orElseThrow(() -> new ApplicationException(ErrorCode.NOT_FOUND));
 
 		if (!findUserAccount.isSamePassword(passwordEncoder.encrypt(password))) {
 			throw new ApplicationException(ErrorCode.FAILED_LOGIN);
