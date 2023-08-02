@@ -22,10 +22,10 @@ public class CommentService {
 	}
 
 	@Transactional
-	public void modify(String modifiedComment, Integer commentId, Integer issueId) {
-		Comment comment = commentRepository.findById(commentId, issueId)
+	public void modify(String modifiedComment, Integer commentId) {
+		Comment comment = commentRepository.findById(commentId)
 			.orElseThrow(() -> new ApplicationException(ErrorCode.COMMENT_NOT_FOUND));
 		comment.modifyContent(modifiedComment);
-		commentRepository.update(comment, commentId);
+		commentRepository.update(comment);
 	}
 }

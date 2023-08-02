@@ -41,10 +41,12 @@ class CommentServiceTest {
 	void modify() {
 		//given
 		Comment comment = new Comment("새로운 내용이지롱~");
-		willDoNothing().given(commentRepository).update(comment, 1);
-		given(commentRepository.findById(1, 1)).willReturn(Optional.of(comment));
+		willDoNothing().given(commentRepository).update(comment);
+		given(commentRepository.findById(1)).willReturn(Optional.of(comment));
+
 		//when
-		commentService.modify("진짜 새로운 내용이지롱~", 1, 1);
+		commentService.modify("진짜 새로운 내용이지롱~", 1);
+
 		//then
 		assertThat(comment.getContent()).isEqualTo("진짜 새로운 내용이지롱~");
 	}

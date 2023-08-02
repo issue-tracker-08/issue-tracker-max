@@ -31,21 +31,20 @@ public class CommentRepository {
 		jdbcInsert.execute(new BeanPropertySqlParameterSource(comment));
 	}
 
-	public Optional<Comment> findById(Integer commentId, Integer issueId) {
-		String sql = "SELECT content FROM comment WHERE issue_id = :issueId AND id = :commentId AND is_deleted = false";
+	public Optional<Comment> findById(Integer commentId) {
+		String sql = "SELECT content FROM comment WHERE id = :commentId AND is_deleted = false";
 		MapSqlParameterSource params = new MapSqlParameterSource()
-			.addValue("issueId", issueId)
 			.addValue("commentId", commentId);
 
 		return Optional.ofNullable(DataAccessUtils.singleResult(jdbcTemplate.query(sql, params, (rs, rowNum) ->
 			new Comment(rs.getString("content")))));
 	}
 
-	public void update(Comment comment, Integer commentId) {
+	public void update(Comment comment) {
 		String sql = "UPDATE comment SET content = :content WHERE id = :commentId";
 		MapSqlParameterSource param = new MapSqlParameterSource()
 			.addValue("content", comment.getContent())
-			.addValue("commentId", commentId);
+			.addValue("commentId", comment.getId());
 		jdbcTemplate.update(sql, param);
 	}
 }
