@@ -1,5 +1,6 @@
 package kr.codesquad.issuetracker.presentation.request;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -23,18 +24,14 @@ public class IssueRegisterRequest {
 	private List<Integer> labels;
 	private Integer milestone;
 
-	public Optional<List<Integer>> getAssignees() {
-		if (assignees == null || assignees.isEmpty()) {
-			return Optional.empty();
-		}
-		return Optional.of(assignees);
+	public List<Integer> getAssignees() {
+		return Optional.ofNullable(assignees)
+			.orElseGet(Collections::emptyList);
 	}
 
-	public Optional<List<Integer>> getLabels() {
-		if (labels == null || labels.isEmpty()) {
-			return Optional.empty();
-		}
-		return Optional.of(labels);
+	public List<Integer> getLabels() {
+		return Optional.ofNullable(labels)
+			.orElseGet(Collections::emptyList);
 	}
 
 	public Optional<Integer> getMilestone() {

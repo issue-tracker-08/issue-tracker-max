@@ -37,11 +37,10 @@ public class IssueService {
 			authorId,
 			request.getMilestone().orElse(null)));
 
-		request.getAssignees().ifPresent(assigneeIds ->
-			assigneeRepository.saveAll(toEntityList(assigneeIds, id -> new IssueAssignee(issueId, id))));
-
-		request.getLabels().ifPresent(labelIds ->
-			issueLabelRepository.saveAll(toEntityList(labelIds, id -> new IssueLabel(issueId, id))));
+		assigneeRepository.saveAll(toEntityList(request.getAssignees(),
+			id -> new IssueAssignee(issueId, id)));
+		issueLabelRepository.saveAll(toEntityList(request.getLabels(),
+			id -> new IssueLabel(issueId, id)));
 
 		return issueId;
 	}
