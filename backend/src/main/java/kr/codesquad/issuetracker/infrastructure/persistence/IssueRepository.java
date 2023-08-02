@@ -66,7 +66,7 @@ public class IssueRepository {
 	}
 
 	public boolean existsById(Integer issueId) {
-		String sql = "SELECT EXISTS (SELECT 1 FROM issue WHERE id = : issueId";
+		String sql = "SELECT EXISTS (SELECT 1 FROM issue WHERE id = :issueId)";
 
 		return Boolean.TRUE.equals(jdbcTemplate.queryForObject(sql, Map.of("issueId", issueId), Boolean.class));
 	}
