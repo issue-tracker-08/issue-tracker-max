@@ -17,6 +17,7 @@ import kr.codesquad.issuetracker.infrastructure.persistence.IssueLabelRepository
 import kr.codesquad.issuetracker.infrastructure.persistence.IssueRepository;
 import kr.codesquad.issuetracker.infrastructure.persistence.mapper.IssueSimpleMapper;
 import kr.codesquad.issuetracker.presentation.request.AssigneeRequest;
+import kr.codesquad.issuetracker.presentation.request.IssueLabelRequest;
 import kr.codesquad.issuetracker.presentation.request.IssueRegisterRequest;
 import kr.codesquad.issuetracker.presentation.response.IssueDetailResponse;
 import lombok.RequiredArgsConstructor;
@@ -37,11 +38,10 @@ public class IssueService {
 			authorId,
 			request.getMilestone().orElse(null)));
 
-		request.getAssignees().ifPresent(assigneeIds ->
-			assigneeRepository.saveAll(toEntityList(assigneeIds, id -> new IssueAssignee(issueId, id))));
-
-		request.getLabels().ifPresent(labelIds ->
-			issueLabelRepository.saveAll(toEntityList(labelIds, id -> new IssueLabel(issueId, id))));
+		assigneeRepository.saveAll(toEntityList(request.getAssignees(),
+			id -> new IssueAssignee(issueId, id)));
+		issueLabelRepository.saveAll(toEntityList(request.getLabels(),
+			id -> new IssueLabel(issueId, id)));
 
 		return issueId;
 	}
@@ -66,12 +66,26 @@ public class IssueService {
 	}
 
 	@Transactional
-	public void updateAssignees(AssigneeRequest assigneeRequest) {
-		if (!issueRepository.existsById(assigneeRequest.getIssueId())) {
+	public void updateAssignees(Integer issueId, AssigneeRequest request) {
+		if (!issueRepository.existsById(issueId)) {
 			throw new ApplicationException(ErrorCode.ISSUE_NOT_FOUND);
 		}
 
-		assigneeRepository.saveAll(assigneeRequest.getAddIssueAssignees());
-		assigneeRepository.deleteAll(assigneeRequest.getRemoveIssueAssignees());
+		assigneeRepository.saveAll(toEntityList(request.getAddUserAccountsId(),
+			id -> new IssueAssignee(issueId, id)));
+		assigneeRepository.deleteAll(toEntityList(request.getRemoveUserAccountsId(),
+			id -> new IssueAssignee(issueId, id)));
+	}
+
+	@Transactional
+	public void updateIssueLabels(Integer issueId, IssueLabelRequest request) {
+		if (!issueRepository.existsById(issueId)) {
+			throw new ApplicationException(ErrorCode.ISSUE_NOT_FOUND);
+		}
+
+		issueLabelRepository.saveAll(toEntityList(request.getAddLabelsId(),
+			id -> new IssueLabel(issueId, id)));
+		issueLabelRepository.deleteAll(toEntityList(request.getRemoveLabelsId(),
+			id -> new IssueLabel(issueId, id)));
 	}
 }

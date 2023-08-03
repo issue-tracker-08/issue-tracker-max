@@ -28,4 +28,10 @@ public class IssueLabelRepository {
 	public void saveAll(List<IssueLabel> issueLabels) {
 		jdbcInsert.executeBatch(SqlParameterSourceUtils.createBatch(issueLabels));
 	}
+
+	public void deleteAll(List<IssueLabel> issueLabels) {
+		String sql = "DELETE FROM issue_label WHERE issue_id = :issueId AND label_id = :labelId";
+
+		jdbcTemplate.batchUpdate(sql, SqlParameterSourceUtils.createBatch(issueLabels));
+	}
 }

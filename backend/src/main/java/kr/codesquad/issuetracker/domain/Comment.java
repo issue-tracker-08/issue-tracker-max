@@ -19,4 +19,18 @@ public class Comment {
 		this.userAccountId = userAccountId;
 		this.issueId = issueId;
 	}
+
+	public Comment(String content) {
+		this.content = content;
+	}
+
+	public Comment(Integer id, String content, Integer userAccountId) {
+		this.id = id;
+		this.content = content;
+		this.userAccountId = userAccountId;
+	}
+
+	public void modifyContent(String content) {
+		this.content = content;
+	}
 }

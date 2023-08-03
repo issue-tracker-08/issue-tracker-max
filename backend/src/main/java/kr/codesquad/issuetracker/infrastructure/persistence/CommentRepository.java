@@ -1,8 +1,12 @@
 package kr.codesquad.issuetracker.infrastructure.persistence;
 
+import java.util.Optional;
+
 import javax.sql.DataSource;
 
+import org.springframework.dao.support.DataAccessUtils;
 import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
@@ -25,5 +29,22 @@ public class CommentRepository {
 
 	public void save(Comment comment) {
 		jdbcInsert.execute(new BeanPropertySqlParameterSource(comment));
+	}
+
+	public Optional<Comment> findById(Integer commentId) {
+		String sql = "SELECT id, content, user_account_id FROM comment WHERE id = :commentId AND is_deleted = false";
+		MapSqlParameterSource params = new MapSqlParameterSource()
+			.addValue("commentId", commentId);
+
+		return Optional.ofNullable(DataAccessUtils.singleResult(jdbcTemplate.query(sql, params, (rs, rowNum) ->
+			new Comment(rs.getInt("id"), rs.getString("content"), rs.getInt("user_account_id")))));
+	}
+
+	public void update(Comment comment) {
+		String sql = "UPDATE comment SET content = :content WHERE id = :commentId";
+		MapSqlParameterSource param = new MapSqlParameterSource()
+			.addValue("content", comment.getContent())
+			.addValue("commentId", comment.getId());
+		jdbcTemplate.update(sql, param);
 	}
 }

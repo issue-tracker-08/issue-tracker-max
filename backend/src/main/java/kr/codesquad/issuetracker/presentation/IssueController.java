@@ -17,6 +17,8 @@ import org.springframework.web.bind.annotation.RestController;
 import kr.codesquad.issuetracker.application.IssueService;
 import kr.codesquad.issuetracker.infrastructure.persistence.mapper.IssueSimpleMapper;
 import kr.codesquad.issuetracker.presentation.auth.AuthPrincipal;
+import kr.codesquad.issuetracker.presentation.request.AssigneeRequest;
+import kr.codesquad.issuetracker.presentation.request.IssueLabelRequest;
 import kr.codesquad.issuetracker.presentation.request.IssueRegisterRequest;
 import kr.codesquad.issuetracker.presentation.response.IssueDetailResponse;
 import lombok.RequiredArgsConstructor;
@@ -46,5 +48,15 @@ public class IssueController {
 	public ResponseEntity<IssueDetailResponse> getIssueDetails(@PathVariable Integer issueId) {
 		return ResponseEntity.status(HttpStatus.OK)
 			.body(issueService.getIssueDetails(issueId));
+  }
+
+	@PostMapping("/{issueId}/assignees")
+	public void updateAssignees(@PathVariable Integer issueId, @RequestBody AssigneeRequest assigneeRequest) {
+		issueService.updateAssignees(issueId, assigneeRequest);
+	}
+
+	@PostMapping("/{issueId}/labels")
+	public void updateIssueLabels(@PathVariable Integer issueId, @RequestBody IssueLabelRequest issueLabelRequest) {
+		issueService.updateIssueLabels(issueId, issueLabelRequest);
 	}
 }

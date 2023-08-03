@@ -122,10 +122,9 @@ class IssueServiceTest {
 	@DisplayName("존재하지 않는 이슈의 담당자를 수정하면 ISSUE_NOT_FOUND 예외가 발생한다.")
 	@Test
 	public void failedToUpdateAssignee_IfNoExistsIssue() {
-		var assigneeRequest = new AssigneeRequest();
-		assigneeRequest.setIssueId(-1);
+		var invalidIssueId = -1;
 
-		assertThatThrownBy(() -> issueService.updateAssignees(assigneeRequest))
+		assertThatThrownBy(() -> issueService.updateAssignees(invalidIssueId, new AssigneeRequest()))
 			.isInstanceOf(ApplicationException.class)
 			.extracting("errorCode").isEqualTo(ErrorCode.ISSUE_NOT_FOUND);
 	}
