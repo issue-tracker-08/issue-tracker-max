@@ -57,16 +57,9 @@ jobs:
       - name: Build with gradle
         run: ./gradlew clean build -x test
 
-      #3-1. zip 파일을 저장할 디렉토리 생성
-      - name: Create temporary directory
-        run: |
-          mkdir deploy
-
-      #3-2. 복사한 파일 압축
+      #3 파일 압축
       - name: Make zip file
-        run: |
-          zip -r ./$GITHUB_SHA.zip ./deploy/
-          rm -r ./deploy/* 
+        run: zip -r ./$GITHUB_SHA.zip .
 
       #4-1. AWS 권한 부여
       - name: Configure AWS credentials
