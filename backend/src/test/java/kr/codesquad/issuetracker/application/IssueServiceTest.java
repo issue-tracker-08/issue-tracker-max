@@ -128,4 +128,31 @@ class IssueServiceTest {
 			.isInstanceOf(ApplicationException.class)
 			.extracting("errorCode").isEqualTo(ErrorCode.ISSUE_NOT_FOUND);
 	}
+
+	@DisplayName("특정 이슈의 마일스톤을 수정할 수 있다.")
+	@Test
+	public void updateIssueMilestone() {
+		//given
+		Integer issueId = 1;
+		Integer updateMilestoneId = 2;
+
+		//when
+		issueService.updateIssueMilestone(issueId, updateMilestoneId);
+
+		//then
+		assertThat(issueService.getIssueDetails(issueId).getMilestone().getMilestoneId()).isEqualTo(updateMilestoneId);
+	}
+
+	@DisplayName("특정 이슈의 등록된 마일스톤을 제거할 수 있다.")
+	@Test
+	public void deleteIssueMilestone() {
+		//given
+		Integer issueId = 1;
+
+		//when
+		issueService.updateIssueMilestone(1, null);
+
+		//then
+		assertThat(issueService.getIssueDetails(issueId).getMilestone()).isNull();
+	}
 }

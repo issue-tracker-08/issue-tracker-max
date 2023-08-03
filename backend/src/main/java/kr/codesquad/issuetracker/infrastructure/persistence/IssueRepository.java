@@ -9,6 +9,7 @@ import javax.sql.DataSource;
 import org.springframework.dao.support.DataAccessUtils;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
@@ -129,5 +130,15 @@ public class IssueRepository {
 			rs.getString("font_color"),
 			rs.getString("background_color")
 		));
+	}
+
+	public void updateIssueMilestone(Integer issueId, Integer milestoneId) {
+		String sql = "UPDATE issue SET milestone_id = :milestoneId WHERE id = :issueId";
+
+		MapSqlParameterSource params = new MapSqlParameterSource()
+			.addValue("milestoneId", milestoneId)
+			.addValue("issueId", issueId);
+
+		jdbcTemplate.update(sql, params);
 	}
 }
