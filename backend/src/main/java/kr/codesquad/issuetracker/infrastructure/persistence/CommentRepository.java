@@ -54,8 +54,7 @@ public class CommentRepository {
 		String sql = "SELECT c.id, u.login_id, u.profile_url, c.content, c.created_at "
 			+ "FROM comment c "
 			+ "JOIN user_account u ON c.user_account_id = u.id "
-			+ "WHERE c.issue_id = :issueId AND c.is_deleted = false AND c.id > :cursor "
-			+ "ORDER BY DESC LIMIT 10 ";
+			+ "WHERE c.issue_id = :issueId AND c.is_deleted = false AND c.id > :cursor LIMIT 10 ";
 		MapSqlParameterSource param = new MapSqlParameterSource()
 			.addValue("issueId", issueId)
 			.addValue("cursor", cursor);
