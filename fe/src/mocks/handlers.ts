@@ -178,6 +178,55 @@ export const handlers = [
     );
   }),
 
+  rest.get("/api/issues/1", async (_req, res, ctx) => {
+    return res(
+      ctx.status(200),
+      ctx.json({
+        issueId: 3,
+        title: "이슈 제목",
+        isOpen: true,
+        createdAt: "2023-07-31 11:33:03",
+        author: {
+          username: "asdf",
+          profileUrl: "~~~",
+        },
+        content: "~~~~",
+        assignees: [
+          {
+            userAccountId: 1,
+            username: "kakamotobi",
+            profileUrl: "~~~",
+          },
+          {
+            userAccountId: 5,
+            username: "brunini",
+            profileUrl: "~~~",
+          },
+        ],
+        labels: [
+          {
+            labelId: 1,
+            labelName: "feat",
+            fontColor: "#FFF",
+            backgroundColor: "#DDD",
+          },
+          {
+            labelId: 2,
+            labelName: "documentation",
+            fontColor: "#FFF",
+            backgroundColor: "#EEE",
+          },
+        ],
+        milestone: {
+          milestoneId: 1,
+          milestoneName: "~~",
+          openIssueCount: 3,
+          closedIssueCount: 5,
+        },
+      })
+    );
+  }),
+
   rest.get("/api/labels", async (_req, res, ctx) => {
     return res(
       ctx.status(200),
