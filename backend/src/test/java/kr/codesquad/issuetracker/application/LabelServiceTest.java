@@ -31,6 +31,6 @@ class LabelServiceTest {
 	@Test
 	void findLabelsSortedNameAscending() {
 		assertThat(labelService.findAll())
-			.isSortedAccordingTo(Comparator.comparing(LabelResponse::getName));
+			.isSortedAccordingTo(Comparator.comparing(LabelResponse::getLabelName));
 	}
 }
