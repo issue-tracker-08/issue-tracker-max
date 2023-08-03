@@ -1,17 +1,23 @@
 import { rest } from "msw";
-
-const users: Record<string, string> = {};
+import {
+  issueDetail,
+  issueList,
+  labelList,
+  loginInfo,
+  milestoneList,
+  users,
+} from "./data";
 
 type AuthRequestBody = {
-  loginId: string;
+  username: string;
   password: string;
 };
 
 export const handlers = [
   rest.post("/api/auth/signup", async (req, res, ctx) => {
-    const { loginId, password } = await req.json<AuthRequestBody>();
-    const isExist = users[loginId];
-    users[loginId] = password;
+    const { username, password } = await req.json<AuthRequestBody>();
+    const isExist = loginInfo[username];
+    loginInfo[username] = password;
 
     if (isExist) {
       return res(
@@ -27,9 +33,9 @@ export const handlers = [
   }),
 
   rest.post("/api/auth/login", async (req, res, ctx) => {
-    const { loginId, password } = await req.json<AuthRequestBody>();
-    const isExist = users[loginId];
-    const isCorrectPassword = users[loginId] === password;
+    const { username, password } = await req.json<AuthRequestBody>();
+    const isExist = loginInfo[username];
+    const isCorrectPassword = loginInfo[username] === password;
 
     if (!isExist) {
       return res(
@@ -60,213 +66,54 @@ export const handlers = [
           expiresIn: 48000000,
         },
         user: {
-          loginId: loginId,
+          username: username,
           profileUrl: "https://avatars.githubusercontent.com/u/48426991?v=4",
         },
       })
     );
   }),
 
-  rest.get("/api/issues", async (_req, res, ctx) => {
-    return res(
-      ctx.status(200),
-      ctx.json([
-        {
-          issueNumber: 1,
-          isOpen: true,
-          title: "메인화면 UI 설계",
-          labels: [
-            {
-              name: "bug",
-              fontColor: "#FFF",
-              backgroundColor: "#D73A4A",
-            },
-            {
-              name: "docs",
-              fontColor: "#FFF",
-              backgroundColor: "#2675CA",
-            },
-          ],
-          milestone: "Sprint #1",
-          authorName: "bruni",
-          assignees: [
-            {
-              username: "bruni",
-              profileUrl:
-                "https://avatars.githubusercontent.com/u/79886384?v=4",
-            },
-          ],
-          createdAt: "2023-07-31 18:02:32",
-        },
-        {
-          issueNumber: 2,
-          isOpen: true,
-          title: "Mock data 설정",
-          labels: [
-            {
-              name: "feat",
-              fontColor: "#000",
-              backgroundColor: "#FACA02",
-            },
-          ],
-          milestone: "Sprint #2",
-          authorName: "Kakamotobi",
-          assignees: [
-            {
-              username: "Kakamotobi",
-              profileUrl:
-                "https://avatars.githubusercontent.com/u/79886384?v=4",
-            },
-            {
-              username: "Zoey",
-              profileUrl:
-                "https://avatars.githubusercontent.com/u/111998760?v=4",
-            },
-          ],
-          createdAt: "2023-07-26 13:22:10",
-        },
-        {
-          issueNumber: 3,
-          isOpen: true,
-          title: "API 연동",
-          labels: [
-            {
-              name: "feat",
-              fontColor: "#000",
-              backgroundColor: "#FACA02",
-            },
-          ],
-          milestone: "Sprint #2",
-          authorName: "Zoey",
-          assignees: [
-            {
-              username: "Kakamotobi",
-              profileUrl:
-                "https://avatars.githubusercontent.com/u/79886384?v=4",
-            },
-            {
-              username: "Zoey",
-              profileUrl:
-                "https://avatars.githubusercontent.com/u/111998760?v=4",
-            },
-          ],
-          createdAt: "2023-05-25 10:42:40",
-        },
-        {
-          issueNumber: 4,
-          isOpen: false,
-          title: "프로젝트 초기화",
-          labels: [
-            {
-              name: "feat",
-              fontColor: "#000",
-              backgroundColor: "#FACA02",
-            },
-          ],
-          milestone: "",
-          authorName: "Kakamotobi",
-          assignees: [
-            {
-              username: "Kakamotobi",
-              profileUrl:
-                "https://avatars.githubusercontent.com/u/79886384?v=4",
-            },
-          ],
-          createdAt: "2022-12-31 10:42:40",
-        },
-      ])
-    );
+  rest.get("/api/issues", async (_, res, ctx) => {
+    return res(ctx.status(200), ctx.json(issueList));
   }),
 
   rest.get("/api/issues/1", async (_req, res, ctx) => {
-    return res(
-      ctx.status(200),
-      ctx.json({
-        issueId: 3,
-        title: "이슈 제목",
-        isOpen: true,
-        createdAt: "2023-07-31 11:33:03",
-        author: {
-          username: "asdf",
-          profileUrl: "~~~",
-        },
-        content: "~~~~",
-        assignees: [
-          {
-            userAccountId: 1,
-            username: "kakamotobi",
-            profileUrl: "~~~",
-          },
-          {
-            userAccountId: 5,
-            username: "brunini",
-            profileUrl: "~~~",
-          },
-        ],
-        labels: [
-          {
-            labelId: 1,
-            labelName: "feat",
-            fontColor: "#FFF",
-            backgroundColor: "#DDD",
-          },
-          {
-            labelId: 2,
-            labelName: "documentation",
-            fontColor: "#FFF",
-            backgroundColor: "#EEE",
-          },
-        ],
-        milestone: {
-          milestoneId: 1,
-          milestoneName: "~~",
-          openIssueCount: 3,
-          closedIssueCount: 5,
-        },
-      })
-    );
+    return res(ctx.status(200), ctx.json(issueDetail));
   }),
 
-  rest.get("/api/labels", async (_req, res, ctx) => {
-    return res(
-      ctx.status(200),
-      ctx.json([
-        {
-          name: "bug",
-          fontColor: "#FFF",
-          backgroundColor: "#D73A4A",
-        },
-        {
-          name: "docs",
-          fontColor: "#FFF",
-          backgroundColor: "#2675CA",
-        },
-        {
-          name: "feat",
-          fontColor: "#000",
-          backgroundColor: "#FACA02",
-        },
-      ])
-    );
+  rest.get("/api/labels", async (_, res, ctx) => {
+    return res(ctx.status(200), ctx.json(labelList));
   }),
 
-  rest.get("/api/milestones", async (_req, res, ctx) => {
+  rest.get("/api/milestones", async (_, res, ctx) => {
+    return res(ctx.status(200), ctx.json(milestoneList));
+  }),
+
+  rest.get("/api/users", async (_, res, ctx) => {
+    return res(ctx.status(200), ctx.json(users));
+  }),
+
+  rest.post("/api/issues", async (req, res, ctx) => {
+    const newIssue = await req.json();
+    issueList.push({
+      issueNumber: issueList.length + 1,
+      isOpen: true,
+      title: newIssue.title,
+      labels: labelList.filter((l) => newIssue.labels.includes(l.labelId)),
+      authorName: "currentUser",
+      assignees: users.filter((u) =>
+        newIssue.assignees.includes(u.userAccountId)
+      ),
+      milestone: "",
+      createdAt: new Date().toISOString(),
+    });
+    return res(ctx.status(200), ctx.json({ issueId: issueList.length + 1 }));
+  }),
+
+  rest.post("/api/upload", async (_, res, ctx) => {
     return res(
       ctx.status(200),
-      ctx.json([
-        {
-          milestoneId: 1,
-          milestoneName: "Sprint #1",
-          openIssueCount: 1,
-          closedIssueCount: 0,
-        },
-        {
-          milestoneId: 2,
-          milestoneName: "Sprint #2",
-          openIssueCount: 2,
-          closedIssueCount: 0,
-        },
-      ])
+      ctx.json({ fileUrl: "https://i.imgur.com/1.jpg" })
     );
   }),
 ];

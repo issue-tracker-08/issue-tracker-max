@@ -4,7 +4,7 @@ import BaseButton from "./BaseButton";
 import { SIZE } from "./constants";
 
 export type ButtonVariant = "container" | "outline" | "ghost";
-export type ButtonSize = "S" | "M" | "L";
+export type ButtonSize = "S" | "M" | "L" | "XL";
 
 export interface ButtonProps
   extends React.ButtonHTMLAttributes<HTMLButtonElement> {

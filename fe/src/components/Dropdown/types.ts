@@ -11,20 +11,30 @@ export type DropdownName = keyof typeof DropdownNameKOR;
 
 export type DropdownPanelVariant = "filter" | "select" | "modify";
 
+export type DropdownOption = "multiple" | "single";
+
 export type DropdownPanelType = {
   variant: DropdownPanelVariant;
   dropdownName: DropdownName;
   dropdownList: DropdownItemType[];
   position: "left" | "right";
   onOutsideClick: (evt: MouseEvent) => void;
+  dropdownOption: DropdownOption;
 };
 
 export type DropdownItemType =
   | {
+      id: number;
       variant: "withImg";
       name: string;
       content: string;
       imgSrc: string;
     }
-  | { variant: "withColor"; name: string; content: string; colorFill: string }
-  | { variant: "plain"; name: string; content: string };
+  | {
+      id: number;
+      variant: "withColor";
+      name: string;
+      content: string;
+      colorFill: string;
+    }
+  | { id: number; variant: "plain"; name: string; content: string };

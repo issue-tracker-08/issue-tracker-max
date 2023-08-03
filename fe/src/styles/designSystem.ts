@@ -32,7 +32,7 @@ const radius = {
 const border = {
   default: `1px solid`,
   icon: `1.6px solid`,
-  dash: `1px dash`,
+  dashed: `1px dashed`,
 };
 
 const font = {

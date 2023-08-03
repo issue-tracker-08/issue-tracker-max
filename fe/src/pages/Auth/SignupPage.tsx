@@ -8,7 +8,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { AuthForm } from "./LoginPage";
 
 export default function SignupPage() {
-  const { isValid: isValidloginId, ...loginId } = useInput({
+  const { isValid: isValidUsername, ...username } = useInput({
     initialValue: "",
     maxLength: 16,
     minLength: 6,
@@ -25,7 +25,7 @@ export default function SignupPage() {
     e.preventDefault();
 
     try {
-      const response = await postSignup(loginId.value, password.value);
+      const response = await postSignup(username.value, password.value);
       if (response.status === 200) {
         alert("회원가입이 완료되었습니다. 가입하신 계정으로 로그인해주세요 :)");
         navigate("/auth");
@@ -44,10 +44,10 @@ export default function SignupPage() {
         <TextInput
           name="아이디"
           variant="tall"
-          hasError={!isValidloginId}
+          hasError={!isValidUsername}
           placeholder="아이디"
           helpText="아이디는 최소 6자리여야 해요!"
-          {...loginId}
+          {...username}
         />
         <TextInput
           name="비밀번호"
@@ -61,9 +61,9 @@ export default function SignupPage() {
         {errorMessage && <p className="error-message">{errorMessage}</p>}
         <Button
           variant="container"
-          size="L"
+          size="XL"
           className="login-btn"
-          disabled={!isValidloginId || !isValidPassword}
+          disabled={!isValidUsername || !isValidPassword}
           type="submit">
           회원가입
         </Button>

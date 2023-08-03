@@ -33,6 +33,8 @@ export default function IssuesPage() {
     callback: () => navigate("/milestones"),
   };
 
+  const moveToNewIssuePage = () => navigate("/issues/new");
+
   return (
     <div>
       <IssuesNavBar>
@@ -44,7 +46,7 @@ export default function IssuesPage() {
             right={tabBarRightInfo}
             borderStyle="outline"
           />
-          <Button size="S" variant="container">
+          <Button size="S" variant="container" onClick={moveToNewIssuePage}>
             <img src={plusIcon} alt="이슈 작성" />
             이슈 작성
           </Button>

@@ -2,6 +2,7 @@ import editIcon from "@assets/icon/edit.svg";
 import smileIcon from "@assets/icon/smile.svg";
 import { styled } from "styled-components";
 import Button from "./common/Button";
+import { Avatar } from "./common/Avatar";
 
 export default function Comment({
   username,
@@ -20,8 +21,7 @@ export default function Comment({
     <StyledComment>
       <Header>
         <div className="left-wrapper">
-          {/* TODO: replace `img` with `Avatar` */}
-          <img src={profileUrl} alt="" />
+          <Avatar src={profileUrl} alt={`${username}-avatar`} $size="M" />
           <span className="comment-author">{username}</span>
           <span className="comment-date">{createdAt}</span>
         </div>

@@ -1,7 +1,7 @@
 import { ReactNode, createContext, useContext, useState } from "react";
 
 type UserInfo = {
-  loginId: string;
+  username: string;
   profileUrl: string;
 };
 
@@ -21,7 +21,7 @@ const authContext = createContext<AuthContextType | null>(null);
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
   const [userInfo, setUserInfo] = useState<UserInfo>({
-    loginId: "",
+    username: "",
     profileUrl: "",
   });
 

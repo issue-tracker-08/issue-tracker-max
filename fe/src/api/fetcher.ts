@@ -22,3 +22,8 @@ fetcherWithBearer.interceptors.request.use(
     Promise.reject(error);
   }
 );
+
+export const fetcherFormDataWithBearer = axios.create({
+  baseURL: "/api",
+  headers: { "Content-Type": "multipart/form-data" },
+});

@@ -1,4 +1,5 @@
 export type Label = {
+  labelId: number;
   name: string;
   fontColor: string;
   backgroundColor: string;
@@ -16,13 +17,28 @@ export type Assignee = {
   profileUrl: string;
 };
 
+// TODO: labels, milestone, assignees optional 처리 필요
 export type IssueItem = {
   issueNumber: number;
   isOpen: boolean;
   title: string;
+  authorName: string;
+  createdAt: string;
   labels: Label[];
   milestone: string;
-  authorName: string;
   assignees: Assignee[];
-  createdAt: string;
+};
+
+export type User = {
+  userAccountId: number;
+  username: string;
+  profileUrl: string;
+};
+
+export type NewIssueInfo = {
+  title: string;
+  content: string;
+  assignees: Set<number>;
+  labels: Set<number>;
+  milestone: number;
 };
