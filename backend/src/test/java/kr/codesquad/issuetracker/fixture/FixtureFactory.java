@@ -1,8 +1,11 @@
 package kr.codesquad.issuetracker.fixture;
 
+import static kr.codesquad.issuetracker.presentation.request.IssueModifyRequest.*;
+
 import java.time.LocalDateTime;
 import java.util.List;
 
+import kr.codesquad.issuetracker.presentation.request.IssueModifyRequest;
 import kr.codesquad.issuetracker.presentation.request.IssueRegisterRequest;
 import kr.codesquad.issuetracker.presentation.request.LoginRequest;
 import kr.codesquad.issuetracker.presentation.request.SignupRequest;
@@ -38,5 +41,10 @@ public class FixtureFactory {
 			List.of(new IssueDetailResponse.LabelInfo(1, "feat", "#fff", "#ddd")),
 
 			new IssueDetailResponse.MilestoneInfo(1, "BE Sprint #1", 3, 5));
+	}
+
+	public static IssueModifyRequest createIssueModifyRequest(String title, String content, Boolean isOpen,
+		UpdateProperty property) {
+		return new IssueModifyRequest(new ModifyData(title, content, isOpen), property);
 	}
 }

@@ -19,6 +19,7 @@ import kr.codesquad.issuetracker.exception.ErrorCode;
 import kr.codesquad.issuetracker.fixture.FixtureFactory;
 import kr.codesquad.issuetracker.infrastructure.persistence.mapper.IssueSimpleMapper;
 import kr.codesquad.issuetracker.presentation.request.AssigneeRequest;
+import kr.codesquad.issuetracker.presentation.request.IssueModifyRequest;
 import kr.codesquad.issuetracker.presentation.request.IssueRegisterRequest;
 import kr.codesquad.issuetracker.presentation.response.IssueDetailResponse;
 
@@ -121,11 +122,60 @@ class IssueServiceTest {
 
 	@DisplayName("존재하지 않는 이슈의 담당자를 수정하면 ISSUE_NOT_FOUND 예외가 발생한다.")
 	@Test
-	public void failedToUpdateAssignee_IfNoExistsIssue() {
+	void failedToUpdateAssignee_IfNoExistsIssue() {
 		var invalidIssueId = -1;
 
 		assertThatThrownBy(() -> issueService.updateAssignees(invalidIssueId, new AssigneeRequest()))
 			.isInstanceOf(ApplicationException.class)
 			.extracting("errorCode").isEqualTo(ErrorCode.ISSUE_NOT_FOUND);
+	}
+
+	@DisplayName("이슈를 수정할 때")
+	@Nested
+	class IssueModifyTest {
+
+		@DisplayName("제목을 수정하는 데이터가 주어지면 수정에 성공한다.")
+		@Test
+		void modifyIssueTitle() {
+			// given
+
+			// when
+			issueService.modifyIssue(1, 1,
+				FixtureFactory.createIssueModifyRequest("변경된 제목", null, null, IssueModifyRequest.UpdateProperty.TITLE));
+
+			// then
+			IssueDetailResponse result = issueService.getIssueDetails(1);
+			assertThat(result.getTitle()).isEqualTo("변경된 제목");
+		}
+
+		@DisplayName("내용을 수정하는 데이터가 주어지면 수정에 성공한다.")
+		@Test
+		void modifyIssueContent() {
+			// given
+
+			// when
+			issueService.modifyIssue(1, 1,
+				FixtureFactory.createIssueModifyRequest(null, "변경된 내용", null,
+					IssueModifyRequest.UpdateProperty.CONTENT));
+
+			// then
+			IssueDetailResponse result = issueService.getIssueDetails(1);
+			assertThat(result.getContent()).isEqualTo("변경된 내용");
+		}
+
+		@DisplayName("이슈의 OPEN 상태를 수정하는 데이터가 주어지면 수정에 성공한다.")
+		@Test
+		void modifyIssueOpenStatus() {
+			// given
+
+			// when
+			issueService.modifyIssue(1, 1,
+				FixtureFactory.createIssueModifyRequest(null, null, false,
+					IssueModifyRequest.UpdateProperty.IS_OPEN));
+
+			// then
+			IssueDetailResponse result = issueService.getIssueDetails(1);
+			assertThat(result.getIsOpen()).isFalse();
+		}
 	}
 }
