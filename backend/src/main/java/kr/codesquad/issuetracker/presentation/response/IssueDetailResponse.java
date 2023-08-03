@@ -21,11 +21,11 @@ public class IssueDetailResponse {
 	private String content;
 	private Author author;
 	private List<Assignee> assignees;
-	private List<LabelInfo> labels;
-	private MilestoneInfo milestone;
+	private List<LabelResponse> labels;
+	private MilestoneResponse milestone;
 
 	public IssueDetailResponse(Integer issueId, String title, Boolean isOpen, LocalDateTime createdAt, String content,
-		Author author, List<Assignee> assignees, List<LabelInfo> labels, MilestoneInfo milestone) {
+		Author author, List<Assignee> assignees, List<LabelResponse> labels, MilestoneResponse milestone) {
 		this.issueId = issueId;
 		this.title = title;
 		this.isOpen = isOpen;
@@ -54,27 +54,5 @@ public class IssueDetailResponse {
 		private Integer userAccountId;
 		private String username;
 		private String profileUrl;
-	}
-
-	@Getter
-	@NoArgsConstructor
-	@AllArgsConstructor
-	public static class LabelInfo {
-
-		private Integer labelId;
-		private String labelName;
-		private String fontColor;
-		private String backgroundColor;
-	}
-
-	@Getter
-	@NoArgsConstructor
-	@AllArgsConstructor
-	public static class MilestoneInfo {
-
-		private Integer milestoneId;
-		private String milestoneName;
-		private Integer openIssueCount;
-		private Integer closedIssueCount;
 	}
 }

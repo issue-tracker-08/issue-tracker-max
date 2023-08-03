@@ -102,4 +102,13 @@ public class IssueService {
 		issueLabelRepository.deleteAll(toEntityList(request.getRemoveLabelsId(),
 			id -> new IssueLabel(issueId, id)));
 	}
+
+	@Transactional
+	public void updateIssueMilestone(Integer issueId, Integer milestoneId) {
+		if (!issueRepository.existsById(issueId)) {
+			throw new ApplicationException(ErrorCode.ISSUE_NOT_FOUND);
+		}
+
+		issueRepository.updateIssueMilestone(issueId, milestoneId);
+	}
 }

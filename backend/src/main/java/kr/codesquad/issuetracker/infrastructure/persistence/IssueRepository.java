@@ -18,6 +18,8 @@ import org.springframework.stereotype.Repository;
 import kr.codesquad.issuetracker.domain.Issue;
 import kr.codesquad.issuetracker.infrastructure.persistence.mapper.IssueSimpleMapper;
 import kr.codesquad.issuetracker.presentation.response.IssueDetailResponse;
+import kr.codesquad.issuetracker.presentation.response.LabelResponse;
+import kr.codesquad.issuetracker.presentation.response.MilestoneResponse;
 
 @Repository
 public class IssueRepository {
@@ -80,8 +82,8 @@ public class IssueRepository {
 
 	public IssueDetailResponse findIssueDetailResponseById(Integer issueId) {
 		List<IssueDetailResponse.Assignee> assignees = findAssigneeById(issueId);
-		List<IssueDetailResponse.LabelInfo> labels = findLabelInfoById(issueId);
-		IssueDetailResponse.MilestoneInfo milestone = milestoneRepository.findMilestoneInfoByIssueId(issueId);
+		List<LabelResponse> labels = findLabelInfoById(issueId);
+		MilestoneResponse milestone = milestoneRepository.findMilestoneByIssueId(issueId);
 
 		String sql = "SELECT i.id, i.title, i.is_open, i.created_at, i.content, ua.login_id, ua.profile_url " +
 			"FROM issue i " +
@@ -116,14 +118,14 @@ public class IssueRepository {
 		));
 	}
 
-	private List<IssueDetailResponse.LabelInfo> findLabelInfoById(Integer issueId) {
+	private List<LabelResponse> findLabelInfoById(Integer issueId) {
 		String sql = "SELECT l.id, l.name, l.font_color, l.background_color " +
 			"FROM issue i " +
 			"JOIN issue_label il ON i.id = il.issue_id " +
 			"JOIN label l ON il.label_id = l.id AND l.is_deleted = FALSE " +
 			"WHERE i.id = :issueId";
 
-		return jdbcTemplate.query(sql, Map.of("issueId", issueId), (rs, rowNum) -> new IssueDetailResponse.LabelInfo(
+		return jdbcTemplate.query(sql, Map.of("issueId", issueId), (rs, rowNum) -> new LabelResponse(
 			rs.getInt("id"),
 			rs.getString("name"),
 			rs.getString("font_color"),
@@ -156,5 +158,15 @@ public class IssueRepository {
 			.addValue("issueId", issue.getId());
 
 		jdbcTemplate.update(sql, param);
+  }
+  
+	public void updateIssueMilestone(Integer issueId, Integer milestoneId) {
+		String sql = "UPDATE issue SET milestone_id = :milestoneId WHERE id = :issueId";
+
+		MapSqlParameterSource params = new MapSqlParameterSource()
+			.addValue("milestoneId", milestoneId)
+			.addValue("issueId", issueId);
+
+		jdbcTemplate.update(sql, params);
 	}
 }
