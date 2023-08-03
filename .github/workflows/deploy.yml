@@ -54,6 +54,10 @@ jobs:
       - name: Build with gradle
         run: ./gradlew build -x test
 
+      - name: Create temporary directory
+        run: |
+          mkdir deploy
+
       - name: Copy Jar, appspec.yml
         run: |
           cp ./build/libs/*.jar ./deploy/
