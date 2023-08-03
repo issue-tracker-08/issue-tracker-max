@@ -60,15 +60,21 @@ export default function IssueDetailPage() {
       </Header>
 
       <Body>
-        <Comment
-          {...{
-            username: "Kakamotobi",
-            profileUrl: "url",
-            createdAt: "yesterday",
-            content: "blahblahblahblah",
-            isIssueAuthor: true,
-          }}
-        />
+        <div className="comments-container">
+          <Comment
+            {...{
+              username: "Kakamotobi",
+              profileUrl: "url",
+              createdAt: "yesterday",
+              content: "blahblahblahblah",
+              isIssueAuthor: true,
+            }}
+          />
+
+          {/* TODO: comments.map() */}
+
+          {/* TODO: 새 코멘트 작성 text area */}
+        </div>
         <div>sidebar</div>
       </Body>
     </>
@@ -140,6 +146,15 @@ const IssueStateTag = styled.div`
 const Body = styled.div`
   width: 100%;
   padding-top: 24px;
+  display: flex;
+  gap: 32px;
   border-top: ${({ theme: { border, neutral } }) =>
     `${border.default} ${neutral.border.default}`};
+
+  .comments-container {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    flex-grow: 1;
+  }
 `;

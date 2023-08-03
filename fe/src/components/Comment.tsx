@@ -1,8 +1,8 @@
 import editIcon from "@assets/icon/edit.svg";
 import smileIcon from "@assets/icon/smile.svg";
 import { styled } from "styled-components";
-import Button from "./common/Button";
 import { Avatar } from "./common/Avatar";
+import Button from "./common/Button";
 
 export default function Comment({
   username,
@@ -99,6 +99,9 @@ const AuthorTag = styled.span`
 const Body = styled.div`
   width: 100%;
   padding: 16px 24px;
+  background-color: ${({ theme: { neutral } }) => neutral.surface.strong};
+  border-bottom-left-radius: ${({ theme: { radius } }) => radius.l};
+  border-bottom-right-radius: ${({ theme: { radius } }) => radius.l};
   font: ${({ theme: { font } }) => font.displayMD16};
   color: ${({ theme: { neutral } }) => neutral.text.default};
 `;
