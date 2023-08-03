@@ -13,6 +13,11 @@ export const getIssues = async () => {
   return await fetcherWithBearer.get<IssueItem[]>("/issues");
 };
 
+export const getIssue = async (issueId: number) => {
+  // TODO: specify return type
+  return await fetcherWithBearer.get(`/issues/${issueId}`);
+};
+
 export const getLabels = async () => {
   return await fetcherWithBearer.get<Label[]>("/labels");
 };

@@ -1,6 +1,7 @@
 import AuthPage from "@pages/Auth/AuthPage";
 import LoginPage from "@pages/Auth/LoginPage";
 import SignupPage from "@pages/Auth/SignupPage";
+import IssueDetailPage from "@pages/MainPage/IssueDetailPage";
 import IssuesPage from "@pages/MainPage/IssuesPage";
 import LabelPage from "@pages/MainPage/LabelPage";
 import MainPage from "@pages/MainPage/MainPage";
@@ -27,6 +28,7 @@ const router = createBrowserRouter(
 
       <Route path="/" element={<MainPage />}>
         <Route path="issues" element={<IssuesPage />} />
+        <Route path="issues/:issueId" element={<IssueDetailPage />} />
         <Route path="labels" element={<LabelPage />} />
         <Route path="milestones" element={<MilestonePage />} />
       </Route>
