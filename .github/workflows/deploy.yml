@@ -11,8 +11,8 @@ env:
   S3_BUCKET_NAME: issue-tracker-s3
   CODE_DEPLOY_APPLICATION_NAME: issue-tracker-cd
   CODE_DEPLOY_DEPLOYMENT_GROUP_NAME_WAS: issue-tracker-group
-  AWS-ACCESS-KEY-ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-  AWS-SECRET-ACCESS-KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+  AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+  AWS-_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
   APPLICATION_PROPERTIES_FILE_PATH: ./src/main/resources/application-prod.yml
 
 permissions:
