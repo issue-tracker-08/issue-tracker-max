@@ -83,7 +83,7 @@ jobs:
       - name: Deploy to CodeDeploy from S3
         run: |
           aws deploy create-deployment \
-          --application-name ${{ CODE_DEPLOY_APPLICATION_NAME }} \
+          --application-name ${{ env.CODE_DEPLOY_APPLICATION_NAME }} \
           --deployment-config-name CodeDeployDefault.AllAtOnce \
-          --deployment-group-name ${{ CODE_DEPLOY_DEPLOYMENT_GROUP_NAME_WAS }} \
-          --s3-location bucket=${{ S3_BUCKET_NAME }},key=deploy/was/issue-tracker-build.zip,bundleType=zip
+          --deployment-group-name ${{ env.CODE_DEPLOY_DEPLOYMENT_GROUP_NAME_WAS }} \
+          --s3-location bucket=${{ env.S3_BUCKET_NAME }},key=deploy/was/issue-tracker-build.zip,bundleType=zip
