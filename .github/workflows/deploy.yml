@@ -54,12 +54,11 @@ jobs:
       - name: Build with gradle
         run: ./gradlew build -x test
 
-      - name: Copy Jar, appspec-app.yml, start_was.sh and stop_was.sh
+      - name: Copy Jar, appspec.yml
         run: |
-          cp ./backend/build/libs/*.jar ./deploy/
-          cp ./appspec-app.yml ./deploy/appspec.yml
-          cp ./scripts/start_was.sh ./deploy/
-          cp ./scripts/stop_was.sh ./deploy/
+          cp ./build/libs/*.jar ./deploy/
+          cp ./appspec.yml ./deploy/
+          cp ./deploy.sh ./deploy/
 
       - name: Make zip file
         run: |
