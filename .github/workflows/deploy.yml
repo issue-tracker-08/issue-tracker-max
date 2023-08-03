@@ -1,0 +1,86 @@
+name: ci
+
+on:
+  pull_request:
+    branches:
+      - be-w2
+      - fe-w2
+
+env:
+  AWS_REGION: ap-northeast-2
+  S3_BUCKET_NAME: issue-tracker-s3
+  CODE_DEPLOY_APPLICATION_NAME: issue-tracker-cd
+  CODE_DEPLOY_DEPLOYMENT_GROUP_NAME_WAS: issue-tracker-group
+  AWS-ACCESS-KEY-ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+  AWS-SECRET-ACCESS-KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+  APPLICATION_PROPERTIES_FILE_PATH: ./src/main/resources/application-prod.yml
+
+permissions:
+  contents: read
+
+jobs:
+  backend:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash
+        working-directory: ./backend
+
+    steps:
+      - name: Checkout-source code
+        uses: actions/checkout@v3
+
+      - name: Set up JDK 11
+        uses: actions/setup-java@v3
+        with:
+          java-version: '11'
+          distribution: 'temurin'
+
+      - name: Make application-prod.yml file
+        run: touch $APPLICATION_PROPERTIES_FILE_PATH
+
+      - name: Output application information
+        run: echo '${{ secrets.APPLICATION }}' > $APPLICATION_PROPERTIES_FILE_PATH
+
+      - name: Make application-jwt.yml file
+        run: touch $APPLICATION_PROPERTIES_FILE_PATH
+
+      - name: Output application information
+        run: echo '${{ secrets.APPLICATION_JWT }}' > $APPLICATION_PROPERTIES_FILE_PATH
+
+      - name: Grant execute permission to gradlew
+        run: chmod +x ./gradlew
+
+      - name: Build with gradle
+        run: ./gradlew build -x test
+
+      - name: Copy Jar, appspec-app.yml, start_was.sh and stop_was.sh
+        run: |
+          cp ./backend/build/libs/*.jar ./deploy/
+          cp ./appspec-app.yml ./deploy/appspec.yml
+          cp ./scripts/start_was.sh ./deploy/
+          cp ./scripts/stop_was.sh ./deploy/
+
+      - name: Make zip file
+        run: |
+          zip -r ./issue-tracker-build.zip ./deploy/
+          rm -r ./deploy/* 
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: $AWS_ACCESS_KEY_ID
+          aws-secret-access-key: $AWS_SECRET_ACCESS_KEY
+          aws-region: $AWS_REGION
+
+      - name: Upload ZIP to S3
+        run: |
+          aws s3 cp ./issue-tracker-build.zip s3://$S3_BUCKET_NAME/deploy/was/issue-tracker-build.zip
+
+      - name: Deploy to CodeDeploy from S3
+        run: |
+          aws deploy create-deployment \
+          --application-name $CODE_DEPLOY_APPLICATION_NAME \
+          --deployment-config-name CodeDeployDefault.AllAtOnce \
+          --deployment-group-name $CODE_DEPLOY_DEPLOYMENT_GROUP_NAME_WAS \
+          --s3-location bucket=$S3_BUCKET_NAME,key=deploy/was/issue-tracker-build.zip,bundleType=zip
