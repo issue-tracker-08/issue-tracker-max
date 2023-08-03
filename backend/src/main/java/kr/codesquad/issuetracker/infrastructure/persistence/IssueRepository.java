@@ -16,6 +16,8 @@ import org.springframework.stereotype.Repository;
 import kr.codesquad.issuetracker.domain.Issue;
 import kr.codesquad.issuetracker.infrastructure.persistence.mapper.IssueSimpleMapper;
 import kr.codesquad.issuetracker.presentation.response.IssueDetailResponse;
+import kr.codesquad.issuetracker.presentation.response.LabelResponse;
+import kr.codesquad.issuetracker.presentation.response.MilestoneResponse;
 
 @Repository
 public class IssueRepository {
@@ -40,7 +42,7 @@ public class IssueRepository {
 			+ "'name', l.name, 'fontColor', l.font_color, 'backgroundColor', l.background_color)), ']') as labels, "
 			+ "IFNULL(ua2.login_id, '(알수없음)') as author_name, "
 			+ "CONCAT('[', GROUP_CONCAT(DISTINCT JSON_OBJECT( "
-			+ "'loginId', ua.login_id, 'profileUrl', ua.profile_url)), ']') as assignee "
+			+ "'username', ua.login_id, 'profileUrl', ua.profile_url)), ']') as assignee "
 			+ "FROM issue i "
 			+ "LEFT JOIN issue_label il ON i.id = il.issue_id "
 			+ "LEFT JOIN label l ON l.id = il.label_id AND l.is_deleted = false "
@@ -78,8 +80,8 @@ public class IssueRepository {
 
 	public IssueDetailResponse findIssueDetailResponseById(Integer issueId) {
 		List<IssueDetailResponse.Assignee> assignees = findAssigneeById(issueId);
-		List<IssueDetailResponse.LabelInfo> labels = findLabelInfoById(issueId);
-		IssueDetailResponse.MilestoneInfo milestone = milestoneRepository.findMilestoneInfoByIssueId(issueId);
+		List<LabelResponse> labels = findLabelInfoById(issueId);
+		MilestoneResponse milestone = milestoneRepository.findMilestoneByIssueId(issueId);
 
 		String sql = "SELECT i.id, i.title, i.is_open, i.created_at, i.content, ua.login_id, ua.profile_url " +
 			"FROM issue i " +
@@ -114,14 +116,14 @@ public class IssueRepository {
 		));
 	}
 
-	private List<IssueDetailResponse.LabelInfo> findLabelInfoById(Integer issueId) {
+	private List<LabelResponse> findLabelInfoById(Integer issueId) {
 		String sql = "SELECT l.id, l.name, l.font_color, l.background_color " +
 			"FROM issue i " +
 			"JOIN issue_label il ON i.id = il.issue_id " +
 			"JOIN label l ON il.label_id = l.id AND l.is_deleted = FALSE " +
 			"WHERE i.id = :issueId";
 
-		return jdbcTemplate.query(sql, Map.of("issueId", issueId), (rs, rowNum) -> new IssueDetailResponse.LabelInfo(
+		return jdbcTemplate.query(sql, Map.of("issueId", issueId), (rs, rowNum) -> new LabelResponse(
 			rs.getInt("id"),
 			rs.getString("name"),
 			rs.getString("font_color"),
