@@ -58,9 +58,23 @@ jobs:
       - name: Build with gradle
         run: ./gradlew clean build -x test
 
-      #3 파일 압축
+      #3-1. 파일을 저장할 디렉토리 생성
+      - name: Create temporary directory
+        run: |
+          mkdir deploy
+
+      #3-2. .jar, appspec.yml, deploy.sh 파일 복사
+      - name: Copy Jar, appspec.yml
+        run: |
+          cp ./build/libs/*.jar ./deploy/
+          cp ./appspec.yml ./deploy/
+          cp ./deploy.sh ./deploy/
+
+      #3-3. 복사한 파일 압축
       - name: Make zip file
-        run: zip -r ./$GITHUB_SHA.zip .
+        run: |
+          zip -r ./issue-tracker-build.zip ./deploy/
+          rm -r ./deploy/*
 
       #4-1. AWS 권한 부여
       - name: Configure AWS credentials
@@ -73,8 +87,8 @@ jobs:
       #4-2. S3에 파일 업로드 (zip으로 압축 -> AWS 권한 부여 -> S3 전송)
       - name: Upload ZIP to S3
         run: aws s3 cp
-          --region '${{ env.AWS_REGION }}' ./$GITHUB_SHA.zip
-          s3://$S3_BUCKET_NAME/deploy/$GITHUB_SHA.zip
+          --region '${{ env.AWS_REGION }}' ./issue-tracker-build.zip
+          s3://$S3_BUCKET_NAME/deploy/was/issue-tracker-build.zip
 
       - name: Deploy to CodeDeploy from S3
         run: |
@@ -82,4 +96,4 @@ jobs:
           --application-name $CODE_DEPLOY_APPLICATION_NAME \
           --deployment-config-name CodeDeployDefault.AllAtOnce \
           --deployment-group-name $CODE_DEPLOY_DEPLOYMENT_GROUP_NAME_WAS \
-          --s3-location bucket=$S3_BUCKET_NAME,key=deploy/$GITHUB_SHA.zip,bundleType=zip
+          --s3-location bucket=$S3_BUCKET_NAME,key=deploy/was/issue-tracker-build.zip,bundleType=zip
