@@ -11,8 +11,6 @@ env:
   S3_BUCKET_NAME: issue-tracker-s3
   CODE_DEPLOY_APPLICATION_NAME: issue-tracker-cd
   CODE_DEPLOY_DEPLOYMENT_GROUP_NAME_WAS: issue-tracker-group
-  AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-  AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
   APPLICATION_PROPERTIES_FILE_PATH: ./src/main/resources/application-prod.yml
 
 permissions:
@@ -27,6 +25,7 @@ jobs:
         working-directory: ./backend
 
     steps:
+      #0. Source 단계
       - name: Checkout-source code
         uses: actions/checkout@v3
 
@@ -36,46 +35,55 @@ jobs:
           java-version: '11'
           distribution: 'temurin'
 
+      #1-1. DB 정보 담은 yml 파일 생성
       - name: Make application-prod.yml file
         run: touch '${{ env.APPLICATION_PROPERTIES_FILE_PATH }}'
 
       - name: Output application information
         run: echo '${{ secrets.APPLICATION }}' > '${{ env.APPLICATION_PROPERTIES_FILE_PATH }}'
 
+      #1-2. JWT 정보 담은 yml 파일 생성
       - name: Make application-jwt.yml file
         run: touch '${{ env.APPLICATION_PROPERTIES_FILE_PATH }}'
 
       - name: Output application information
         run: echo '${{ secrets.APPLICATION_JWT }}' > '${{ env.APPLICATION_PROPERTIES_FILE_PATH }}'
 
+      #2-1. Gradle 실행 권한 부여
       - name: Grant execute permission to gradlew
         run: chmod +x ./gradlew
 
+      #2-2. Build
       - name: Build with gradle
-        run: ./gradlew build -x test
+        run: ./gradlew clean build -x test
 
+      #3-1. zip 파일을 저장할 디렉토리 생성
       - name: Create temporary directory
         run: |
           mkdir deploy
 
+      #3-2. jar, appspec.yml, deploy.sh 파일 복사
       - name: Copy Jar, appspec.yml
         run: |
           cp ./build/libs/*.jar ./deploy/
           cp ./appspec.yml ./deploy/
           cp ./deploy.sh ./deploy/
 
+      #3-3. 복사한 파일 압축
       - name: Make zip file
         run: |
           zip -r ./issue-tracker-build.zip ./deploy/
           rm -r ./deploy/* 
 
+      #4-1. AWS 권한 부여
       - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v1
+        uses: aws-actions/configure-aws-credentials@v2
         with:
-          aws-access-key-id: ${{env.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{env.AWS_SECRET_ACCESS_KEY}}
-          aws-region: ${{env.AWS_REGION}}
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ env.AWS_REGION }}
 
+      #4-2. S3에 파일 업로드 (zip으로 압축 -> AWS 권한 부여 -> S3 전송)
       - name: Upload ZIP to S3
         run: |
           aws s3 cp ./issue-tracker-build.zip s3://$S3_BUCKET_NAME/deploy/was/issue-tracker-build.zip
@@ -83,7 +91,7 @@ jobs:
       - name: Deploy to CodeDeploy from S3
         run: |
           aws deploy create-deployment \
-          --application-name ${{ env.CODE_DEPLOY_APPLICATION_NAME }} \
+          --application-name $CODE_DEPLOY_APPLICATION_NAME \
           --deployment-config-name CodeDeployDefault.AllAtOnce \
-          --deployment-group-name ${{ env.CODE_DEPLOY_DEPLOYMENT_GROUP_NAME_WAS }} \
-          --s3-location bucket=${{ env.S3_BUCKET_NAME }},key=deploy/was/issue-tracker-build.zip,bundleType=zip
+          --deployment-group-name $CODE_DEPLOY_DEPLOYMENT_GROUP_NAME_WAS \
+          --s3-location bucket=$S3_BUCKET_NAME,key=deploy/was/issue-tracker-build.zip,bundleType=zip
