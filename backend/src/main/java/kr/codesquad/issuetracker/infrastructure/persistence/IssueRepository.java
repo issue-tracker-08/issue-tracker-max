@@ -3,12 +3,14 @@ package kr.codesquad.issuetracker.infrastructure.persistence;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import javax.sql.DataSource;
 
 import org.springframework.dao.support.DataAccessUtils;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
@@ -40,7 +42,7 @@ public class IssueRepository {
 			+ "'name', l.name, 'fontColor', l.font_color, 'backgroundColor', l.background_color)), ']') as labels, "
 			+ "IFNULL(ua2.login_id, '(알수없음)') as author_name, "
 			+ "CONCAT('[', GROUP_CONCAT(DISTINCT JSON_OBJECT( "
-			+ "'loginId', ua.login_id, 'profileUrl', ua.profile_url)), ']') as assignee "
+			+ "'username', ua.login_id, 'profileUrl', ua.profile_url)), ']') as assignee "
 			+ "FROM issue i "
 			+ "LEFT JOIN issue_label il ON i.id = il.issue_id "
 			+ "LEFT JOIN label l ON l.id = il.label_id AND l.is_deleted = false "
@@ -127,5 +129,32 @@ public class IssueRepository {
 			rs.getString("font_color"),
 			rs.getString("background_color")
 		));
+	}
+
+	public Optional<Issue> findById(Integer issueId) {
+		String sql = "SELECT id, title, is_open, content, user_account_id FROM issue WHERE id = :issueId";
+
+		return Optional.ofNullable(DataAccessUtils.singleResult(
+			jdbcTemplate.query(sql, Map.of("issueId", issueId), (rs, rowNum) -> new Issue(
+				rs.getInt("id"),
+				rs.getString("title"),
+				rs.getString("content"),
+				rs.getBoolean("is_open"),
+				rs.getInt("user_account_id")
+			))));
+	}
+
+	public void updateIssue(Issue issue) {
+		String sql = "UPDATE issue "
+			+ "SET title = :title, is_open = :isOpen, content = :content "
+			+ "WHERE id = :issueId";
+
+		MapSqlParameterSource param = new MapSqlParameterSource()
+			.addValue("title", issue.getTitle())
+			.addValue("isOpen", issue.getIsOpen())
+			.addValue("content", issue.getContent())
+			.addValue("issueId", issue.getId());
+
+		jdbcTemplate.update(sql, param);
 	}
 }

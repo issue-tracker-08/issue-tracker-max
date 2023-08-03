@@ -18,6 +18,7 @@ import kr.codesquad.issuetracker.infrastructure.persistence.IssueRepository;
 import kr.codesquad.issuetracker.infrastructure.persistence.mapper.IssueSimpleMapper;
 import kr.codesquad.issuetracker.presentation.request.AssigneeRequest;
 import kr.codesquad.issuetracker.presentation.request.IssueLabelRequest;
+import kr.codesquad.issuetracker.presentation.request.IssueModifyRequest;
 import kr.codesquad.issuetracker.presentation.request.IssueRegisterRequest;
 import kr.codesquad.issuetracker.presentation.response.IssueDetailResponse;
 import lombok.RequiredArgsConstructor;
@@ -63,6 +64,19 @@ public class IssueService {
 	@Transactional(readOnly = true)
 	public List<IssueSimpleMapper> findAll() {
 		return issueRepository.findAll();
+	}
+
+	@Transactional
+	public void modifyIssue(Integer userId, Integer issueId, IssueModifyRequest request) {
+		Issue issue = issueRepository.findById(issueId)
+			.orElseThrow(() -> new ApplicationException(ErrorCode.ISSUE_NOT_FOUND));
+
+		if (!issue.isAuthor(userId)) {
+			throw new ApplicationException(ErrorCode.NO_AUTHORIZATION);
+		}
+
+		request.modifyData(issue);
+		issueRepository.updateIssue(issue);
 	}
 
 	@Transactional
