@@ -1,5 +1,6 @@
 package kr.codesquad.issuetracker.presentation;
 
+import static kr.codesquad.issuetracker.presentation.request.IssueModifyRequest.*;
 import static org.mockito.BDDMockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.request;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -21,6 +22,7 @@ import kr.codesquad.issuetracker.application.IssueService;
 import kr.codesquad.issuetracker.exception.ApplicationException;
 import kr.codesquad.issuetracker.exception.ErrorCode;
 import kr.codesquad.issuetracker.fixture.FixtureFactory;
+import kr.codesquad.issuetracker.presentation.request.IssueModifyRequest;
 import kr.codesquad.issuetracker.presentation.request.IssueRegisterRequest;
 
 @WebMvcTest(IssueController.class)
@@ -126,6 +128,62 @@ class IssueControllerTest extends ControllerTest {
 						.contentType(MediaType.APPLICATION_JSON)
 						.header(HttpHeaders.AUTHORIZATION, "Bearer " + jwtProvider.createToken("1")))
 				.andExpect(status().isNotFound())
+				.andDo(print());
+		}
+	}
+
+	@Nested
+	class IssueModifyTest {
+
+		@DisplayName("이슈 수정에 성공한다.")
+		@Test
+		void modifyIssue() throws Exception {
+			// given
+			willDoNothing().given(issueService).modifyIssue(anyInt(), anyInt(), any(IssueModifyRequest.class));
+
+			// when & then
+			mockMvc.perform(
+					patch("/api/issues/1")
+						.contentType(MediaType.APPLICATION_JSON)
+						.header(HttpHeaders.AUTHORIZATION, "Bearer " + jwtProvider.createToken("1"))
+						.content(objectMapper.writeValueAsString(
+							FixtureFactory.createIssueModifyRequest("", null, null, UpdateProperty.TITLE))))
+				.andExpect(status().isOk())
+				.andDo(print());
+		}
+
+		@DisplayName("자신이 작성한 댓글이 아니라면 403응답을 한다.")
+		@Test
+		void givenNotAuthor_thenResponse403() throws Exception {
+			// given
+			willThrow(new ApplicationException(ErrorCode.NO_AUTHORIZATION))
+				.given(issueService).modifyIssue(anyInt(), anyInt(), any(IssueModifyRequest.class));
+
+			// when & then
+			mockMvc.perform(
+					patch("/api/issues/1")
+						.contentType(MediaType.APPLICATION_JSON)
+						.header(HttpHeaders.AUTHORIZATION, "Bearer " + jwtProvider.createToken("1"))
+						.content(objectMapper.writeValueAsString(
+							FixtureFactory.createIssueModifyRequest("", null, null, UpdateProperty.TITLE))))
+				.andExpect(status().isForbidden())
+				.andDo(print());
+		}
+
+		@DisplayName("유효한 형식의 요청이 아니라면 400응답을 한다.")
+		@Test
+		void givenInvalidRequest_thenResponse400() throws Exception {
+			// given
+			willDoNothing().given(issueService).modifyIssue(anyInt(), anyInt(), any(IssueModifyRequest.class));
+
+			// when & then
+			mockMvc.perform(
+					patch("/api/issues/1")
+						.contentType(MediaType.APPLICATION_JSON)
+						.header(HttpHeaders.AUTHORIZATION, "Bearer " + jwtProvider.createToken("1"))
+						.content("{\"data\": {\"title\": \"수정된 제목\",\"content\": null,\"isOpen\": null},"
+							+ "\"updateProperty\": \"createdAt\"}"))
+				.andExpect(status().isBadRequest())
 				.andDo(print());
 		}
 	}
