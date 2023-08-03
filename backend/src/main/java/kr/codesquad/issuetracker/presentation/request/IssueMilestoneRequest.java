@@ -6,5 +6,6 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 public class IssueMilestoneRequest {
+
 	private Integer milestoneId;
 }

@@ -89,6 +89,7 @@ public class IssueService {
 			id -> new IssueLabel(issueId, id)));
 	}
 
+	@Transactional
 	public void updateIssueMilestone(Integer issueId, Integer milestoneId) {
 		if (!issueRepository.existsById(issueId)) {
 			throw new ApplicationException(ErrorCode.ISSUE_NOT_FOUND);

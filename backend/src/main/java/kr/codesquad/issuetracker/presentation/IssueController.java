@@ -52,18 +52,26 @@ public class IssueController {
 	}
 
 	@PostMapping("/{issueId}/assignees")
-	public void updateAssignees(@PathVariable Integer issueId, @RequestBody AssigneeRequest assigneeRequest) {
+	public ResponseEntity<Void> updateAssignees(@PathVariable Integer issueId,
+		@RequestBody AssigneeRequest assigneeRequest) {
 		issueService.updateAssignees(issueId, assigneeRequest);
+
+		return ResponseEntity.ok().build();
 	}
 
 	@PostMapping("/{issueId}/labels")
-	public void updateIssueLabels(@PathVariable Integer issueId, @RequestBody IssueLabelRequest issueLabelRequest) {
+	public ResponseEntity<Void> updateIssueLabels(@PathVariable Integer issueId,
+		@RequestBody IssueLabelRequest issueLabelRequest) {
 		issueService.updateIssueLabels(issueId, issueLabelRequest);
+
+		return ResponseEntity.ok().build();
 	}
 
 	@PostMapping("/{issueId}/milestone")
-	public void updateIssueMilestone(@PathVariable Integer issueId,
+	public ResponseEntity<Void> updateIssueMilestone(@PathVariable Integer issueId,
 		@RequestBody IssueMilestoneRequest milestoneRequest) {
 		issueService.updateIssueMilestone(issueId, milestoneRequest.getMilestoneId());
+
+		return ResponseEntity.ok().build();
 	}
 }
