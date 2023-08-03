@@ -37,16 +37,16 @@ jobs:
           distribution: 'temurin'
 
       - name: Make application-prod.yml file
-        run: touch $APPLICATION_PROPERTIES_FILE_PATH
+        run: touch '${{ env.APPLICATION_PROPERTIES_FILE_PATH }}'
 
       - name: Output application information
-        run: echo '${{ secrets.APPLICATION }}' > $APPLICATION_PROPERTIES_FILE_PATH
+        run: echo '${{ secrets.APPLICATION }}' > '${{ env.APPLICATION_PROPERTIES_FILE_PATH }}'
 
       - name: Make application-jwt.yml file
-        run: touch $APPLICATION_PROPERTIES_FILE_PATH
+        run: touch '${{ env.APPLICATION_PROPERTIES_FILE_PATH }}'
 
       - name: Output application information
-        run: echo '${{ secrets.APPLICATION_JWT }}' > $APPLICATION_PROPERTIES_FILE_PATH
+        run: echo '${{ secrets.APPLICATION_JWT }}' > '${{ env.APPLICATION_PROPERTIES_FILE_PATH }}'
 
       - name: Grant execute permission to gradlew
         run: chmod +x ./gradlew
@@ -72,8 +72,8 @@ jobs:
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
         with:
-          aws-access-key-id: $AWS_ACCESS_KEY_ID
-          aws-secret-access-key: $AWS_SECRET_ACCESS_KEY
+          aws-access-key-id: ${{env.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{env.AWS_SECRET_ACCESS_KEY}}
           aws-region: ${{env.AWS_REGION}}
 
       - name: Upload ZIP to S3
