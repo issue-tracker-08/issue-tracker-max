@@ -14,10 +14,11 @@ public class UserAccount {
 	private String profileUrl;
 	private Boolean isDeleted;
 
-	public UserAccount(Integer id, String loginId, String password) {
+	public UserAccount(Integer id, String loginId, String password, String profileUrl) {
 		this.id = id;
 		this.loginId = loginId;
 		this.password = password;
+		this.profileUrl = profileUrl;
 	}
 
 	public UserAccount(String loginId, String password) {

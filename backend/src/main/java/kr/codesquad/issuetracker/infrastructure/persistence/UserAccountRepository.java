@@ -39,10 +39,11 @@ public class UserAccountRepository {
 
 	public Optional<UserAccount> findByLoginId(String loginId) {
 		return Optional.ofNullable(DataAccessUtils.singleResult(jdbcTemplate.query(
-			"SELECT id, login_id, password FROM user_account WHERE login_id = :loginId AND is_deleted = FALSE",
+			"SELECT id, login_id, password, profile_url FROM user_account WHERE login_id = :loginId AND is_deleted = FALSE",
 			Map.of("loginId", loginId), (rs, rowNum) -> new UserAccount(rs.getInt("id"),
 				rs.getString("login_id"),
-				rs.getString("password")))));
+				rs.getString("password"),
+				rs.getString("profile_url")))));
 	}
 
 	public List<UserAccount> findAll() {
