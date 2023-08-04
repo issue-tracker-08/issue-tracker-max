@@ -13,7 +13,7 @@ import org.springframework.http.MediaType;
 
 import kr.codesquad.issuetracker.application.AuthService;
 import kr.codesquad.issuetracker.fixture.FixtureFactory;
-import kr.codesquad.issuetracker.presentation.response.TokenResponse;
+import kr.codesquad.issuetracker.presentation.response.LoginSuccessResponse;
 
 @WebMvcTest(controllers = AuthController.class)
 class AuthControllerTest extends ControllerTest {
@@ -56,7 +56,7 @@ class AuthControllerTest extends ControllerTest {
 			String id = "applePIE";
 			String pw = "qwer1234";
 
-			given(authService.login(id, pw)).willReturn(new TokenResponse("qwerqwer"));
+			given(authService.login(id, pw)).willReturn(new LoginSuccessResponse("qwerqwer", "url", id));
 
 			mockMvc.perform(
 					post("/api/auth/login")
@@ -65,8 +65,8 @@ class AuthControllerTest extends ControllerTest {
 							objectMapper.writeValueAsString(FixtureFactory.createLoginRequest(id, pw))
 						)
 				).andExpect(status().isCreated())
-				.andExpect(jsonPath("$.tokenType").exists())
-				.andExpect(jsonPath("$.accessToken").exists());
+				.andExpect(jsonPath("$.token").exists())
+				.andExpect(jsonPath("$.user").exists());
 		}
 	}
 }

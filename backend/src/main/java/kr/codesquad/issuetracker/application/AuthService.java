@@ -9,7 +9,7 @@ import kr.codesquad.issuetracker.exception.ErrorCode;
 import kr.codesquad.issuetracker.infrastructure.persistence.UserAccountRepository;
 import kr.codesquad.issuetracker.infrastructure.security.hash.PasswordEncoder;
 import kr.codesquad.issuetracker.infrastructure.security.jwt.JwtProvider;
-import kr.codesquad.issuetracker.presentation.response.TokenResponse;
+import kr.codesquad.issuetracker.presentation.response.LoginSuccessResponse;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
@@ -31,7 +31,7 @@ public class AuthService {
 	}
 
 	@Transactional(readOnly = true)
-	public TokenResponse login(final String loginId, final String password) {
+	public LoginSuccessResponse login(final String loginId, final String password) {
 		UserAccount findUserAccount = userAccountRepository.findByLoginId(loginId)
 			.orElseThrow(() -> new ApplicationException(ErrorCode.USER_NOT_FOUND));
 
@@ -39,6 +39,7 @@ public class AuthService {
 			throw new ApplicationException(ErrorCode.FAILED_LOGIN);
 		}
 
-		return new TokenResponse(jwtProvider.createToken(String.valueOf(findUserAccount.getId())));
+		return new LoginSuccessResponse(jwtProvider.createToken(String.valueOf(findUserAccount.getId())),
+			findUserAccount.getProfileUrl(), findUserAccount.getLoginId());
 	}
 }
