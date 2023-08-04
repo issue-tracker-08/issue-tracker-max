@@ -48,8 +48,8 @@ class IssueControllerTest extends ControllerTest {
 						.contentType(MediaType.APPLICATION_JSON)
 						.header(HttpHeaders.AUTHORIZATION, "Bearer " + jwtProvider.createToken("1"))
 						.content(objectMapper.writeValueAsString(request)))
-				.andExpect(status().isFound())
-				.andExpect(header().stringValues("Location", "/api/issues/1"))
+				.andExpect(status().isOk())
+				.andExpect(jsonPath("issueId").exists())
 				.andDo(print());
 		}
 

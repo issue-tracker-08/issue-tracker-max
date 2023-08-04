@@ -1,10 +1,10 @@
 package kr.codesquad.issuetracker.presentation;
 
 import java.util.List;
+import java.util.Map;
 
 import javax.validation.Valid;
 
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -39,12 +39,9 @@ public class IssueController {
 	}
 
 	@PostMapping
-	public ResponseEntity<Void> register(@AuthPrincipal Integer userId,
+	public ResponseEntity<Map<String, Integer>> register(@AuthPrincipal Integer userId,
 		@Valid @RequestBody IssueRegisterRequest request) {
-		Integer issueId = issueService.register(userId, request);
-		return ResponseEntity.status(HttpStatus.FOUND)
-			.header(HttpHeaders.LOCATION, "/api/issues/" + issueId)
-			.build();
+		return ResponseEntity.ok(Map.of("issueId", issueService.register(userId, request)));
 	}
 
 	@GetMapping("/{issueId}")

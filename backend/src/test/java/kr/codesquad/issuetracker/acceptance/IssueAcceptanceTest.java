@@ -49,8 +49,8 @@ public class IssueAcceptanceTest {
 
 		// then
 		assertAll(
-			() -> assertThat(response.statusCode()).isEqualTo(302),
-			() -> assertThat(response.header(HttpHeaders.LOCATION)).isEqualTo("/api/issues/1")
+			() -> assertThat(response.statusCode()).isEqualTo(200),
+			() -> assertThat(response.body().jsonPath().getInt("issueId")).isEqualTo(1)
 		);
 	}
 }
