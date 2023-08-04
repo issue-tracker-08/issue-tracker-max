@@ -40,7 +40,7 @@ export default function SignupPage() {
 
   return (
     <>
-      <AuthForm onSubmit={onSubmit}>
+      <AuthForm onSubmit={onSubmit} method="POST">
         <TextInput
           name="아이디"
           variant="tall"

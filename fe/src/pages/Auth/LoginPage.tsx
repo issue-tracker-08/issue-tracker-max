@@ -46,7 +46,7 @@ export default function LoginPage() {
         GitHub 계정으로 로그인
       </Button>
       <span className="or">or</span>
-      <AuthForm onSubmit={onSubmit}>
+      <AuthForm onSubmit={onSubmit} method="POST">
         <TextInput
           name="아이디"
           variant="tall"
