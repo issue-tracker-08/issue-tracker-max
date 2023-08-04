@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.util.AntPathMatcher;
 import org.springframework.util.StringUtils;
+import org.springframework.web.cors.CorsUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import kr.codesquad.issuetracker.domain.AuthenticationContext;
@@ -40,7 +41,10 @@ public class JwtFilter extends OncePerRequestFilter {
 	@Override
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
 		FilterChain filterChain) throws ServletException, IOException {
-
+		if (CorsUtils.isPreFlightRequest(request)) {
+			filterChain.doFilter(request, response);
+			return;
+		}
 		String token = extractJwt(request).orElseThrow(() -> new ApplicationException(ErrorCode.EMPTY_JWT));
 		jwtProvider.validateToken(token);
 		authenticationContext.setPrincipal(jwtProvider.extractUserId(token));
