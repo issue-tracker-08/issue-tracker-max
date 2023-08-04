@@ -6,11 +6,11 @@ import {
 } from "./fetcher";
 
 export const postSignup = async (username: string, password: string) => {
-  return await fetcher.post("/auth/signup", { username, password });
+  return await fetcher.post("/auth/signup", { loginId: username, password });
 };
 
 export const postLogin = async (username: string, password: string) => {
-  return await fetcher.post("/auth/login", { username, password });
+  return await fetcher.post("/auth/login", { loginId: username, password });
 };
 
 export const getIssues = async () => {
