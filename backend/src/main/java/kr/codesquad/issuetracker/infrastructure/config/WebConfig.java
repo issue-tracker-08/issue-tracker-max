@@ -24,7 +24,6 @@ public class WebConfig implements WebMvcConfigurer {
 	@Override
 	public void addCorsMappings(CorsRegistry registry) {
 		registry.addMapping("/api/**")
-			.allowedOrigins("http://issue-tracker-8.s3-website.ap-northeast-2.amazonaws.com")
-			.allowedMethods("HEAD", "OPTIONS", "GET", "POST", "PUT", "DELETE", "PATCH");
+			.allowedOrigins("http://issue-tracker-8.s3-website.ap-northeast-2.amazonaws.com");
 	}
 }
