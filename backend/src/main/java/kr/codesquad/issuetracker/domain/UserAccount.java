@@ -24,7 +24,7 @@ public class UserAccount {
 	public UserAccount(String loginId, String password) {
 		this.loginId = loginId;
 		this.password = password;
-		this.profileUrl = "defaultImageUrl";
+		this.profileUrl = "https://issue-tracker-s3.s3.ap-northeast-2.amazonaws.com/public/profile/default_profile.png";
 	}
 
 	public boolean isSamePassword(String password) {
