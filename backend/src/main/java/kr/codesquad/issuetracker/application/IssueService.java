@@ -6,6 +6,7 @@ import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
 import kr.codesquad.issuetracker.domain.Issue;
 import kr.codesquad.issuetracker.domain.IssueAssignee;
@@ -75,8 +76,21 @@ public class IssueService {
 			throw new ApplicationException(ErrorCode.NO_AUTHORIZATION);
 		}
 
-		request.modifyData(issue);
+		updateIssueAttribute(request, issue);
+
 		issueRepository.updateIssue(issue);
+	}
+
+	private void updateIssueAttribute(IssueModifyRequest request, Issue issue) {
+		if (request.getIsOpen() != null) {
+			issue.modifyOpenStatus(request.getIsOpen());
+			return;
+		}
+		if (StringUtils.hasText(request.getTitle())) {
+			issue.modifyTitle(request.getTitle());
+			return;
+		}
+		issue.modifyContent(request.getContent());
 	}
 
 	@Transactional

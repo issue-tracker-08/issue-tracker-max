@@ -1,7 +1,5 @@
 package kr.codesquad.issuetracker.fixture;
 
-import static kr.codesquad.issuetracker.presentation.request.IssueModifyRequest.*;
-
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -45,8 +43,7 @@ public class FixtureFactory {
 			new MilestoneResponse(1, "BE Sprint #1", 3, 5));
 	}
 
-	public static IssueModifyRequest createIssueModifyRequest(String title, String content, Boolean isOpen,
-		UpdateProperty property) {
-		return new IssueModifyRequest(new ModifyData(title, content, isOpen), property);
+	public static IssueModifyRequest createIssueModifyRequest(String title, String content, Boolean isOpen) {
+		return new IssueModifyRequest(title, content, isOpen);
 	}
 }

@@ -19,7 +19,6 @@ import kr.codesquad.issuetracker.exception.ErrorCode;
 import kr.codesquad.issuetracker.fixture.FixtureFactory;
 import kr.codesquad.issuetracker.infrastructure.persistence.mapper.IssueSimpleMapper;
 import kr.codesquad.issuetracker.presentation.request.AssigneeRequest;
-import kr.codesquad.issuetracker.presentation.request.IssueModifyRequest;
 import kr.codesquad.issuetracker.presentation.request.IssueRegisterRequest;
 import kr.codesquad.issuetracker.presentation.response.IssueDetailResponse;
 
@@ -141,7 +140,7 @@ class IssueServiceTest {
 
 			// when
 			issueService.modifyIssue(1, 1,
-				FixtureFactory.createIssueModifyRequest("변경된 제목", null, null, IssueModifyRequest.UpdateProperty.TITLE));
+				FixtureFactory.createIssueModifyRequest("변경된 제목", null, null));
 
 			// then
 			IssueDetailResponse result = issueService.getIssueDetails(1);
@@ -155,8 +154,7 @@ class IssueServiceTest {
 
 			// when
 			issueService.modifyIssue(1, 1,
-				FixtureFactory.createIssueModifyRequest(null, "변경된 내용", null,
-					IssueModifyRequest.UpdateProperty.CONTENT));
+				FixtureFactory.createIssueModifyRequest(null, "변경된 내용", null));
 
 			// then
 			IssueDetailResponse result = issueService.getIssueDetails(1);
@@ -170,15 +168,14 @@ class IssueServiceTest {
 
 			// when
 			issueService.modifyIssue(1, 1,
-				FixtureFactory.createIssueModifyRequest(null, null, false,
-					IssueModifyRequest.UpdateProperty.IS_OPEN));
+				FixtureFactory.createIssueModifyRequest(null, null, false));
 
 			// then
 			IssueDetailResponse result = issueService.getIssueDetails(1);
 			assertThat(result.getIsOpen()).isFalse();
 		}
-  }
-  
+	}
+
 	@DisplayName("특정 이슈의 마일스톤을 수정할 수 있다.")
 	@Test
 	void updateIssueMilestone() {
