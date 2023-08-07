@@ -25,7 +25,7 @@ export default function TextInput({
           <Label htmlFor={name}>{props.placeholder}</Label>
         )}
         {!isTallType && <Label htmlFor={name}>{props.placeholder}</Label>}
-        <Input id={name} {...props} />
+        <Input id={name} value={value} {...props} />
       </InputContainer>
       {hasError && helpText && (
         <HelpTextArea $hasError={hasError}>{helpText}</HelpTextArea>
@@ -40,6 +40,7 @@ const INPUT_HEIGHT = {
 };
 
 const StyledTextInput = styled.div`
+  width: 100%;
   display: flex;
   flex-direction: column;
   gap: 4px;
