@@ -116,7 +116,7 @@ export const issueList = [
 ];
 
 export const issueDetails = {
-  issueId: 3,
+  issueId: 1,
   title: "이슈 제목",
   isOpen: true,
   createdAt: "2023-07-31 11:33:03",
