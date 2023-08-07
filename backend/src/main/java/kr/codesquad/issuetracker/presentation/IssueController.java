@@ -56,10 +56,24 @@ public class IssueController {
 			.body(issueService.getIssueDetailsSidebar(issueId));
 	}
 
-	@PutMapping(value = {"/{issueId}/title", "/{issueId}/content", "/{issueId}/isOpen"})
-	public ResponseEntity<Void> modifyIssue(@AuthPrincipal Integer userId,
-		@PathVariable Integer issueId, @RequestBody IssueModifyRequest request) {
-		issueService.modifyIssue(userId, issueId, request);
+	@PutMapping("/{issueId}/title")
+	public ResponseEntity<Void> modifyIssueTitle(@AuthPrincipal Integer userId,
+		@PathVariable Integer issueId, @RequestBody IssueModifyRequest.IssueTitleModifyRequest request) {
+		issueService.modifyIssueTitle(userId, issueId, request.getTitle());
+		return ResponseEntity.ok().build();
+	}
+
+	@PutMapping("/{issueId}/content")
+	public ResponseEntity<Void> modifyIssueContent(@AuthPrincipal Integer userId,
+		@PathVariable Integer issueId, @RequestBody IssueModifyRequest.IssueContentModifyRequest request) {
+		issueService.modifyIssueContent(userId, issueId, request.getContent());
+		return ResponseEntity.ok().build();
+	}
+
+	@PutMapping("/{issueId}/isOpen")
+	public ResponseEntity<Void> modifyIssueContent(@AuthPrincipal Integer userId,
+		@PathVariable Integer issueId, @RequestBody IssueModifyRequest.IssueIsOpenModifyRequest request) {
+		issueService.modifyIssueOpenStatus(userId, issueId, request.getIsOpen());
 		return ResponseEntity.ok().build();
 	}
 

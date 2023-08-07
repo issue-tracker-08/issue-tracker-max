@@ -6,10 +6,29 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor
-@AllArgsConstructor
 public class IssueModifyRequest {
 
-	private String title;
-	private String content;
-	private Boolean isOpen;
+	@Getter
+	@NoArgsConstructor
+	@AllArgsConstructor
+	public static class IssueTitleModifyRequest {
+
+		private String title;
+	}
+
+	@Getter
+	@NoArgsConstructor
+	@AllArgsConstructor
+	public static class IssueContentModifyRequest {
+
+		private String content;
+	}
+
+	@Getter
+	@NoArgsConstructor
+	@AllArgsConstructor
+	public static class IssueIsOpenModifyRequest {
+
+		private Boolean isOpen;
+	}
 }

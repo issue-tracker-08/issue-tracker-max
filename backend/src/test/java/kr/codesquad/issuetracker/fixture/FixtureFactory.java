@@ -3,7 +3,6 @@ package kr.codesquad.issuetracker.fixture;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import kr.codesquad.issuetracker.presentation.request.IssueModifyRequest;
 import kr.codesquad.issuetracker.presentation.request.IssueRegisterRequest;
 import kr.codesquad.issuetracker.presentation.request.LoginRequest;
 import kr.codesquad.issuetracker.presentation.request.SignupRequest;
@@ -33,9 +32,5 @@ public class FixtureFactory {
 	public static IssueDetailResponse createIssueDetailResponse() {
 		return new IssueDetailResponse(1, "이슈 제목", true, LocalDateTime.now(), "이슈 내용",
 			new IssueDetailResponse.Author("작성자", "url"));
-	}
-
-	public static IssueModifyRequest createIssueModifyRequest(String title, String content, Boolean isOpen) {
-		return new IssueModifyRequest(title, content, isOpen);
 	}
 }

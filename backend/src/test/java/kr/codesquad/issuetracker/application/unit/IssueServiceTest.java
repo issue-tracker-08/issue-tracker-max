@@ -20,7 +20,6 @@ import kr.codesquad.issuetracker.exception.ErrorCode;
 import kr.codesquad.issuetracker.infrastructure.persistence.IssueAssigneeRepository;
 import kr.codesquad.issuetracker.infrastructure.persistence.IssueLabelRepository;
 import kr.codesquad.issuetracker.infrastructure.persistence.IssueRepository;
-import kr.codesquad.issuetracker.presentation.request.IssueModifyRequest;
 
 @ExtendWith(MockitoExtension.class)
 class IssueServiceTest {
@@ -47,7 +46,7 @@ class IssueServiceTest {
 			willDoNothing().given(issueRepository).updateIssue(any(Issue.class));
 
 			// when & then
-			assertThatCode(() -> issueService.modifyIssue(1, 1, new IssueModifyRequest("변경된 제목", null, null)))
+			assertThatCode(() -> issueService.modifyIssueTitle(1, 1, "변경된 제목"))
 				.doesNotThrowAnyException();
 		}
 
@@ -58,7 +57,7 @@ class IssueServiceTest {
 			given(issueRepository.findById(anyInt())).willReturn(Optional.of(new Issue("", "", true, 1, null)));
 
 			// when & then
-			assertThatThrownBy(() -> issueService.modifyIssue(2, 1, new IssueModifyRequest()))
+			assertThatThrownBy(() -> issueService.modifyIssueTitle(2, 1, "변경된 제목"))
 				.isInstanceOf(ApplicationException.class)
 				.extracting("errorCode").isEqualTo(ErrorCode.NO_AUTHORIZATION);
 		}

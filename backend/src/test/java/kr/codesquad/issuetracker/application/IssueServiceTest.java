@@ -137,8 +137,7 @@ class IssueServiceTest {
 			// given
 
 			// when
-			issueService.modifyIssue(1, 1,
-				FixtureFactory.createIssueModifyRequest("변경된 제목", null, null));
+			issueService.modifyIssueTitle(1, 1, "변경된 제목");
 
 			// then
 			IssueDetailResponse result = issueService.getIssueDetails(1);
@@ -151,8 +150,7 @@ class IssueServiceTest {
 			// given
 
 			// when
-			issueService.modifyIssue(1, 1,
-				FixtureFactory.createIssueModifyRequest(null, "변경된 내용", null));
+			issueService.modifyIssueContent(1, 1, "변경된 내용");
 
 			// then
 			IssueDetailResponse result = issueService.getIssueDetails(1);
@@ -165,8 +163,7 @@ class IssueServiceTest {
 			// given
 
 			// when
-			issueService.modifyIssue(1, 1,
-				FixtureFactory.createIssueModifyRequest(null, null, false));
+			issueService.modifyIssueOpenStatus(1, 1, false);
 
 			// then
 			IssueDetailResponse result = issueService.getIssueDetails(1);

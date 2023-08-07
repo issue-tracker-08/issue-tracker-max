@@ -33,4 +33,8 @@ public class Comment {
 	public void modifyContent(String content) {
 		this.content = content;
 	}
+
+	public boolean isWriter(Integer userAccountId) {
+		return this.userAccountId.equals(userAccountId);
+	}
 }

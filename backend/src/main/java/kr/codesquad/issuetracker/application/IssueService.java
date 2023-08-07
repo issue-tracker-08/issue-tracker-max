@@ -1,12 +1,12 @@
 package kr.codesquad.issuetracker.application;
 
 import java.util.List;
+import java.util.function.BiConsumer;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.StringUtils;
 
 import kr.codesquad.issuetracker.domain.Issue;
 import kr.codesquad.issuetracker.domain.IssueAssignee;
@@ -19,7 +19,6 @@ import kr.codesquad.issuetracker.infrastructure.persistence.IssueRepository;
 import kr.codesquad.issuetracker.infrastructure.persistence.mapper.IssueSimpleMapper;
 import kr.codesquad.issuetracker.presentation.request.AssigneeRequest;
 import kr.codesquad.issuetracker.presentation.request.IssueLabelRequest;
-import kr.codesquad.issuetracker.presentation.request.IssueModifyRequest;
 import kr.codesquad.issuetracker.presentation.request.IssueRegisterRequest;
 import kr.codesquad.issuetracker.presentation.response.IssueDetailResponse;
 import kr.codesquad.issuetracker.presentation.response.IssueDetailSidebarResponse;
@@ -76,7 +75,22 @@ public class IssueService {
 	}
 
 	@Transactional
-	public void modifyIssue(Integer userId, Integer issueId, IssueModifyRequest request) {
+	public void modifyIssueTitle(Integer userId, Integer issueId, String title) {
+		modifyIssue(userId, issueId, title, Issue::modifyTitle);
+	}
+
+	@Transactional
+	public void modifyIssueContent(Integer userId, Integer issueId, String content) {
+		modifyIssue(userId, issueId, content, Issue::modifyContent);
+	}
+
+	@Transactional
+	public void modifyIssueOpenStatus(Integer userId, Integer issueId, Boolean isOpen) {
+		modifyIssue(userId, issueId, String.valueOf(isOpen), Issue::modifyOpenStatus);
+	}
+
+	private void modifyIssue(Integer userId, Integer issueId, String modifiedData,
+		BiConsumer<Issue, String> modifyFunction) {
 		Issue issue = issueRepository.findById(issueId)
 			.orElseThrow(() -> new ApplicationException(ErrorCode.ISSUE_NOT_FOUND));
 
@@ -84,24 +98,9 @@ public class IssueService {
 			throw new ApplicationException(ErrorCode.NO_AUTHORIZATION);
 		}
 
-		updateIssueAttribute(request, issue);
+		modifyFunction.accept(issue, modifiedData);
 
 		issueRepository.updateIssue(issue);
-	}
-
-	private void updateIssueAttribute(IssueModifyRequest request, Issue issue) {
-		if (request.getIsOpen() != null) {
-			issue.modifyOpenStatus(request.getIsOpen());
-			return;
-		}
-		if (request.getIsOpen() == null && request.getContent() == null) {
-			if (StringUtils.hasText(request.getTitle())) {
-				issue.modifyTitle(request.getTitle());
-				return;
-			}
-			throw new ApplicationException(ErrorCode.INVALID_INPUT);
-		}
-		issue.modifyContent(request.getContent());
 	}
 
 	@Transactional

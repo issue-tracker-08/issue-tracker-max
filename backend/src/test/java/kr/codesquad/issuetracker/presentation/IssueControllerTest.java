@@ -135,7 +135,7 @@ class IssueControllerTest extends ControllerTest {
 		@Test
 		void modifyIssue() throws Exception {
 			// given
-			willDoNothing().given(issueService).modifyIssue(anyInt(), anyInt(), any(IssueModifyRequest.class));
+			willDoNothing().given(issueService).modifyIssueTitle(anyInt(), anyInt(), anyString());
 
 			// when & then
 			mockMvc.perform(
@@ -143,7 +143,7 @@ class IssueControllerTest extends ControllerTest {
 						.contentType(MediaType.APPLICATION_JSON)
 						.header(HttpHeaders.AUTHORIZATION, "Bearer " + jwtProvider.createToken("1"))
 						.content(objectMapper.writeValueAsString(
-							FixtureFactory.createIssueModifyRequest("변경된 타이틀", null, null))))
+							new IssueModifyRequest.IssueTitleModifyRequest("변경된 제목"))))
 				.andExpect(status().isOk())
 				.andDo(print());
 		}
@@ -153,7 +153,7 @@ class IssueControllerTest extends ControllerTest {
 		void givenNotAuthor_thenResponse403() throws Exception {
 			// given
 			willThrow(new ApplicationException(ErrorCode.NO_AUTHORIZATION))
-				.given(issueService).modifyIssue(anyInt(), anyInt(), any(IssueModifyRequest.class));
+				.given(issueService).modifyIssueTitle(anyInt(), anyInt(), anyString());
 
 			// when & then
 			mockMvc.perform(
@@ -161,7 +161,7 @@ class IssueControllerTest extends ControllerTest {
 						.contentType(MediaType.APPLICATION_JSON)
 						.header(HttpHeaders.AUTHORIZATION, "Bearer " + jwtProvider.createToken("1"))
 						.content(objectMapper.writeValueAsString(
-							FixtureFactory.createIssueModifyRequest("변경된 타이틀", null, null))))
+							new IssueModifyRequest.IssueTitleModifyRequest("변경된 제목"))))
 				.andExpect(status().isForbidden())
 				.andDo(print());
 		}

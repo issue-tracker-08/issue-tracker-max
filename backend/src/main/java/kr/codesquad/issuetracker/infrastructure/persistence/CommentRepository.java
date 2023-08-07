@@ -51,10 +51,11 @@ public class CommentRepository {
 	}
 
 	public List<CommentsResponse> findAll(Integer issueId, Integer cursor) {
-		String sql = "SELECT comment.id, user.login_id, user.profile_url, comment.content, comment.created_at "
-			+ "FROM comment "
-			+ "JOIN user_account user ON comment.user_account_id = user.id "
-			+ "WHERE comment.issue_id = :issueId AND comment.is_deleted = false AND comment.id >= :cursor LIMIT 11";
+		String sql =
+			"SELECT comment.id, user_account.login_id, user_account.profile_url, comment.content, comment.created_at "
+				+ "FROM comment "
+				+ "JOIN user_account ON comment.user_account_id = user_account.id "
+				+ "WHERE comment.issue_id = :issueId AND comment.is_deleted = false AND comment.id >= :cursor LIMIT 11";
 		MapSqlParameterSource param = new MapSqlParameterSource()
 			.addValue("issueId", issueId)
 			.addValue("cursor", cursor);

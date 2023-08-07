@@ -38,16 +38,16 @@ public class IssueRepository {
 		String sql = "SELECT issue.id, issue.is_open, issue.title, issue.created_at, milestone.name as milestone, "
 			+ "CONCAT('[', GROUP_CONCAT(DISTINCT JSON_OBJECT( "
 			+ "'name', label.name, 'fontColor', label.font_color, 'backgroundColor', label.background_color)), ']') as labels, "
-			+ "IFNULL(user2.login_id, '(알수없음)') as author_name, "
+			+ "IFNULL(author.login_id, '(알수없음)') as author_name, "
 			+ "CONCAT('[', GROUP_CONCAT(DISTINCT JSON_OBJECT( "
-			+ "'username', user.login_id, 'profileUrl', user.profile_url)), ']') as assignee "
+			+ "'username', user_account.login_id, 'profileUrl', user_account.profile_url)), ']') as assignee "
 			+ "FROM issue "
 			+ "LEFT JOIN issue_label ON issue.id = issue_label.issue_id "
 			+ "LEFT JOIN label ON label.id = issue_label.label_id AND label.is_deleted = false "
 			+ "LEFT JOIN issue_assignee assignee ON issue.id = assignee.issue_id "
-			+ "LEFT JOIN user_account user ON user.id = assignee.user_account_id AND user.is_deleted = false "
+			+ "LEFT JOIN user_account ON user_account.id = assignee.user_account_id AND user_account.is_deleted = false "
 			+ "LEFT JOIN milestone ON issue.milestone_id = milestone.id AND milestone.is_deleted = false "
-			+ "LEFT JOIN user_account user2 ON user2.id = issue.user_account_id AND user2.is_deleted = false "
+			+ "LEFT JOIN user_account author ON author.id = issue.user_account_id AND author.is_deleted = false "
 			+ "WHERE issue.is_deleted = false "
 			+ "GROUP BY issue.id "
 			+ "ORDER BY issue.id DESC";
@@ -79,9 +79,9 @@ public class IssueRepository {
 	public Optional<IssueDetailResponse> findIssueDetailResponseById(Integer issueId) {
 		String sql =
 			"SELECT issue.id, issue.title, issue.is_open, issue.created_at, issue.content, " +
-				"user.login_id, user.profile_url " +
+				"user_account.login_id, user_account.profile_url " +
 				"FROM issue " +
-				"JOIN user_account user ON issue.user_account_id = user.id AND user.is_deleted = FALSE " +
+				"JOIN user_account ON issue.user_account_id = user_account.id AND user_account.is_deleted = FALSE " +
 				"WHERE issue.id = :issueId";
 
 		return Optional.ofNullable(DataAccessUtils.singleResult(
@@ -99,7 +99,7 @@ public class IssueRepository {
 		String sql = "SELECT milestone_id FROM issue WHERE id = :issueId";
 		MapSqlParameterSource params = new MapSqlParameterSource().addValue("issueId", issueId);
 
-		Integer milestoneId = DataAccessUtils.singleResult(
+		Integer milestoneId = DataAccessUtils.singleResult( // rs.getInt 메서드는 값이 null 이면 0을 반환
 			jdbcTemplate.query(sql, params, (rs, rowNum) -> rs.getInt("milestone_id")));
 		if (Objects.equals(milestoneId, 0)) {
 			return null;
