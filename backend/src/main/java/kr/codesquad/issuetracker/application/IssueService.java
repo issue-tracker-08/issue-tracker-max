@@ -56,10 +56,8 @@ public class IssueService {
 
 	@Transactional(readOnly = true)
 	public IssueDetailResponse getIssueDetails(Integer issueId) {
-		if (!issueRepository.existsById(issueId)) {
-			throw new ApplicationException(ErrorCode.ISSUE_NOT_FOUND);
-		}
-		return issueRepository.findIssueDetailResponseById(issueId);
+		return issueRepository.findIssueDetailResponseById(issueId)
+			.orElseThrow(() -> new ApplicationException(ErrorCode.ISSUE_NOT_FOUND));
 	}
 
 	@Transactional(readOnly = true)

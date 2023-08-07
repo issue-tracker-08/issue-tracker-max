@@ -80,7 +80,7 @@ public class IssueRepository {
 		return Boolean.TRUE.equals(jdbcTemplate.queryForObject(sql, Map.of("issueId", issueId), Boolean.class));
 	}
 
-	public IssueDetailResponse findIssueDetailResponseById(Integer issueId) {
+	public Optional<IssueDetailResponse> findIssueDetailResponseById(Integer issueId) {
 		List<IssueDetailResponse.Assignee> assignees = findAssigneeById(issueId);
 		List<LabelResponse> labels = findLabelInfoById(issueId);
 		MilestoneResponse milestone = milestoneRepository.findMilestoneByIssueId(issueId);
@@ -92,7 +92,7 @@ public class IssueRepository {
 				"JOIN user_account user ON issue.user_account_id = user.id AND user.is_deleted = FALSE " +
 				"WHERE issue.id = :issueId";
 
-		return DataAccessUtils.singleResult(
+		return Optional.ofNullable(DataAccessUtils.singleResult(
 			jdbcTemplate.query(sql, Map.of("issueId", issueId), (rs, rowNum) -> new IssueDetailResponse(
 				rs.getInt("id"),
 				rs.getString("title"),
@@ -103,7 +103,7 @@ public class IssueRepository {
 				assignees,
 				labels,
 				milestone
-			)));
+			))));
 	}
 
 	private List<IssueDetailResponse.Assignee> findAssigneeById(Integer issueId) {

@@ -38,10 +38,10 @@ public class CommentService {
 
 	@Transactional(readOnly = true)
 	public Slice<CommentsResponse> getComments(Integer issueId, Integer cursor) {
-		if (!commentRepository.isExistCommentByIssueId(issueId)) {
+		List<CommentsResponse> comments = commentRepository.findAll(issueId, cursor);
+		if (comments.isEmpty()) {
 			return new Slice<>(List.of(), false, 0);
 		}
-		List<CommentsResponse> comments = commentRepository.findAll(issueId, cursor);
 		cursor = comments.get(comments.size() - 1).getId();
 		boolean hasMore = commentRepository.hasMoreComment(issueId, cursor);
 		return new Slice<>(comments, hasMore, cursor);
