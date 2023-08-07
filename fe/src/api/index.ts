@@ -36,6 +36,20 @@ export const getIssueDetails = async (issueId: number) => {
   );
 };
 
+export const putIssueTitle = async (
+  issueId: number,
+  body: { title: string }
+) => {
+  return await fetcherWithBearer.put(`/issues/${issueId}/title`, body);
+};
+
+export const putIssueIsOpen = async (
+  issueId: number,
+  body: { isOpen: boolean }
+) => {
+  return await fetcherWithBearer.put(`/issues/${issueId}/isOpen`, body);
+};
+
 export const getIssueSidebar = async (issueId: number) => {
   return await fetcherWithBearer.get<IssueSidebar>(
     `/issues/${issueId}/sidebar`

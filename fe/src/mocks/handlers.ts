@@ -37,6 +37,7 @@ export const handlers = [
     const { username, password } = await req.json<AuthRequestBody>();
     const isExist = loginInfo[username];
     const isCorrectPassword = loginInfo[username] === password;
+    console.log("login attempt!");
 
     if (!isExist) {
       return res(
@@ -85,6 +86,8 @@ export const handlers = [
   rest.get("/api/issues/:issueId/sidebar", async (_, res, ctx) => {
     return res(ctx.status(200), ctx.json(issueSidebar));
   }),
+
+  // TODO: issue edit api
 
   rest.get("/api/labels", async (_, res, ctx) => {
     return res(ctx.status(200), ctx.json(labelList));
