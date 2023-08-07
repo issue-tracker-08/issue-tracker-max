@@ -16,18 +16,17 @@ export default function MilestoneField({
   onMilestoneChange: (milestoneId: number) => void;
   onEditMilestone?: () => void;
 }) {
-  const [milestonesList] = useFetch<Milestone[]>([], getMilestones);
+  const { data: milestonesList } = useFetch(getMilestones);
 
-  const milestoneDropdownList: DropdownItemType[] = milestonesList.map(
-    (milestone) => ({
+  const milestoneDropdownList: DropdownItemType[] | undefined =
+    milestonesList?.map((milestone) => ({
       id: milestone.milestoneId,
       variant: "plain",
       name: "milestone",
       content: milestone.milestoneName,
-    })
-  );
+    }));
 
-  const generateMilestone = () => {
+  const generateMilestone = (milestonesList: Milestone[]) => {
     const milestone = milestonesList.find(
       (milestone) => milestone.milestoneId === milestoneId
     );
@@ -45,17 +44,19 @@ export default function MilestoneField({
 
   return (
     <Container>
-      <RadioGroup value={milestoneId} onChange={onMilestoneChange}>
-        <DropdownIndicator
-          displayName="마일스톤"
-          dropdownPanelVariant="select"
-          dropdownName="milestone"
-          dropdownList={milestoneDropdownList}
-          dropdownPanelPosition="right"
-          outsideClickHandler={onEditMilestone}
-        />
-      </RadioGroup>
-      {!!milestoneId && generateMilestone()}
+      {milestoneDropdownList && (
+        <RadioGroup value={milestoneId} onChange={onMilestoneChange}>
+          <DropdownIndicator
+            displayName="마일스톤"
+            dropdownPanelVariant="select"
+            dropdownName="milestone"
+            dropdownList={milestoneDropdownList}
+            dropdownPanelPosition="right"
+            outsideClickHandler={onEditMilestone}
+          />
+        </RadioGroup>
+      )}
+      {milestonesList && generateMilestone(milestonesList)}
     </Container>
   );
 }

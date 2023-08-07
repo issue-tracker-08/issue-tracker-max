@@ -2,12 +2,12 @@ import { AxiosError, AxiosResponse } from "axios";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 
 export default function useFetch<T>(fetchFn: () => Promise<AxiosResponse<T>>): {
-  data: T;
+  data: T | null;
   isLoading: boolean;
   errorMessage: string;
-  setData: Dispatch<SetStateAction<T>>;
+  setData: Dispatch<SetStateAction<T | null>>;
 } {
-  const [data, setData] = useState<T>({} as T);
+  const [data, setData] = useState<T | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string>("");
 

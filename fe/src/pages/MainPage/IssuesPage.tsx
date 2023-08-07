@@ -11,23 +11,24 @@ import { useNavigate } from "react-router-dom";
 import { styled } from "styled-components";
 
 export default function IssuesPage() {
-  const [issuesList] = useFetch([], getIssues);
-  const [labelsList] = useFetch([], getLabels);
-  const [milestonesList] = useFetch([], getMilestones);
-
-  const numOpen = issuesList.filter((issue) => issue.isOpen).length;
-  const numClosed = issuesList.length - numOpen;
-
   const navigate = useNavigate();
+
+  const { data: issuesList } = useFetch(getIssues);
+  const { data: labelsList } = useFetch(getLabels);
+  const { data: milestonesList } = useFetch(getMilestones);
+
+  const numOpen = issuesList?.filter((issue) => issue.isOpen).length || 0;
+  const numClosed = issuesList ? issuesList.length - numOpen : 0;
+
   const tabBarLeftInfo = {
     name: "레이블",
-    count: labelsList.length,
+    count: labelsList ? labelsList.length : 0,
     iconSrc: labelIcon,
     callback: () => navigate("/labels"),
   };
   const tabBarRightInfo = {
     name: "마일스톤",
-    count: milestonesList.length,
+    count: milestonesList ? milestonesList.length : 0,
     iconSrc: milestoneIcon,
     callback: () => navigate("/milestones"),
   };
@@ -52,10 +53,12 @@ export default function IssuesPage() {
         </div>
       </IssuesNavBar>
 
-      <Table>
-        <TableHeaderIssues {...{ numOpen, numClosed }} />
-        <TableBodyIssues issuesList={issuesList} />
-      </Table>
+      {issuesList && (
+        <Table>
+          <TableHeaderIssues {...{ numOpen, numClosed }} />
+          <TableBodyIssues issuesList={issuesList} />
+        </Table>
+      )}
     </div>
   );
 }

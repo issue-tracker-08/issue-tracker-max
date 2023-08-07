@@ -17,17 +17,19 @@ export default function LabelField({
   onLabelChange: (labels: Set<number>) => void;
   onEditLabels?: () => void;
 }) {
-  const [labelList] = useFetch<Label[]>([], getLabels);
+  const { data: labelList } = useFetch(getLabels);
 
-  const labelDropdownList: DropdownItemType[] = labelList.map((label) => ({
-    id: label.labelId,
-    variant: "withColor",
-    name: "label",
-    content: label.name,
-    colorFill: label.backgroundColor,
-  }));
+  const labelDropdownList: DropdownItemType[] | undefined = labelList?.map(
+    (label) => ({
+      id: label.labelId,
+      variant: "withColor",
+      name: "label",
+      content: label.name,
+      colorFill: label.backgroundColor,
+    })
+  );
 
-  const generateLabels = () => {
+  const generateLabels = (labelList: Label[]) => {
     const currentLabels = labelList.filter((label) =>
       labels.has(label.labelId)
     );
@@ -38,18 +40,22 @@ export default function LabelField({
 
   return (
     <Container>
-      <CheckboxGroup values={labels} onChange={onLabelChange}>
-        <DropdownIndicator
-          displayName="레이블"
-          dropdownPanelVariant="select"
-          dropdownName="label"
-          dropdownList={labelDropdownList}
-          dropdownPanelPosition="right"
-          dropdownOption="multiple"
-          outsideClickHandler={onEditLabels}
-        />
-      </CheckboxGroup>
-      {!!labels.size && <Wrapper>{generateLabels()}</Wrapper>}
+      {labelDropdownList && (
+        <CheckboxGroup values={labels} onChange={onLabelChange}>
+          <DropdownIndicator
+            displayName="레이블"
+            dropdownPanelVariant="select"
+            dropdownName="label"
+            dropdownList={labelDropdownList}
+            dropdownPanelPosition="right"
+            dropdownOption="multiple"
+            outsideClickHandler={onEditLabels}
+          />
+        </CheckboxGroup>
+      )}
+      {labelList && !!labels.size && (
+        <Wrapper>{generateLabels(labelList)}</Wrapper>
+      )}
     </Container>
   );
 }
