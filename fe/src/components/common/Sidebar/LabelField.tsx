@@ -6,7 +6,7 @@ import useFetch from "@hooks/useFetch";
 import { getLabels } from "api";
 import styled from "styled-components";
 import CheckboxGroup from "../Group/CheckboxGroup";
-import { Container } from "./Container";
+import { Container } from "./Container.style";
 
 export default function LabelField({
   labels,

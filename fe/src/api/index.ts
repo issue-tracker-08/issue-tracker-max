@@ -1,6 +1,7 @@
 import {
-  IssueDetail,
+  IssueDetails,
   IssueItem,
+  IssueSidebar,
   Label,
   Milestone,
   User,
@@ -29,8 +30,16 @@ export const getIssues = async () => {
   return await fetcherWithBearer.get<IssueItem[]>("/issues");
 };
 
-export const getIssue = async (issueId: number) => {
-  return await fetcherWithBearer.get<IssueDetail>(`/issues/${issueId}`);
+export const getIssueDetails = async (issueId: number) => {
+  return await fetcherWithBearer.get<IssueDetails>(
+    `/issues/${issueId}/details`
+  );
+};
+
+export const getIssueSidebar = async (issueId: number) => {
+  return await fetcherWithBearer.get<IssueSidebar>(
+    `/issues/${issueId}/sidebar`
+  );
 };
 
 export const getLabels = async () => {

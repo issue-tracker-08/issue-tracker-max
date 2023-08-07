@@ -5,7 +5,7 @@ import useFetch from "@hooks/useFetch";
 import { getMilestones } from "api";
 import RadioGroup from "../Group/RadioGroup";
 import ProgressBar from "../ProgressBar";
-import { Container } from "./Container";
+import { Container } from "./Container.style";
 
 export default function MilestoneField({
   milestone: milestoneId,

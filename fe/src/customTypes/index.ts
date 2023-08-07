@@ -42,3 +42,21 @@ export type IssueInfo = {
   labels: Set<number>;
   milestone: number;
 };
+
+export type IssueDetails = {
+  issueId: number;
+  title: string;
+  isOpen: boolean;
+  createdAt: string;
+  author: {
+    username: string;
+    profileUrl: string;
+  };
+  content: string;
+};
+
+export type IssueSidebar = {
+  assignees: number[];
+  labels: number[];
+  milestone: number;
+};

@@ -1,7 +1,8 @@
 import { rest } from "msw";
 import {
-  issueDetail,
+  issueDetails,
   issueList,
+  issueSidebar,
   labelList,
   loginInfo,
   milestoneList,
@@ -77,10 +78,12 @@ export const handlers = [
     return res(ctx.status(200), ctx.json(issueList));
   }),
 
-  rest.get("/api/issues/:issueId", async (_, res, ctx) => {
-    // const issueId = Number(req.params.issueId);
+  rest.get("/api/issues/:issueId/details", async (_, res, ctx) => {
+    return res(ctx.status(200), ctx.json(issueDetails));
+  }),
 
-    return res(ctx.status(200), ctx.json(issueDetail));
+  rest.get("/api/issues/:issueId/sidebar", async (_, res, ctx) => {
+    return res(ctx.status(200), ctx.json(issueSidebar));
   }),
 
   rest.get("/api/labels", async (_, res, ctx) => {
@@ -95,20 +98,7 @@ export const handlers = [
     return res(ctx.status(200), ctx.json(users));
   }),
 
-  rest.post("/api/issues", async (req, res, ctx) => {
-    const newIssue = await req.json();
-    issueList.push({
-      issueNumber: issueList.length + 1,
-      isOpen: true,
-      title: newIssue.title,
-      labels: labelList.filter((l) => newIssue.labels.includes(l.labelId)),
-      authorName: "currentUser",
-      assignees: users.filter((u) =>
-        newIssue.assignees.includes(u.userAccountId)
-      ),
-      milestone: "",
-      createdAt: new Date().toISOString(),
-    });
+  rest.post("/api/issues", async (_, res, ctx) => {
     return res(ctx.status(200), ctx.json({ issueId: issueList.length + 1 }));
   }),
 
@@ -119,65 +109,16 @@ export const handlers = [
     );
   }),
 
-  rest.post("/api/issues/:issueId/assignees", async (req, res, ctx) => {
-    // const { issueId } = req.params;
-    const { addUserAccountId, removeUserAccountId } = await req.json();
-
-    issueDetail.assignees = issueDetail.assignees.filter(
-      (a) => !removeUserAccountId.includes(a.userAccountId)
-    );
-    issueDetail.assignees.push(
-      ...users.filter((u) => addUserAccountId.includes(u.userAccountId))
-    );
-
+  rest.post("/api/issues/:issueId/assignees", async (_, res, ctx) => {
     return res(ctx.status(200));
   }),
 
   rest.post("/api/issues/:issueId/labels", async (_, res, ctx) => {
-    return res(ctx.status(200), ctx.json("API 수정되면 해줄게"));
-
-    // const { issueId } = req.params;
-    // const { addLabelsId, removeLabelsId } = await req.json();
-
-    // const issue = issueList.find((i) => i.issueNumber === Number(issueId));
-    // if (!issue) {
-    //   return res(
-    //     ctx.status(404),
-    //     ctx.json({
-    //       errorCode: "ISSUE_NOT_FOUND",
-    //       message: "존재하지 않는 이슈입니다.",
-    //     })
-    //   );
-    // }
-
-    // issueDetail.labels = issueDetail.labels.filter(
-    //   (l) => !removeLabelsId.includes(l.labelId)
-    // );
-    // issueDetail.labels.push(
-    //   ...labelList.filter((l) => addLabelsId.includes(l.labelId))
-    // );
+    return res(ctx.status(200));
   }),
 
   rest.post("/api/issues/:issueId/milestone", async (_, res, ctx) => {
-    return res(ctx.status(200), ctx.json("API 수정되면 해줄게"));
-
-    // const { issueId } = req.params;
-    // const { milestoneId } = await req.json();
-
-    // const issue = issueList.find((i) => i.issueNumber === Number(issueId));
-    // if (!issue) {
-    //   return res(
-    //     ctx.status(404),
-    //     ctx.json({
-    //       errorCode: "ISSUE_NOT_FOUND",
-    //       message: "존재하지 않는 이슈입니다.",
-    //     })
-    //   );
-    // }
-
-    // issueDetail.milestone = milestoneList.find(
-    //   (m) => m.milestoneId === milestoneId
-    // );
+    return res(ctx.status(200));
   }),
 ];
 

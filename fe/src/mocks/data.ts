@@ -115,7 +115,7 @@ export const issueList = [
   },
 ];
 
-export const issueDetail = {
+export const issueDetails = {
   issueId: 3,
   title: "이슈 제목",
   isOpen: true,
@@ -125,38 +125,12 @@ export const issueDetail = {
     profileUrl: "~~~",
   },
   content: "~~~~",
-  assignees: [
-    {
-      userAccountId: 1,
-      username: "kakamotobi",
-      profileUrl: "~~~",
-    },
-    {
-      userAccountId: 5,
-      username: "brunini",
-      profileUrl: "~~~",
-    },
-  ],
-  labels: [
-    {
-      labelId: 1,
-      labelName: "feat",
-      fontColor: "#FFF",
-      backgroundColor: "#DDD",
-    },
-    {
-      labelId: 2,
-      labelName: "documentation",
-      fontColor: "#FFF",
-      backgroundColor: "#EEE",
-    },
-  ],
-  milestone: {
-    milestoneId: 1,
-    milestoneName: "~~",
-    openIssueCount: 3,
-    closedIssueCount: 5,
-  },
+};
+
+export const issueSidebar = {
+  assignees: [1, 5],
+  labels: [1, 2],
+  milestone: 1,
 };
 
 export const labelList = [

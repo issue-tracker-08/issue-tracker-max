@@ -6,7 +6,7 @@ import { getUsers } from "api";
 import styled from "styled-components";
 import { Avatar } from "../Avatar";
 import CheckboxGroup from "../Group/CheckboxGroup";
-import { Container } from "./Container";
+import { Container } from "./Container.style";
 
 export default function AssigneeField({
   assignees,
