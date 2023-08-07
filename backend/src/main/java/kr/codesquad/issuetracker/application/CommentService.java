@@ -29,7 +29,7 @@ public class CommentService {
 	public void modify(String modifiedComment, Integer commentId, Integer userId) {
 		Comment comment = commentRepository.findById(commentId)
 			.orElseThrow(() -> new ApplicationException(ErrorCode.COMMENT_NOT_FOUND));
-		if (comment.getUserAccountId() != userId) {
+		if (comment.getUserAccountId().equals(userId)) {
 			throw new ApplicationException(ErrorCode.NO_AUTHORIZATION);
 		}
 		comment.modifyContent(modifiedComment);
@@ -43,7 +43,9 @@ public class CommentService {
 			return new Slice<>(List.of(), false, 0);
 		}
 		cursor = comments.get(comments.size() - 1).getId();
-		boolean hasMore = commentRepository.hasMoreComment(issueId, cursor);
-		return new Slice<>(comments, hasMore, cursor);
+		if (comments.size() == 11) {
+			return new Slice<>(comments.subList(0, 10), true, cursor);
+		}
+		return new Slice<>(comments, false, cursor);
 	}
 }

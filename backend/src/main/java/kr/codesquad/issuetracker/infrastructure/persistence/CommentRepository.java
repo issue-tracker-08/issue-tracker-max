@@ -54,32 +54,16 @@ public class CommentRepository {
 		String sql = "SELECT comment.id, user.login_id, user.profile_url, comment.content, comment.created_at "
 			+ "FROM comment "
 			+ "JOIN user_account user ON comment.user_account_id = user.id "
-			+ "WHERE comment.issue_id = :issueId AND comment.is_deleted = false AND comment.id > :cursor LIMIT 10 ";
+			+ "WHERE comment.issue_id = :issueId AND comment.is_deleted = false AND comment.id >= :cursor LIMIT 11";
 		MapSqlParameterSource param = new MapSqlParameterSource()
 			.addValue("issueId", issueId)
 			.addValue("cursor", cursor);
-		return jdbcTemplate.query(sql, param, (rs, rownum) -> new CommentsResponse(
+		return jdbcTemplate.query(sql, param, (rs, rowNum) -> new CommentsResponse(
 			rs.getInt("id"),
 			rs.getString("login_id"),
 			rs.getString("profile_url"),
 			rs.getString("content"),
 			rs.getTimestamp("created_at").toLocalDateTime())
 		);
-	}
-
-	public boolean isExistCommentByIssueId(Integer issueId) {
-		String sql = "SELECT EXISTS (SELECT 1 FROM comment JOIN issue ON comment.issue_id = issue.id "
-			+ "WHERE comment.issue_id = :issueId)";
-		MapSqlParameterSource param = new MapSqlParameterSource()
-			.addValue("issueId", issueId);
-		return jdbcTemplate.queryForObject(sql, param, boolean.class);
-	}
-
-	public boolean hasMoreComment(Integer issueId, Integer cursor) {
-		String sql = "SELECT EXISTS (SELECT 1 FROM comment WHERE issue_id = :issueId AND id > :cursor)";
-		MapSqlParameterSource param = new MapSqlParameterSource()
-			.addValue("issueId", issueId)
-			.addValue("cursor", cursor);
-		return jdbcTemplate.queryForObject(sql, param, boolean.class);
 	}
 }

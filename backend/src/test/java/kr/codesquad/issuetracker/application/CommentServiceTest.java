@@ -41,7 +41,7 @@ class CommentServiceTest {
 		// then
 		assertAll(
 			() -> assertThat(comments.getHasMore()).isTrue(),
-			() -> assertThat(comments.getNextCursor()).isEqualTo(10),
+			() -> assertThat(comments.getNextCursor()).isEqualTo(11),
 			() -> assertThat(comments.getData().size()).isEqualTo(10)
 		);
 	}
