@@ -2,14 +2,14 @@ import { AxiosError, AxiosResponse } from "axios";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 
 export default function useFetch<T>(fetchFn: () => Promise<AxiosResponse<T>>): {
-  data: T | null;
+  data: T;
   isLoading: boolean;
-  errorMessage: string | null;
-  setData: Dispatch<SetStateAction<T | null>>;
+  errorMessage: string;
+  setData: Dispatch<SetStateAction<T>>;
 } {
-  const [data, setData] = useState<T | null>(null);
+  const [data, setData] = useState<T>({} as T);
   const [isLoading, setIsLoading] = useState(false);
-  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [errorMessage, setErrorMessage] = useState<string>("");
 
   useEffect(() => {
     const fetchData = async () => {
@@ -17,7 +17,7 @@ export default function useFetch<T>(fetchFn: () => Promise<AxiosResponse<T>>): {
 
       try {
         const res = await fetchFn();
-      
+
         if (res.statusText === "OK") {
           setData(res.data);
           return;
