@@ -1,34 +1,38 @@
-import { AxiosResponse } from "axios";
-import { useEffect, useState } from "react";
+import { AxiosError, AxiosResponse } from "axios";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
 
-export default function useFetch<T>(
-  initialData: T,
-  fetchFn: () => Promise<AxiosResponse<T>>
-): [T, (newData: T) => void] {
-  const [data, setData] = useState(initialData);
-
-  const updateData = (newData: T) => {
-    setData(newData);
-  };
+export default function useFetch<T>(fetchFn: () => Promise<AxiosResponse<T>>): {
+  data: T | null;
+  isLoading: boolean;
+  errorMessage: string | null;
+  setData: Dispatch<SetStateAction<T | null>>;
+} {
+  const [data, setData] = useState<T | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchData = async () => {
+      setIsLoading(true);
+
       try {
         const res = await fetchFn();
-
-        if (res.status === 200) {
+      
+        if (res.statusText === "OK") {
           setData(res.data);
           return;
         }
 
-        throw Error("데이터를 불러올 수 없었습니다.");
+        throw Error((res.data as AxiosError).message);
       } catch (error) {
-        alert(error);
+        setErrorMessage(error as string);
+      } finally {
+        setIsLoading(false);
       }
     };
 
     fetchData();
   }, [fetchFn]);
 
-  return [data, updateData];
+  return { data, isLoading, errorMessage, setData };
 }
