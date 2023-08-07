@@ -34,16 +34,14 @@ export default function IssueDetailPage() {
 
   return (
     <>
-      {issueDetails && (
-        <IssueDetailHeader
-          {...{
-            issueDetails,
-            updateIssueTitle,
-            updateIssueIsOpen,
-            numComments: 0,
-          }}
-        />
-      )}
+      <IssueDetailHeader
+        {...{
+          issueDetails,
+          updateIssueTitle,
+          updateIssueIsOpen,
+          numComments: 0,
+        }}
+      />
 
       {issueSidebar && (
         <IssueDetailBody {...{ issueNumber, ...issueSidebar }} />

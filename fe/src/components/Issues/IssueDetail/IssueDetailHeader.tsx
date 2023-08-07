@@ -16,7 +16,7 @@ export default function IssueDetailHeader({
   updateIssueIsOpen,
   numComments,
 }: {
-  issueDetails: IssueDetails;
+  issueDetails: IssueDetails | null;
   updateIssueTitle: (newTitle: string) => void;
   updateIssueIsOpen: () => void;
   numComments: number;
@@ -24,7 +24,13 @@ export default function IssueDetailHeader({
   const [isEditTitle, setIsEditTitle] = useState(false);
   const [newTitle, setNewTitle] = useState("");
 
-  const { issueId, author, title, createdAt, isOpen } = issueDetails;
+  const { issueId, author, title, createdAt, isOpen } = issueDetails || {
+    issueId: 0,
+    author: { username: "", profileURl: "" },
+    title: "",
+    createdAt: new Date().toISOString(),
+    isOpen: true,
+  };
 
   useEffect(() => {
     setNewTitle(title);
