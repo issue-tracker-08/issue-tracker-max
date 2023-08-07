@@ -142,11 +142,11 @@ class IssueControllerTest extends ControllerTest {
 
 			// when & then
 			mockMvc.perform(
-					patch("/api/issues/1")
+					put("/api/issues/1/title")
 						.contentType(MediaType.APPLICATION_JSON)
 						.header(HttpHeaders.AUTHORIZATION, "Bearer " + jwtProvider.createToken("1"))
 						.content(objectMapper.writeValueAsString(
-							FixtureFactory.createIssueModifyRequest("", null, null))))
+							FixtureFactory.createIssueModifyRequest("변경된 타이틀", null, null))))
 				.andExpect(status().isOk())
 				.andDo(print());
 		}
@@ -160,11 +160,11 @@ class IssueControllerTest extends ControllerTest {
 
 			// when & then
 			mockMvc.perform(
-					patch("/api/issues/1")
+					put("/api/issues/1/title")
 						.contentType(MediaType.APPLICATION_JSON)
 						.header(HttpHeaders.AUTHORIZATION, "Bearer " + jwtProvider.createToken("1"))
 						.content(objectMapper.writeValueAsString(
-							FixtureFactory.createIssueModifyRequest("", null, null))))
+							FixtureFactory.createIssueModifyRequest("변경된 타이틀", null, null))))
 				.andExpect(status().isForbidden())
 				.andDo(print());
 		}

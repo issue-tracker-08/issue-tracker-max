@@ -47,7 +47,7 @@ class IssueServiceTest {
 			willDoNothing().given(issueRepository).updateIssue(any(Issue.class));
 
 			// when & then
-			assertThatCode(() -> issueService.modifyIssue(1, 1, new IssueModifyRequest()))
+			assertThatCode(() -> issueService.modifyIssue(1, 1, new IssueModifyRequest("변경된 제목", null, null)))
 				.doesNotThrowAnyException();
 		}
 

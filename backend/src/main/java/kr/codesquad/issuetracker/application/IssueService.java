@@ -84,9 +84,12 @@ public class IssueService {
 			issue.modifyOpenStatus(request.getIsOpen());
 			return;
 		}
-		if (StringUtils.hasText(request.getTitle())) {
-			issue.modifyTitle(request.getTitle());
-			return;
+		if (request.getIsOpen() == null && request.getContent() == null) {
+			if (StringUtils.hasText(request.getTitle())) {
+				issue.modifyTitle(request.getTitle());
+				return;
+			}
+			throw new ApplicationException(ErrorCode.INVALID_INPUT);
 		}
 		issue.modifyContent(request.getContent());
 	}
