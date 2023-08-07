@@ -29,7 +29,7 @@ public class CommentService {
 	public void modify(String modifiedComment, Integer commentId, Integer userId) {
 		Comment comment = commentRepository.findById(commentId)
 			.orElseThrow(() -> new ApplicationException(ErrorCode.COMMENT_NOT_FOUND));
-		if (comment.getUserAccountId().equals(userId)) {
+		if (!comment.getUserAccountId().equals(userId)) {
 			throw new ApplicationException(ErrorCode.NO_AUTHORIZATION);
 		}
 		comment.modifyContent(modifiedComment);
