@@ -3,6 +3,7 @@ package kr.codesquad.issuetracker.infrastructure.persistence;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 
 import javax.sql.DataSource;
@@ -18,8 +19,6 @@ import org.springframework.stereotype.Repository;
 import kr.codesquad.issuetracker.domain.Issue;
 import kr.codesquad.issuetracker.infrastructure.persistence.mapper.IssueSimpleMapper;
 import kr.codesquad.issuetracker.presentation.response.IssueDetailResponse;
-import kr.codesquad.issuetracker.presentation.response.LabelResponse;
-import kr.codesquad.issuetracker.presentation.response.MilestoneResponse;
 
 @Repository
 public class IssueRepository {
@@ -27,15 +26,12 @@ public class IssueRepository {
 	private final NamedParameterJdbcTemplate jdbcTemplate;
 	private final SimpleJdbcInsert jdbcInsert;
 
-	private final MilestoneRepository milestoneRepository;
-
-	public IssueRepository(DataSource dataSource, MilestoneRepository milestoneRepository) {
+	public IssueRepository(DataSource dataSource) {
 		this.jdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
 		this.jdbcInsert = new SimpleJdbcInsert(dataSource)
 			.withTableName("issue")
 			.usingGeneratedKeyColumns("id")
 			.usingColumns("title", "is_open", "content", "user_account_id", "milestone_id");
-		this.milestoneRepository = milestoneRepository;
 	}
 
 	public List<IssueSimpleMapper> findAll() {
@@ -81,10 +77,6 @@ public class IssueRepository {
 	}
 
 	public Optional<IssueDetailResponse> findIssueDetailResponseById(Integer issueId) {
-		List<IssueDetailResponse.Assignee> assignees = findAssigneeById(issueId);
-		List<LabelResponse> labels = findLabelInfoById(issueId);
-		MilestoneResponse milestone = milestoneRepository.findMilestoneByIssueId(issueId);
-
 		String sql =
 			"SELECT issue.id, issue.title, issue.is_open, issue.created_at, issue.content, " +
 				"user.login_id, user.profile_url " +
@@ -99,40 +91,20 @@ public class IssueRepository {
 				rs.getBoolean("is_open"),
 				rs.getTimestamp("created_at").toLocalDateTime(),
 				rs.getString("content"),
-				new IssueDetailResponse.Author(rs.getString("login_id"), rs.getString("profile_url")),
-				assignees,
-				labels,
-				milestone
+				new IssueDetailResponse.Author(rs.getString("login_id"), rs.getString("profile_url"))
 			))));
 	}
 
-	private List<IssueDetailResponse.Assignee> findAssigneeById(Integer issueId) {
-		String sql = "SELECT assignee.user_account_id, user.login_id, user.profile_url " +
-			"FROM issue " +
-			"JOIN issue_assignee assignee ON issue.id = assignee.issue_id " +
-			"JOIN user_account user ON assignee.user_account_id = user.id AND user.is_deleted = FALSE " +
-			"WHERE issue.id = :issueId";
+	public Integer findMilestoneIdById(Integer issueId) {
+		String sql = "SELECT milestone_id FROM issue WHERE id = :issueId";
+		MapSqlParameterSource params = new MapSqlParameterSource().addValue("issueId", issueId);
 
-		return jdbcTemplate.query(sql, Map.of("issueId", issueId), (rs, rowNum) -> new IssueDetailResponse.Assignee(
-			rs.getInt("user_account_id"),
-			rs.getString("login_id"),
-			rs.getString("profile_url")
-		));
-	}
-
-	private List<LabelResponse> findLabelInfoById(Integer issueId) {
-		String sql = "SELECT label.id, label.name, label.font_color, label.background_color " +
-			"FROM issue " +
-			"JOIN issue_label ON issue.id = issue_label.issue_id " +
-			"JOIN label ON issue_label.label_id = label.id AND label.is_deleted = FALSE " +
-			"WHERE issue.id = :issueId";
-
-		return jdbcTemplate.query(sql, Map.of("issueId", issueId), (rs, rowNum) -> new LabelResponse(
-			rs.getInt("id"),
-			rs.getString("name"),
-			rs.getString("font_color"),
-			rs.getString("background_color")
-		));
+		Integer milestoneId = DataAccessUtils.singleResult(
+			jdbcTemplate.query(sql, params, (rs, rowNum) -> rs.getInt("milestone_id")));
+		if (Objects.equals(milestoneId, 0)) {
+			return null;
+		}
+		return milestoneId;
 	}
 
 	public Optional<Issue> findById(Integer issueId) {

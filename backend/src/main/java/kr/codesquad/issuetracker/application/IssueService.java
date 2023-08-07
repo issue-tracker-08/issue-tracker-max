@@ -22,6 +22,7 @@ import kr.codesquad.issuetracker.presentation.request.IssueLabelRequest;
 import kr.codesquad.issuetracker.presentation.request.IssueModifyRequest;
 import kr.codesquad.issuetracker.presentation.request.IssueRegisterRequest;
 import kr.codesquad.issuetracker.presentation.response.IssueDetailResponse;
+import kr.codesquad.issuetracker.presentation.response.IssueDetailSidebarResponse;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
@@ -58,6 +59,15 @@ public class IssueService {
 	public IssueDetailResponse getIssueDetails(Integer issueId) {
 		return issueRepository.findIssueDetailResponseById(issueId)
 			.orElseThrow(() -> new ApplicationException(ErrorCode.ISSUE_NOT_FOUND));
+	}
+
+	@Transactional(readOnly = true)
+	public IssueDetailSidebarResponse getIssueDetailsSidebar(Integer issueId) {
+		List<Integer> assigneeIds = assigneeRepository.findIdsByIssueId(issueId);
+		List<Integer> labelIds = issueLabelRepository.findIdsByIssueId(issueId);
+		Integer milestoneId = issueRepository.findMilestoneIdById(issueId);
+
+		return new IssueDetailSidebarResponse(assigneeIds, labelIds, milestoneId);
 	}
 
 	@Transactional(readOnly = true)

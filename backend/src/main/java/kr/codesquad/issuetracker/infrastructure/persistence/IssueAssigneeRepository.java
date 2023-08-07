@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.sql.DataSource;
 
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.namedparam.SqlParameterSourceUtils;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
@@ -33,5 +34,14 @@ public class IssueAssigneeRepository {
 		String sql = "DELETE FROM issue_assignee WHERE issue_id = :issueId AND user_account_id = :userAccountId";
 
 		jdbcTemplate.batchUpdate(sql, SqlParameterSourceUtils.createBatch(assignees));
+	}
+
+	public List<Integer> findIdsByIssueId(Integer issueId) {
+		String sql = "SELECT user_account_id FROM issue_assignee WHERE issue_id = :issueId";
+
+		MapSqlParameterSource params = new MapSqlParameterSource()
+			.addValue("issueId", issueId);
+
+		return jdbcTemplate.query(sql, params, (rs, rowNum) -> rs.getInt("user_account_id"));
 	}
 }

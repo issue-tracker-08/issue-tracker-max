@@ -108,9 +108,6 @@ class IssueControllerTest extends ControllerTest {
 				.andExpect(jsonPath("$.content").exists())
 				.andExpect(jsonPath("$.author.username").exists())
 				.andExpect(jsonPath("$.author.profileUrl").exists())
-				.andExpect(jsonPath("$.assignees").exists())
-				.andExpect(jsonPath("$.labels").exists())
-				.andExpect(jsonPath("$.milestone").exists())
 				.andDo(print());
 		}
 

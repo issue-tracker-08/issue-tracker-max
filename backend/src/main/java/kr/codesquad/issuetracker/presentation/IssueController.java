@@ -5,7 +5,6 @@ import java.util.Map;
 
 import javax.validation.Valid;
 
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -24,6 +23,7 @@ import kr.codesquad.issuetracker.presentation.request.IssueMilestoneRequest;
 import kr.codesquad.issuetracker.presentation.request.IssueModifyRequest;
 import kr.codesquad.issuetracker.presentation.request.IssueRegisterRequest;
 import kr.codesquad.issuetracker.presentation.response.IssueDetailResponse;
+import kr.codesquad.issuetracker.presentation.response.IssueDetailSidebarResponse;
 import lombok.RequiredArgsConstructor;
 
 @RequestMapping("/api/issues")
@@ -46,8 +46,14 @@ public class IssueController {
 
 	@GetMapping("/{issueId}")
 	public ResponseEntity<IssueDetailResponse> getIssueDetails(@PathVariable Integer issueId) {
-		return ResponseEntity.status(HttpStatus.OK)
+		return ResponseEntity.ok()
 			.body(issueService.getIssueDetails(issueId));
+	}
+
+	@GetMapping("/{issueId}/sidebar")
+	public ResponseEntity<IssueDetailSidebarResponse> getIssueDetailsSidebar(@PathVariable Integer issueId) {
+		return ResponseEntity.ok()
+			.body(issueService.getIssueDetailsSidebar(issueId));
 	}
 
 	@PutMapping(value = {"/{issueId}/title", "/{issueId}/content", "/{issueId}/isOpen"})
