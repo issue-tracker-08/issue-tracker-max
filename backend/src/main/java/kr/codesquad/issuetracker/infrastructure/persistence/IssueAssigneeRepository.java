@@ -30,7 +30,7 @@ public class IssueAssigneeRepository {
 	}
 
 	public void deleteAll(List<IssueAssignee> assignees) {
-		String sql = "DELETE FROM issue_assignee WHERE issue_id = :issueId, user_account_id = :userAccountId";
+		String sql = "DELETE FROM issue_assignee WHERE issue_id = :issueId AND user_account_id = :userAccountId";
 
 		jdbcTemplate.batchUpdate(sql, SqlParameterSourceUtils.createBatch(assignees));
 	}

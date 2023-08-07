@@ -39,22 +39,22 @@ public class IssueRepository {
 	}
 
 	public List<IssueSimpleMapper> findAll() {
-		String sql = "SELECT i.id, i.is_open, i.title, i.created_at, m.name as milestone, "
+		String sql = "SELECT issue.id, issue.is_open, issue.title, issue.created_at, milestone.name as milestone, "
 			+ "CONCAT('[', GROUP_CONCAT(DISTINCT JSON_OBJECT( "
-			+ "'name', l.name, 'fontColor', l.font_color, 'backgroundColor', l.background_color)), ']') as labels, "
-			+ "IFNULL(ua2.login_id, '(알수없음)') as author_name, "
+			+ "'name', label.name, 'fontColor', label.font_color, 'backgroundColor', label.background_color)), ']') as labels, "
+			+ "IFNULL(user2.login_id, '(알수없음)') as author_name, "
 			+ "CONCAT('[', GROUP_CONCAT(DISTINCT JSON_OBJECT( "
-			+ "'username', ua.login_id, 'profileUrl', ua.profile_url)), ']') as assignee "
-			+ "FROM issue i "
-			+ "LEFT JOIN issue_label il ON i.id = il.issue_id "
-			+ "LEFT JOIN label l ON l.id = il.label_id AND l.is_deleted = false "
-			+ "LEFT JOIN issue_assignee ia ON i.id = ia.issue_id "
-			+ "LEFT JOIN user_account ua ON ua.id = ia.user_account_id AND ua.is_deleted = false "
-			+ "LEFT JOIN milestone m ON i.milestone_id = m.id AND m.is_deleted = false "
-			+ "LEFT JOIN user_account ua2 ON ua2.id = i.user_account_id AND ua2.is_deleted = false "
-			+ "WHERE i.is_deleted = false "
-			+ "GROUP BY i.id "
-			+ "ORDER BY i.id DESC";
+			+ "'username', user.login_id, 'profileUrl', user.profile_url)), ']') as assignee "
+			+ "FROM issue "
+			+ "LEFT JOIN issue_label ON issue.id = issue_label.issue_id "
+			+ "LEFT JOIN label ON label.id = issue_label.label_id AND label.is_deleted = false "
+			+ "LEFT JOIN issue_assignee assignee ON issue.id = assignee.issue_id "
+			+ "LEFT JOIN user_account user ON user.id = assignee.user_account_id AND user.is_deleted = false "
+			+ "LEFT JOIN milestone ON issue.milestone_id = milestone.id AND milestone.is_deleted = false "
+			+ "LEFT JOIN user_account user2 ON user2.id = issue.user_account_id AND user2.is_deleted = false "
+			+ "WHERE issue.is_deleted = false "
+			+ "GROUP BY issue.id "
+			+ "ORDER BY issue.id DESC";
 
 		return jdbcTemplate.query(sql, Collections.emptyMap(), mapSimpleIssue());
 	}
@@ -85,10 +85,12 @@ public class IssueRepository {
 		List<LabelResponse> labels = findLabelInfoById(issueId);
 		MilestoneResponse milestone = milestoneRepository.findMilestoneByIssueId(issueId);
 
-		String sql = "SELECT i.id, i.title, i.is_open, i.created_at, i.content, ua.login_id, ua.profile_url " +
-			"FROM issue i " +
-			"JOIN user_account ua ON i.user_account_id = ua.id AND ua.is_deleted = FALSE " +
-			"WHERE i.id = :issueId";
+		String sql =
+			"SELECT issue.id, issue.title, issue.is_open, issue.created_at, issue.content, " +
+				"user.login_id, user.profile_url " +
+				"FROM issue " +
+				"JOIN user_account user ON issue.user_account_id = user.id AND user.is_deleted = FALSE " +
+				"WHERE issue.id = :issueId";
 
 		return DataAccessUtils.singleResult(
 			jdbcTemplate.query(sql, Map.of("issueId", issueId), (rs, rowNum) -> new IssueDetailResponse(
@@ -105,11 +107,11 @@ public class IssueRepository {
 	}
 
 	private List<IssueDetailResponse.Assignee> findAssigneeById(Integer issueId) {
-		String sql = "SELECT ia.user_account_id, ua.login_id, ua.profile_url " +
-			"FROM issue i " +
-			"JOIN issue_assignee ia ON i.id = ia.issue_id " +
-			"JOIN user_account ua ON ia.user_account_id = ua.id AND ua.is_deleted = FALSE " +
-			"WHERE i.id = :issueId";
+		String sql = "SELECT assignee.user_account_id, user.login_id, user.profile_url " +
+			"FROM issue " +
+			"JOIN issue_assignee assignee ON issue.id = assignee.issue_id " +
+			"JOIN user_account user ON assignee.user_account_id = user.id AND user.is_deleted = FALSE " +
+			"WHERE issue.id = :issueId";
 
 		return jdbcTemplate.query(sql, Map.of("issueId", issueId), (rs, rowNum) -> new IssueDetailResponse.Assignee(
 			rs.getInt("user_account_id"),
@@ -119,11 +121,11 @@ public class IssueRepository {
 	}
 
 	private List<LabelResponse> findLabelInfoById(Integer issueId) {
-		String sql = "SELECT l.id, l.name, l.font_color, l.background_color " +
-			"FROM issue i " +
-			"JOIN issue_label il ON i.id = il.issue_id " +
-			"JOIN label l ON il.label_id = l.id AND l.is_deleted = FALSE " +
-			"WHERE i.id = :issueId";
+		String sql = "SELECT label.id, label.name, label.font_color, label.background_color " +
+			"FROM issue " +
+			"JOIN issue_label ON issue.id = issue_label.issue_id " +
+			"JOIN label ON issue_label.label_id = label.id AND label.is_deleted = FALSE " +
+			"WHERE issue.id = :issueId";
 
 		return jdbcTemplate.query(sql, Map.of("issueId", issueId), (rs, rowNum) -> new LabelResponse(
 			rs.getInt("id"),
@@ -158,8 +160,8 @@ public class IssueRepository {
 			.addValue("issueId", issue.getId());
 
 		jdbcTemplate.update(sql, param);
-  }
-  
+	}
+
 	public void updateIssueMilestone(Integer issueId, Integer milestoneId) {
 		String sql = "UPDATE issue SET milestone_id = :milestoneId WHERE id = :issueId";
 

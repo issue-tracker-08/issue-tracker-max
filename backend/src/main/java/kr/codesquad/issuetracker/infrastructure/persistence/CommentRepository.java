@@ -51,10 +51,10 @@ public class CommentRepository {
 	}
 
 	public List<CommentsResponse> findAll(Integer issueId, Integer cursor) {
-		String sql = "SELECT c.id, u.login_id, u.profile_url, c.content, c.created_at "
-			+ "FROM comment c "
-			+ "JOIN user_account u ON c.user_account_id = u.id "
-			+ "WHERE c.issue_id = :issueId AND c.is_deleted = false AND c.id > :cursor LIMIT 10 ";
+		String sql = "SELECT comment.id, user.login_id, user.profile_url, comment.content, comment.created_at "
+			+ "FROM comment "
+			+ "JOIN user_account user ON comment.user_account_id = user.id "
+			+ "WHERE comment.issue_id = :issueId AND comment.is_deleted = false AND comment.id > :cursor LIMIT 10 ";
 		MapSqlParameterSource param = new MapSqlParameterSource()
 			.addValue("issueId", issueId)
 			.addValue("cursor", cursor);
@@ -68,8 +68,8 @@ public class CommentRepository {
 	}
 
 	public boolean isExistCommentByIssueId(Integer issueId) {
-		String sql = "SELECT EXISTS (SELECT 1 FROM comment c JOIN issue i ON c.issue_id = i.id "
-			+ "WHERE c.issue_id = :issueId)";
+		String sql = "SELECT EXISTS (SELECT 1 FROM comment JOIN issue ON comment.issue_id = issue.id "
+			+ "WHERE comment.issue_id = :issueId)";
 		MapSqlParameterSource param = new MapSqlParameterSource()
 			.addValue("issueId", issueId);
 		return jdbcTemplate.queryForObject(sql, param, boolean.class);

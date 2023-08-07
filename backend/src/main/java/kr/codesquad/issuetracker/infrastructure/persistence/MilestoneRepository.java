@@ -18,11 +18,12 @@ public class MilestoneRepository {
 
 	public MilestoneResponse findMilestoneByIssueId(Integer issueId) {
 		String sql =
-			"SELECT m.id, m.name, SUM(i.is_open = TRUE) as open_count, SUM(i.is_open = FALSE) as closed_count " +
-				"FROM milestone m " +
-				"JOIN issue i ON m.id = i.milestone_id AND m.is_deleted = FALSE " +
-				"WHERE i.id = :issueId " +
-				"GROUP BY m.id";
+			"SELECT milestone.id, milestone.name, "
+				+ "SUM(issue.is_open = TRUE) as open_count, SUM(issue.is_open = FALSE) as closed_count " +
+				"FROM milestone " +
+				"JOIN issue ON milestone.id = issue.milestone_id AND milestone.is_deleted = FALSE " +
+				"WHERE issue.id = :issueId " +
+				"GROUP BY milestone.id";
 
 		return DataAccessUtils.singleResult(
 			jdbcTemplate.query(sql, Map.of("issueId", issueId), (rs, rowNum) -> new MilestoneResponse(
@@ -34,13 +35,13 @@ public class MilestoneRepository {
 	}
 
 	public List<MilestoneResponse> findAll() {
-		String sql = "SELECT m.id, m.name, m.description, m.due_date, "
-			+ "IFNULL(SUM(i.is_open = TRUE), 0) as open_count, "
-			+ "IFNULL(SUM(i.is_open = FALSE), 0) as closed_count "
-			+ "FROM milestone m "
-			+ "LEFT JOIN issue i ON m.id = i.milestone_id AND i.is_deleted = FALSE "
-			+ "WHERE m.is_deleted = FALSE "
-			+ "GROUP BY m.id";
+		String sql = "SELECT milestone.id, milestone.name, milestone.description, milestone.due_date, "
+			+ "IFNULL(SUM(issue.is_open = TRUE), 0) as open_count, "
+			+ "IFNULL(SUM(issue.is_open = FALSE), 0) as closed_count "
+			+ "FROM milestone "
+			+ "LEFT JOIN issue ON milestone.id = issue.milestone_id AND issue.is_deleted = FALSE "
+			+ "WHERE milestone.is_deleted = FALSE "
+			+ "GROUP BY milestone.id";
 
 		return jdbcTemplate.query(sql, (rs, rowNum) -> new MilestoneResponse(
 			rs.getInt("id"),
