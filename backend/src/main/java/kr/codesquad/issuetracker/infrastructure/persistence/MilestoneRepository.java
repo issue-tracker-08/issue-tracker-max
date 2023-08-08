@@ -1,37 +1,29 @@
 package kr.codesquad.issuetracker.infrastructure.persistence;
 
 import java.util.List;
-import java.util.Map;
 
-import org.springframework.dao.support.DataAccessUtils;
+import javax.sql.DataSource;
+
+import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
 
+import kr.codesquad.issuetracker.domain.Milestone;
 import kr.codesquad.issuetracker.presentation.response.MilestoneResponse;
-import lombok.RequiredArgsConstructor;
 
-@RequiredArgsConstructor
 @Repository
 public class MilestoneRepository {
 
+	private final SimpleJdbcInsert jdbcInsert;
 	private final NamedParameterJdbcTemplate jdbcTemplate;
 
-	public MilestoneResponse findMilestoneByIssueId(Integer issueId) {
-		String sql =
-			"SELECT milestone.id, milestone.name, "
-				+ "SUM(issue.is_open = TRUE) as open_count, SUM(issue.is_open = FALSE) as closed_count " +
-				"FROM milestone " +
-				"JOIN issue ON milestone.id = issue.milestone_id AND milestone.is_deleted = FALSE " +
-				"WHERE issue.id = :issueId " +
-				"GROUP BY milestone.id";
-
-		return DataAccessUtils.singleResult(
-			jdbcTemplate.query(sql, Map.of("issueId", issueId), (rs, rowNum) -> new MilestoneResponse(
-				rs.getInt("id"),
-				rs.getString("name"),
-				rs.getInt("open_count"),
-				rs.getInt("closed_count")
-			)));
+	public MilestoneRepository(DataSource dataSource) {
+		this.jdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
+		this.jdbcInsert = new SimpleJdbcInsert(dataSource)
+			.withTableName("milestone")
+			.usingColumns("name", "description", "due_date")
+			.usingGeneratedKeyColumns("id");
 	}
 
 	public List<MilestoneResponse> findAll() {
@@ -51,5 +43,9 @@ public class MilestoneRepository {
 			rs.getInt("open_count"),
 			rs.getInt("closed_count")
 		));
+	}
+
+	public void save(Milestone milestone) {
+		jdbcInsert.execute(new BeanPropertySqlParameterSource(milestone));
 	}
 }

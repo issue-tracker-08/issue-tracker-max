@@ -12,4 +12,10 @@ public class Milestone {
 	private String description;
 	private LocalDateTime dueDate;
 	private Boolean isDeleted;
+
+	public Milestone(String name, String description, LocalDateTime dueDate) {
+		this.name = name;
+		this.description = description;
+		this.dueDate = dueDate;
+	}
 }
