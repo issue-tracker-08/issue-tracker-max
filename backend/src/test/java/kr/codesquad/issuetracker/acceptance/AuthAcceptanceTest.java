@@ -7,29 +7,16 @@ import java.util.Map;
 import java.util.stream.Stream;
 
 import org.apache.http.HttpStatus;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 
 import io.restassured.RestAssured;
 
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
-public class AuthAcceptanceTest {
-
-	@Autowired
-	private DatabaseInitializer databaseInitializer;
-
-	@BeforeEach
-	void setUp() {
-		databaseInitializer.truncateTables();
-		databaseInitializer.initTables();
-	}
+public class AuthAcceptanceTest extends AcceptanceTest {
 
 	@DisplayName("회원가입에 성공한다.")
 	@Test

@@ -7,6 +7,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.mock.mockito.MockBean;
 
 import kr.codesquad.issuetracker.ApplicationTest;
 import kr.codesquad.issuetracker.domain.UserAccount;
@@ -25,6 +26,9 @@ public class AuthServiceTest {
 	private UserAccountRepository userAccountRepository;
 	@Autowired
 	private PasswordEncoder passwordEncoder;
+
+	@MockBean
+	private S3Service s3Service;
 
 	@DisplayName("회원가입할 때")
 	@Nested

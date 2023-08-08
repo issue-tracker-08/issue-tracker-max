@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.mock.mockito.MockBean;
 
 import kr.codesquad.issuetracker.ApplicationTest;
 import kr.codesquad.issuetracker.domain.Issue;
@@ -24,6 +25,9 @@ class CommentServiceTest {
 	private IssueRepository issueRepository;
 	@Autowired
 	private UserAccountRepository accountRepository;
+
+	@MockBean
+	private S3Service s3Service;
 
 	@DisplayName("댓글 목록 조회에 성공한다.")
 	@Test
