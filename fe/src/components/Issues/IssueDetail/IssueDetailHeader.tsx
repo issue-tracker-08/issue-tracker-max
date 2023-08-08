@@ -7,7 +7,7 @@ import TextInput from "@components/common/TextInput";
 import { IssueDetails } from "@customTypes/index";
 import { convertPastTimestamp } from "@utils/time";
 import { putIssueIsOpen, putIssueTitle } from "api";
-import { FormEvent, useEffect, useState } from "react";
+import { FormEvent, useState } from "react";
 import { styled } from "styled-components";
 
 export default function IssueDetailHeader({
@@ -21,9 +21,6 @@ export default function IssueDetailHeader({
   updateIssueIsOpen: () => void;
   numComments: number;
 }) {
-  const [isEditTitle, setIsEditTitle] = useState(false);
-  const [newTitle, setNewTitle] = useState("");
-
   const { issueId, author, title, createdAt, isOpen } = issueDetails || {
     issueId: 0,
     author: { username: "", profileURl: "" },
@@ -32,9 +29,14 @@ export default function IssueDetailHeader({
     isOpen: true,
   };
 
-  useEffect(() => {
+  const [isEditTitle, setIsEditTitle] = useState(false);
+  const [newTitle, setNewTitle] = useState(title);
+  const [prevTitle, setPrevTitle] = useState(title);
+
+  if (title !== prevTitle) {
+    setPrevTitle(title);
     setNewTitle(title);
-  }, [title]);
+  }
 
   const onNewTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setNewTitle(e.target.value);
