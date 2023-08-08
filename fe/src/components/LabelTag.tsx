@@ -17,6 +17,7 @@ const StyledLabelTag = styled.span<{
   $fontColor: string;
   $backgroundColor: string;
 }>`
+  display: inline-block;
   height: 24px;
   padding-inline: 12px;
   background-color: ${({ $backgroundColor }) => $backgroundColor};
