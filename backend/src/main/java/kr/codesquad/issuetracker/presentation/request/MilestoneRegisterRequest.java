@@ -30,9 +30,9 @@ public class MilestoneRegisterRequest {
 	}
 
 	public LocalDateTime getDueDate() {
-		if (dueDate != null) {
-			return LocalDateTime.parse(dueDate, formatter);
+		if (dueDate == null) {
+			return null;
 		}
-		return null;
+		return LocalDateTime.parse(dueDate, formatter);
 	}
 }
