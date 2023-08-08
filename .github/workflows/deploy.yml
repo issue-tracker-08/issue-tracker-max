@@ -3,16 +3,15 @@ name: ci
 on:
   pull_request:
     branches:
-      - be-w2
-      - fe-w2
+      - be-w3
+      - fe-w3
 
 env:
   AWS_REGION: ap-northeast-2
   S3_BUCKET_NAME: issue-tracker-s3
   CODE_DEPLOY_APPLICATION_NAME: issue-tracker-cd
   CODE_DEPLOY_DEPLOYMENT_GROUP_NAME_WAS: issue-tracker-group
-  APPLICATION_PROPERTIES_FILE_PATH: ./src/main/resources/application-prod.yml
-  APPLICATION_JWT_FILE_PATH: ./src/main/resources/application-jwt.yml
+  APPLICATION_SECRET_FILE_PATH: ./src/main/resources/application-secret.yml
 
 permissions:
   contents: read
@@ -36,19 +35,12 @@ jobs:
           java-version: '11'
           distribution: 'temurin'
 
-      #1-1. DB 정보 담은 yml 파일 생성
-      - name: Make application-prod.yml file
-        run: touch '${{ env.APPLICATION_PROPERTIES_FILE_PATH }}'
+      #1. SECRET 정보 담은 yml 파일 생성
+      - name: Make application-secret.yml file
+        run: touch '${{ env.APPLICATION_SECRET_FILE_PATH }}'
 
       - name: Output application information
-        run: echo '${{ secrets.APPLICATION }}' > '${{ env.APPLICATION_PROPERTIES_FILE_PATH }}'
-
-      #1-2. JWT 정보 담은 yml 파일 생성
-      - name: Make application-jwt.yml file
-        run: touch '${{ env.APPLICATION_JWT_FILE_PATH }}'
-
-      - name: Output application information
-        run: echo '${{ secrets.APPLICATION_JWT }}' > '${{ env.APPLICATION_JWT_FILE_PATH }}'
+        run: echo '${{ secrets.APPLICATION_SECRET }}' > '${{ env.APPLICATION_SECRET_FILE_PATH }}'
 
       #2-1. Gradle 실행 권한 부여
       - name: Grant execute permission to gradlew

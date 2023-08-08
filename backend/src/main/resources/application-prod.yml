@@ -1,0 +1,9 @@
+spring:
+  datasource:
+    url: ${db.prod.datasource.url}
+    username: ${db.prod.datasource.username}
+    password: ${db.prod.datasource.password}
+
+  sql:
+    init:
+      mode: always

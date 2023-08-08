@@ -6,4 +6,4 @@
 /build
 
 ## YML
-application-jwt.yml
+application-secret.yml

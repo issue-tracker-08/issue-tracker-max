@@ -3,5 +3,4 @@ spring:
     active:
       - prod
     include:
-      - jwt
-      - KEYS
+      - secret
