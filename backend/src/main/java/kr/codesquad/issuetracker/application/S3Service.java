@@ -15,8 +15,8 @@ import java.nio.charset.StandardCharsets;
 @Service
 public class S3Service {
 
-    private static final String UPLOADED_IMAGES = "public/uploaded-images/";
-    private static final String PROFILE_IMAGES = "public/profile-images/";
+    private static final String UPLOADED_IMAGES_DIR = "public/uploaded-images/";
+    private static final String PROFILE_IMAGES_DIR = "public/profile-images/";
 
     private final AmazonS3Client amazonS3Client;
     private final String bucket;
@@ -26,17 +26,25 @@ public class S3Service {
         this.bucket = awsProperties.getS3().getBucket();
     }
 
+    public String uploadImage(MultipartFile file) {
         ImageFile imageFile = ImageFile.from(file);
 
         // 버킷에 저장할 파일 이름 생성
-        String fileName = UPLOADED_IMAGES + imageFile.getRandomName();
+        String fileName = UPLOADED_IMAGES_DIR + imageFile.getRandomName();
 
+        uploadImageToS3(imageFile, fileName);
+        return getObjectUri(fileName);
+    }
+
+    private void uploadImageToS3(ImageFile imageFile, String fileName) {
         ObjectMetadata metadata = new ObjectMetadata();
         metadata.setContentType(imageFile.getContentType());
-        metadata.setContentLength(file.getSize());
-
+        metadata.setContentLength(imageFile.getFileSize());
         amazonS3Client.putObject(new PutObjectRequest(bucket, fileName, imageFile.getImageInputStream(), metadata)
                 .withCannedAcl(CannedAccessControlList.PublicRead));
+    }
+
+    private String getObjectUri(String fileName) {
         return URLDecoder.decode(amazonS3Client.getUrl(bucket, fileName).toString(), StandardCharsets.UTF_8);
     }
 }

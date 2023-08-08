@@ -4,7 +4,6 @@ import kr.codesquad.issuetracker.exception.ApplicationException;
 import kr.codesquad.issuetracker.exception.ErrorCode;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -19,11 +18,13 @@ public class ImageFile {
     private final String originalFilename;
     private final String contentType;
     private final InputStream imageInputStream;
+    private final Long fileSize;
 
     public ImageFile(MultipartFile multipartFile) {
         this.originalFilename = getImageFileName(multipartFile);
         this.contentType = getImageContentType(multipartFile);
         this.imageInputStream = getImageInputStream(multipartFile);
+        this.fileSize = multipartFile.getSize();
     }
 
     public String getImageFileName(MultipartFile multipartFile) {
@@ -42,11 +43,7 @@ public class ImageFile {
     }
 
     public String getImageContentType(MultipartFile multipartFile) {
-        try {
-            return ImageContentType.valueOf(multipartFile.getContentType()).getContentType();
-        } catch (IllegalArgumentException e) {
-            throw new ApplicationException(ErrorCode.INVALID_FILE_EXTENSION);
-        }
+            return ImageContentType.findEnum(multipartFile.getContentType()).getContentType();
     }
 
     public InputStream getImageInputStream(MultipartFile multipartFile) {
@@ -70,5 +67,14 @@ public class ImageFile {
         PNG("image/png");
 
         private final String contentType;
+
+        public static ImageContentType findEnum(String contentType) {
+            for (ImageContentType imageContentType : ImageContentType.values()) {
+                if (imageContentType.getContentType().equals(contentType)) {
+                    return imageContentType;
+                }
+            }
+            throw new ApplicationException(ErrorCode.INVALID_FILE_EXTENSION);
+        }
     }
 }
