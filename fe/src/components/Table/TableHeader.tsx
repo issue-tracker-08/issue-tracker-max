@@ -1,7 +1,7 @@
-import { ReactElement } from "react";
+import { ReactNode } from "react";
 import { styled } from "styled-components";
 
-export default function TableHeader({ children }: { children: ReactElement }) {
+export default function TableHeader({ children }: { children: ReactNode }) {
   return <StyledTableHeader>{children}</StyledTableHeader>;
 }
 
