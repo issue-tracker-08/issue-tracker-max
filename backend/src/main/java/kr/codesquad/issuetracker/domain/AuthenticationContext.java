@@ -3,6 +3,7 @@ package kr.codesquad.issuetracker.domain;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.annotation.RequestScope;
 
+import kr.codesquad.issuetracker.presentation.auth.Principal;
 import lombok.Getter;
 
 @Component
@@ -10,9 +11,9 @@ import lombok.Getter;
 @RequestScope
 public class AuthenticationContext {
 
-	private String principal;
+	private Principal principal;
 
-	public void setPrincipal(String principal) {
+	public void setPrincipal(Principal principal) {
 		this.principal = principal;
 	}
 }

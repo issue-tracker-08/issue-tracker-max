@@ -47,7 +47,7 @@ public class JwtFilter extends OncePerRequestFilter {
 		}
 		String token = extractJwt(request).orElseThrow(() -> new ApplicationException(ErrorCode.EMPTY_JWT));
 		jwtProvider.validateToken(token);
-		authenticationContext.setPrincipal(jwtProvider.extractUserId(token));
+		authenticationContext.setPrincipal(jwtProvider.extractPrincipal(token));
 
 		filterChain.doFilter(request, response);
 	}
