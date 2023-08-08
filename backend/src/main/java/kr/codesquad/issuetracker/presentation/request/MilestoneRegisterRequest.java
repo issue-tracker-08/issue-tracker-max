@@ -6,9 +6,13 @@ import java.time.format.DateTimeFormatter;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+@Getter
 @NoArgsConstructor
 @AllArgsConstructor
 public class MilestoneRegisterRequest {
@@ -19,20 +23,6 @@ public class MilestoneRegisterRequest {
 	@Size(max = 45, message = "마일스톤의 이름은 45자를 넘을 수 없습니다.")
 	private String milestoneName;
 	private String description;
-	private String dueDate;
-
-	public String getMilestoneName() {
-		return milestoneName;
-	}
-
-	public String getDescription() {
-		return description;
-	}
-
-	public LocalDateTime getDueDate() {
-		if (dueDate == null) {
-			return null;
-		}
-		return LocalDateTime.parse(dueDate, formatter);
-	}
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Seoul")
+	private LocalDateTime dueDate;
 }
