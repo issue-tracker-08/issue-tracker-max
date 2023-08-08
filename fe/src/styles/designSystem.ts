@@ -32,7 +32,7 @@ const radius = {
 const border = {
   default: `1px solid`,
   icon: `1.6px solid`,
-  dash: `1px dash`,
+  dashed: `1px dashed`,
 };
 
 const font = {
@@ -109,7 +109,7 @@ export const lightMode = {
     neutralTextDefault:
       "brightness(0) saturate(100%) invert(28%) sepia(15%) saturate(1004%) hue-rotate(207deg) brightness(91%) contrast(82%);",
     brandTextDefault:
-      "brightness(0) saturate(100%) invert(100%) sepia(0%) saturate(0%) hue-rotate(45deg) brightness(103%) contrast(103%);",
+      "brightness(0) saturate(100%) invert(100%) sepia(6%) saturate(2%) hue-rotate(48deg) brightness(105%) contrast(99%);",
     brandTextWeak:
       "brightness(0) saturate(100%) invert(29%) sepia(66%) saturate(2882%) hue-rotate(201deg) brightness(103%) contrast(105%);",
   },
@@ -168,9 +168,9 @@ export const darkMode = {
     neutralTextStrong:
       "brightness(0) saturate(100%) invert(100%) sepia(2%) saturate(469%) hue-rotate(289deg) brightness(120%) contrast(99%);",
     neutralTextDefault:
-      "brightness(0) saturate(100%) invert(90%) sepia(4%) saturate(1252%) hue-rotate(196deg) brightness(89%) contrast(85%);      ",
+      "brightness(0) saturate(100%) invert(90%) sepia(4%) saturate(1252%) hue-rotate(196deg) brightness(89%) contrast(85%);",
     brandTextDefault:
-      "brightness(0) saturate(100%) invert(92%) sepia(1%) saturate(5034%) hue-rotate(193deg) brightness(82%) contrast(104%);",
+      "brightness(0) saturate(100%) invert(100%) sepia(6%) saturate(2%) hue-rotate(48deg) brightness(105%) contrast(99%);",
     brandTextWeak:
       "brightness(0) saturate(100%) invert(39%) sepia(89%) saturate(4222%) hue-rotate(199deg) brightness(100%) contrast(112%);",
   },

@@ -4,28 +4,21 @@ import static org.mockito.BDDMockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
+import java.util.Date;
+
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
-import org.springframework.test.web.servlet.MockMvc;
-
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 import kr.codesquad.issuetracker.application.AuthService;
 import kr.codesquad.issuetracker.fixture.FixtureFactory;
-import kr.codesquad.issuetracker.presentation.response.TokenResponse;
+import kr.codesquad.issuetracker.presentation.response.LoginSuccessResponse;
 
 @WebMvcTest(controllers = AuthController.class)
-class AuthControllerTest {
-
-	@Autowired
-	private MockMvc mockMvc;
-	@Autowired
-	private ObjectMapper objectMapper;
+class AuthControllerTest extends ControllerTest {
 
 	@MockBean
 	AuthService authService;
@@ -65,7 +58,9 @@ class AuthControllerTest {
 			String id = "applePIE";
 			String pw = "qwer1234";
 
-			given(authService.login(id, pw)).willReturn(new TokenResponse("qwerqwer"));
+			long expirationTime = new Date(new Date().getTime() + 36000).toInstant().toEpochMilli();
+			given(authService.login(id, pw)).willReturn(new LoginSuccessResponse(
+				new LoginSuccessResponse.TokenResponse("qwerqwer", expirationTime), "url", id));
 
 			mockMvc.perform(
 					post("/api/auth/login")
@@ -74,8 +69,8 @@ class AuthControllerTest {
 							objectMapper.writeValueAsString(FixtureFactory.createLoginRequest(id, pw))
 						)
 				).andExpect(status().isCreated())
-				.andExpect(jsonPath("$.tokenType").exists())
-				.andExpect(jsonPath("$.accessToken").exists());
+				.andExpect(jsonPath("$.token").exists())
+				.andExpect(jsonPath("$.user").exists());
 		}
 	}
 }

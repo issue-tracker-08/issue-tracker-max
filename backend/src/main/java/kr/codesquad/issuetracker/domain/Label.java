@@ -11,4 +11,11 @@ public class Label {
 	private String fontColor;
 	private String backgroundColor;
 	private Boolean isDeleted;
+
+	public Label(Integer id, String name, String fontColor, String backgroundColor) {
+		this.id = id;
+		this.name = name;
+		this.fontColor = fontColor;
+		this.backgroundColor = backgroundColor;
+	}
 }

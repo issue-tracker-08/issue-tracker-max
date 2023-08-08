@@ -1,29 +1,44 @@
 import alertIcon from "@assets/icon/alertCircle.svg";
 import archiveIcon from "@assets/icon/archive.svg";
 import DropdownIndicator from "@components/Dropdown/DropdownIndicator";
-import Button from "@components/common/Button";
 import InputCheckbox from "@components/common/Input/InputCheckbox";
+import TabBar from "@components/common/TabBar";
 import { styled } from "styled-components";
 import TableHeader from "./TableHeader";
 
-export default function TableHeaderIssues() {
+export default function TableHeaderIssues({
+  numOpen,
+  numClosed,
+}: {
+  numOpen: number;
+  numClosed: number;
+}) {
+  const tabBarLeftInfo = {
+    name: "열린 이슈",
+    count: numOpen,
+    iconSrc: alertIcon,
+    callback: () => console.log("열린 이슈"),
+  };
+  const tabBarRightInfo = {
+    name: "닫힌 이슈",
+    count: numClosed,
+    iconSrc: archiveIcon,
+    callback: () => console.log("닫힌 이슈"),
+  };
+
   return (
     <TableHeader>
       <TableHeaderContents>
         <div className="left-wrapper">
           <InputCheckbox />
-
-          {/* TODO: TabBar로 변경 */}
-          <Button size="M" variant="ghost">
-            <img src={alertIcon} alt="열린 이슈" />
-            열린 이슈 (2)
-          </Button>
-          <Button size="M" variant="ghost">
-            <img src={archiveIcon} alt="닫힌 이슈" />
-            닫힌 이슈 (0)
-          </Button>
+          <TabBar
+            left={tabBarLeftInfo}
+            right={tabBarRightInfo}
+            borderStyle="none"
+          />
         </div>
 
+        {/* TODO: dropdownList */}
         <div className="right-wrapper">
           <DropdownIndicator
             displayName="담당자"
@@ -31,6 +46,7 @@ export default function TableHeaderIssues() {
             dropdownName="assignee"
             dropdownList={[
               {
+                id: 1,
                 variant: "withImg",
                 name: "assignee",
                 content: "Kakamotobi",
@@ -80,17 +96,8 @@ const TableHeaderContents = styled.div`
       margin-right: 32px;
     }
 
-    button:first-of-type {
-      margin-right: 24px;
-    }
-
-    button {
-      color: ${({ theme: { neutral } }) => neutral.text.default};
-      font: ${({ theme: { font } }) => font.availableMD16};
-
-      img {
-        filter: ${({ theme: { filter } }) => filter.neutralTextDefault};
-      }
+    > *:last-child {
+      gap: 24px;
     }
   }
 

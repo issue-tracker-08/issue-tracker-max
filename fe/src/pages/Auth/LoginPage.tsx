@@ -3,8 +3,9 @@ import TextInput from "@components/common/TextInput";
 import useInput from "@hooks/useInput";
 import { postLogin } from "api";
 import { AxiosError } from "axios";
+import { useAuth } from "context/authContext";
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 
 export default function LoginPage() {
@@ -19,13 +20,18 @@ export default function LoginPage() {
     minLength: 6,
   });
   const [errorMessage, setErrorMessage] = useState<string>("");
+  const { onLogin } = useAuth();
+  const navigate = useNavigate();
 
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     try {
-      await postLogin(username.value, password.value);
-      // accessToken을 받아서 axios의 header에 넣어주는 로직이 필요함
+      const {
+        data: { token, user },
+      } = await postLogin(username.value, password.value);
+      onLogin({ accessToken: token.accessToken, userInfo: user });
+      navigate("/");
     } catch (error) {
       if (error instanceof AxiosError && error.response) {
         const { message } = error.response.data;
@@ -36,7 +42,7 @@ export default function LoginPage() {
 
   return (
     <>
-      <Button variant="outline" size="L" className="github-login-btn">
+      <Button variant="outline" size="XL" className="github-login-btn">
         GitHub 계정으로 로그인
       </Button>
       <span className="or">or</span>
@@ -61,7 +67,7 @@ export default function LoginPage() {
         {errorMessage && <p className="error-message">{errorMessage}</p>}
         <Button
           variant="container"
-          size="L"
+          size="XL"
           className="login-btn"
           disabled={!isValidUsername || !isValidPassword}
           type="submit">
@@ -69,7 +75,7 @@ export default function LoginPage() {
         </Button>
       </AuthForm>
       <Link to="/auth/signup">
-        <Button variant="ghost" size="M" className="change-auth-btn">
+        <Button variant="ghost" size="XL" className="change-auth-btn">
           아직 계정이 없으신가요? 회원가입
         </Button>
       </Link>

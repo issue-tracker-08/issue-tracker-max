@@ -57,6 +57,10 @@ export default createGlobalStyle`
   input {
     all: unset;
   }
+
+  textarea {
+    all: unset;
+  }
   
   select {
     margin: 0;

@@ -1,11 +1,12 @@
 import IssueItem from "@components/Issues/IssueItem";
+import { IssueItem as IssueItemType } from "@customTypes/index";
 import { styled } from "styled-components";
 import TableBody from "./TableBody";
 
 export default function TableBodyIssues({
   issuesList,
 }: {
-  issuesList: { title: string }[];
+  issuesList: IssueItemType[];
 }) {
   return (
     <TableBody>
@@ -13,7 +14,7 @@ export default function TableBodyIssues({
         {issuesList.length > 0 ? (
           <ul>
             {issuesList.map((issue) => (
-              <IssueItem key={issue.title} issue={issue} /> // TODO: issue object & props
+              <IssueItem key={issue.issueNumber} issue={issue} />
             ))}
           </ul>
         ) : (

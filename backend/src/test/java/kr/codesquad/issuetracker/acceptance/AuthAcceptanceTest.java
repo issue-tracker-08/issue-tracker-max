@@ -124,8 +124,8 @@ public class AuthAcceptanceTest {
 		// then
 		assertAll(
 			() -> assertThat(response.statusCode()).isEqualTo(HttpStatus.SC_CREATED),
-			() -> assertThat(response.body().jsonPath().getString("tokenType")).isNotNull(),
-			() -> assertThat(response.body().jsonPath().getString("accessToken")).isNotNull()
+			() -> assertThat(response.body().jsonPath().getString("token")).isNotNull(),
+			() -> assertThat(response.body().jsonPath().getString("user")).isNotNull()
 		);
 	}
 

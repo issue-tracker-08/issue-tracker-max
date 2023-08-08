@@ -1,24 +1,33 @@
 import moonIcon from "@assets/icon/moon.svg";
 import sunIcon from "@assets/icon/sun.svg";
+import { useAuth } from "context/authContext";
+import { ThemeModeContext } from "context/themeModeContext";
+import { useContext } from "react";
+import { Link } from "react-router-dom";
 import { styled } from "styled-components";
+import { Avatar } from "./common/Avatar";
 import Logo from "./common/Logo";
 import ToggleSwitch from "./common/ToggleSwitch";
 
 export default function Header() {
+  const { userInfo } = useAuth();
+  const { toggleThemeMode } = useContext(ThemeModeContext);
+
   return (
     <StyledHeader>
-      <Logo size="large" />
+      <Link to="/">
+        <Logo size="large" />
+      </Link>
       <div className="global-bar">
         <ToggleSwitch
           onImg={moonIcon}
           offImg={sunIcon}
-          onToggle={() => console.log("toggle dark mode")}
+          onToggle={toggleThemeMode}
         />
-
-        {/* TODO: user object에서 사진 정보 가져오기 */}
-        <UserProfileImg
-          src="https://avatars.githubusercontent.com/u/79886384?v=4"
-          alt="User Profile Picture"
+        <Avatar
+          src={userInfo.profileUrl}
+          alt={`${userInfo.username}-avatar`}
+          $size="M"
         />
       </div>
     </StyledHeader>
@@ -36,11 +45,4 @@ const StyledHeader = styled.header`
     align-items: center;
     gap: 20px;
   }
-`;
-
-const UserProfileImg = styled.img`
-  width: 32px;
-  height: 32px;
-  overflow: hidden;
-  border-radius: ${({ theme: { radius } }) => radius.half};
 `;

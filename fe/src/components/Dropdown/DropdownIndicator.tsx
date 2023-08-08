@@ -2,20 +2,29 @@ import chevronDown from "@assets/icon/chevronDown.svg";
 import DropdownPanel from "@components/Dropdown/DropdownPanel";
 import { useState } from "react";
 import { styled } from "styled-components";
-import { DropdownItemType, DropdownName, DropdownPanelVariant } from "./types";
+import {
+  DropdownItemType,
+  DropdownName,
+  DropdownOption,
+  DropdownPanelVariant,
+} from "./types";
 
 export default function DropdownIndicator({
   displayName,
   dropdownPanelVariant,
+  dropdownOption = "single",
   dropdownName,
   dropdownList,
   dropdownPanelPosition,
+  outsideClickHandler,
 }: {
   displayName: string;
   dropdownPanelVariant: DropdownPanelVariant;
   dropdownName: DropdownName;
   dropdownList: DropdownItemType[];
   dropdownPanelPosition: "left" | "right";
+  dropdownOption?: DropdownOption;
+  outsideClickHandler?: () => void;
 }) {
   const [isOpen, setIsOpen] = useState(false);
 
@@ -28,6 +37,7 @@ export default function DropdownIndicator({
       !(e.target as HTMLElement).closest(`#dropdown-indicator-${dropdownName}`)
     ) {
       setIsOpen(false);
+      outsideClickHandler?.();
     }
   };
 
@@ -44,6 +54,7 @@ export default function DropdownIndicator({
         <DropdownPanel
           {...{
             variant: dropdownPanelVariant,
+            dropdownOption,
             dropdownName,
             dropdownList,
             position: dropdownPanelPosition,

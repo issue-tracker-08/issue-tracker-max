@@ -16,6 +16,7 @@ import io.jsonwebtoken.security.Keys;
 import kr.codesquad.issuetracker.exception.ApplicationException;
 import kr.codesquad.issuetracker.exception.ErrorCode;
 import kr.codesquad.issuetracker.infrastructure.config.jwt.JwtProperties;
+import kr.codesquad.issuetracker.presentation.response.LoginSuccessResponse;
 
 @Component
 public class JwtProvider {
@@ -28,14 +29,18 @@ public class JwtProvider {
 		this.expirationMilliseconds = jwt.getExpirationMilliseconds();
 	}
 
-	public String createToken(String payload) {
+	public LoginSuccessResponse.TokenResponse createToken(String payload) {
 		Date now = new Date();
-		return Jwts.builder()
+		Date expiration = new Date(now.getTime() + expirationMilliseconds);
+		long expirationMilli = expiration.toInstant().toEpochMilli();
+
+		String token = Jwts.builder()
 			.signWith(secretKey, SignatureAlgorithm.HS256)
 			.setIssuedAt(now)
-			.setExpiration(new Date(now.getTime() + expirationMilliseconds))
+			.setExpiration(expiration)
 			.setClaims(Map.of("userId", payload))
 			.compact();
+		return new LoginSuccessResponse.TokenResponse(token, expirationMilli);
 	}
 
 	public void validateToken(final String token) {
@@ -49,5 +54,15 @@ public class JwtProvider {
 		} catch (JwtException e) {
 			throw new ApplicationException(ErrorCode.INVALID_JWT);
 		}
+	}
+
+	public String extractUserId(final String token) {
+		return Jwts.parserBuilder()
+			.setSigningKey(secretKey)
+			.build()
+			.parseClaimsJws(token)
+			.getBody()
+			.get("userId")
+			.toString();
 	}
 }

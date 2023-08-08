@@ -5,15 +5,16 @@ import { DropdownItemType } from "./Dropdown/types";
 
 export default function FilterBar() {
   const filterOptions: DropdownItemType[] = [
-    { variant: "plain", name: "issue", content: "열린 이슈" },
-    { variant: "plain", name: "issue", content: "내가 작성한 이슈" },
-    { variant: "plain", name: "issue", content: "나에게 할당된 이슈" },
+    { id: 0, variant: "plain", name: "issue", content: "열린 이슈" },
+    { id: 0, variant: "plain", name: "issue", content: "내가 작성한 이슈" },
+    { id: 0, variant: "plain", name: "issue", content: "나에게 할당된 이슈" },
     {
+      id: 0,
       variant: "plain",
       name: "issue",
       content: "내가 댓글을 남긴 이슈",
     },
-    { variant: "plain", name: "issue", content: "닫힌 이슈" },
+    { id: 0, variant: "plain", name: "issue", content: "닫힌 이슈" },
   ];
 
   return (

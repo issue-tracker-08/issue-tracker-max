@@ -4,7 +4,7 @@ import useInput from "@hooks/useInput";
 import { postSignup } from "api";
 import { AxiosError } from "axios";
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { AuthForm } from "./LoginPage";
 
 export default function SignupPage() {
@@ -19,12 +19,17 @@ export default function SignupPage() {
     minLength: 6,
   });
   const [errorMessage, setErrorMessage] = useState<string>("");
+  const navigate = useNavigate();
 
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     try {
-      await postSignup(username.value, password.value);
+      const response = await postSignup(username.value, password.value);
+      if (response.status === 201) {
+        alert("회원가입이 완료되었습니다. 가입하신 계정으로 로그인해주세요 :)");
+        navigate("/auth");
+      }
     } catch (error) {
       if (error instanceof AxiosError && error.response) {
         const { message } = error.response.data;
@@ -56,7 +61,7 @@ export default function SignupPage() {
         {errorMessage && <p className="error-message">{errorMessage}</p>}
         <Button
           variant="container"
-          size="L"
+          size="XL"
           className="login-btn"
           disabled={!isValidUsername || !isValidPassword}
           type="submit">

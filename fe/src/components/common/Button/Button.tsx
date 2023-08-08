@@ -4,7 +4,7 @@ import BaseButton from "./BaseButton";
 import { SIZE } from "./constants";
 
 export type ButtonVariant = "container" | "outline" | "ghost";
-export type ButtonSize = "S" | "M" | "L";
+export type ButtonSize = "S" | "M" | "L" | "XL";
 
 export interface ButtonProps
   extends React.ButtonHTMLAttributes<HTMLButtonElement> {
@@ -16,7 +16,7 @@ export default function Button({ variant, size, ...props }: ButtonProps) {
   const buttonComponent = {
     container: <ContainerButton $size={size} {...props} />,
     outline: <OutlineButton $size={size} {...props} />,
-    ghost: <GhostButton $size={size} {...props} />,
+    ghost: <GhostButton {...props} />,
   };
 
   return buttonComponent[variant];
@@ -55,9 +55,6 @@ const OutlineButton = styled(BaseButton)<{
   }
 `;
 
-const GhostButton = styled(BaseButton)<{
-  $size: ButtonSize;
-}>`
-  width: ${({ $size }) => SIZE[$size].width};
-  height: ${({ $size }) => SIZE[$size].height};
+const GhostButton = styled(BaseButton)`
+  display: flex;
 `;
