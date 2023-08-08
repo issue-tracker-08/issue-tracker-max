@@ -19,7 +19,7 @@ public class MilestoneAcceptanceTest extends AcceptanceTest {
 		// given
 		var given = RestAssured
 			.given().log().all()
-			.header(HttpHeaders.AUTHORIZATION, "Bearer " + jwtProvider.createToken("1").getAccessToken())
+			.header(HttpHeaders.AUTHORIZATION, "Bearer " + jwtProvider.createToken(Map.of("userId", "1")).getAccessToken())
 			.contentType(MediaType.APPLICATION_JSON_VALUE)
 			.body(Map.of(
 				"milestoneName", "BE 1주차 스프린트",
