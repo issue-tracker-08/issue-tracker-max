@@ -38,5 +38,10 @@ public class MilestoneService {
 		milestone.modify(milestoneName, description, dueDate);
 		milestoneRepository.update(milestone);
 	}
+
+	@Transactional
+	public void remove(Integer milestoneId) {
+		milestoneRepository.deleteById(milestoneId);
+	}
 }
 

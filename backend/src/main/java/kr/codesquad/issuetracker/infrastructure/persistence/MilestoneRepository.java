@@ -78,4 +78,14 @@ public class MilestoneRepository {
 			.addValue("id", milestone.getId());
 		jdbcTemplate.update(sql, params);
 	}
+
+	public void deleteById(Integer milestoneId) {
+		String sql = "UPDATE milestone "
+			+ "SET milestone.is_deleted = TRUE "
+			+ "WHERE id = :milestoneId";
+
+		MapSqlParameterSource params = new MapSqlParameterSource()
+			.addValue("milestoneId", milestoneId);
+		jdbcTemplate.update(sql, params);
+	}
 }
