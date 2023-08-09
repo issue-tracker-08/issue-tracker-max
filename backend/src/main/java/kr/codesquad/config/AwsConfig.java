@@ -1,7 +1,8 @@
 package kr.codesquad.config;
 
-import kr.codesquad.issuetracker.infrastructure.config.AwsProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
+
+import kr.codesquad.issuetracker.infrastructure.config.AwsProperties;
 
 @EnableConfigurationProperties(AwsProperties.class)
 public class AwsConfig {

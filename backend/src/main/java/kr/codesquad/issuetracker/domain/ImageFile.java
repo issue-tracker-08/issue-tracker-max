@@ -1,15 +1,16 @@
 package kr.codesquad.issuetracker.domain;
 
-import kr.codesquad.issuetracker.exception.ApplicationException;
-import kr.codesquad.issuetracker.exception.ErrorCode;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-import org.springframework.web.multipart.MultipartFile;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Objects;
 import java.util.UUID;
+
+import org.springframework.web.multipart.MultipartFile;
+
+import kr.codesquad.issuetracker.exception.ApplicationException;
+import kr.codesquad.issuetracker.exception.ErrorCode;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 
 @Getter
 @RequiredArgsConstructor
