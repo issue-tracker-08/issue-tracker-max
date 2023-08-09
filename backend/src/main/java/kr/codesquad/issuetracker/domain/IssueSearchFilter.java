@@ -20,7 +20,6 @@ public enum IssueSearchFilter {
 	LABEL("label", IssueSearch::addLabel),
 	MILESTONE("milestone", IssueSearch::registerMilestone);
 
-	// type
 	private final String key;
 	private final BiConsumer<IssueSearch, String> register;
 
