@@ -81,4 +81,17 @@ class MilestoneServiceTest {
 				.extracting("errorCode").isEqualTo(ErrorCode.MILESTONE_NOT_FOUND);
 		}
 	}
+
+	@DisplayName("마일스톤 삭제에 성공한다.")
+	@Test
+	void remove() {
+		// given
+		milestoneService.register("BE Sprint #1", null, null);
+
+		// when
+		milestoneService.remove(1);
+
+		// then
+		assertThat(milestoneService.findAll()).hasSize(0);
+	}
 }

@@ -106,4 +106,25 @@ class MilestoneControllerTest extends ControllerTest {
 				.andDo(print());
 		}
 	}
+
+	@DisplayName("마일스톤을 삭제할 때 ")
+	@Nested
+	class MilestoneRemoveTest {
+
+		@DisplayName("마일스톤 삭제에 성공한다.")
+		@Test
+		void remove() throws Exception {
+			// given
+			willDoNothing().given(milestoneService).remove(anyInt());
+
+			// when & then
+			mockMvc.perform(
+					delete("/api/milestones/1")
+						.contentType(MediaType.APPLICATION_JSON)
+						.header(HttpHeaders.AUTHORIZATION,
+							"Bearer " + jwtProvider.createToken(Map.of("userId", "1")).getAccessToken()))
+				.andExpect(status().isNoContent())
+				.andDo(print());
+		}
+	}
 }

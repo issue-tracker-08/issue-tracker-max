@@ -67,4 +67,15 @@ class MilestoneServiceTest {
 				.extracting("errorCode").isEqualTo(ErrorCode.MILESTONE_NOT_FOUND);
 		}
 	}
+
+	@DisplayName("마일스톤 삭제에 성공한다.")
+	@Test
+	void remove() {
+		// given
+		willDoNothing().given(milestoneRepository).deleteById(anyInt());
+
+		// when & then
+		assertThatCode(() -> milestoneService.remove(1))
+			.doesNotThrowAnyException();
+	}
 }

@@ -19,7 +19,8 @@ public class MilestoneAcceptanceTest extends AcceptanceTest {
 		// given
 		var given = RestAssured
 			.given().log().all()
-			.header(HttpHeaders.AUTHORIZATION, "Bearer " + jwtProvider.createToken(Map.of("userId", "1")).getAccessToken())
+			.header(HttpHeaders.AUTHORIZATION,
+				"Bearer " + jwtProvider.createToken(Map.of("userId", "1")).getAccessToken())
 			.contentType(MediaType.APPLICATION_JSON_VALUE)
 			.body(Map.of(
 				"milestoneName", "BE 1주차 스프린트",
@@ -35,5 +36,26 @@ public class MilestoneAcceptanceTest extends AcceptanceTest {
 
 		// then
 		assertThat(response.statusCode()).isEqualTo(201);
+	}
+
+	@DisplayName("마일스톤 삭제에 성공한다.")
+	@Test
+	void remove() {
+		// given
+		var given = RestAssured
+			.given().log().all()
+			.header(HttpHeaders.AUTHORIZATION,
+				"Bearer " + jwtProvider.createToken(Map.of("userId", "1")).getAccessToken())
+			.contentType(MediaType.APPLICATION_JSON_VALUE);
+
+		// when
+		var response = given
+			.when()
+			.delete("/api/milestones/1")
+			.then().log().all()
+			.extract();
+
+		// then
+		assertThat(response.statusCode()).isEqualTo(204);
 	}
 }
