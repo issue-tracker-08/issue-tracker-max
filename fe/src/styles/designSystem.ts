@@ -112,6 +112,8 @@ export const lightMode = {
       "brightness(0) saturate(100%) invert(100%) sepia(6%) saturate(2%) hue-rotate(48deg) brightness(105%) contrast(99%);",
     brandTextWeak:
       "brightness(0) saturate(100%) invert(29%) sepia(66%) saturate(2882%) hue-rotate(201deg) brightness(103%) contrast(105%);",
+    dangerTextDefault:
+      "brightness(0) saturate(100%) invert(44%) sepia(47%) saturate(7165%) hue-rotate(341deg) brightness(98%) contrast(106%);",
   },
 };
 
@@ -173,5 +175,7 @@ export const darkMode = {
       "brightness(0) saturate(100%) invert(100%) sepia(6%) saturate(2%) hue-rotate(48deg) brightness(105%) contrast(99%);",
     brandTextWeak:
       "brightness(0) saturate(100%) invert(39%) sepia(89%) saturate(4222%) hue-rotate(199deg) brightness(100%) contrast(112%);",
+    dangerTextDefault:
+      "brightness(0) saturate(100%) invert(44%) sepia(47%) saturate(7165%) hue-rotate(341deg) brightness(98%) contrast(106%);",
   },
 };
