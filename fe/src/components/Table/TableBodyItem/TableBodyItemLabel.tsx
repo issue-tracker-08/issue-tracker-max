@@ -7,6 +7,9 @@ import { styled } from "styled-components";
 import TableBodyItem from "./TableBodyItem";
 
 export default function TableBodyItemLabel({ label }: { label: Label }) {
+  // TODO: onEdit
+  // TODO: onDelete
+
   return (
     <StyledTableBodyItemLabel>
       <LeftWrapper>
@@ -18,10 +21,12 @@ export default function TableBodyItemLabel({ label }: { label: Label }) {
       </CenterWrapper>
 
       <RightWrapper>
-        <Button variant="ghost" size="S" onClick={() => ""}>
+        {/* TODO: onEditClick */}
+        <Button variant="ghost" size="S">
           <img className="tab-button-icon" src={editIcon} alt="편집 취소" />
           <span className="tab-button-text">편집</span>
         </Button>
+        {/* TODO: onDeleteClick */}
         <Button variant="ghost" size="S">
           <img
             className="tab-button-icon delete"
