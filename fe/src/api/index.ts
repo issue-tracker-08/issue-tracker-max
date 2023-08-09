@@ -78,6 +78,31 @@ export const getLabels = async () => {
   return await fetcherWithBearer.get<Label[]>("/labels");
 };
 
+export const postLabel = async (body: {
+  name: string;
+  description: string;
+  fontColor: string;
+  backgroundColor: string;
+}) => {
+  return await fetcherWithBearer.post("/labels", body);
+};
+
+export const patchLabel = async (
+  labelId: number,
+  body: {
+    name: string;
+    description: string;
+    fontColor: string;
+    backgroundColor: string;
+  }
+) => {
+  return await fetcherWithBearer.patch(`/labels/${labelId}`, body);
+};
+
+export const deleteLabel = async (labelId: number) => {
+  return await fetcherWithBearer.patch(`/labels/${labelId}`);
+};
+
 export const getMilestones = async () => {
   return await fetcherWithBearer.get<Milestone[]>("/milestones");
 };
