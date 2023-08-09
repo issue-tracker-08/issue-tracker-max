@@ -25,4 +25,12 @@ public class Label {
 		this.fontColor = fontColor;
 		this.backgroundColor = backgroundColor;
 	}
+
+	public Label(Integer id, String name, String description, String fontColor, String backgroundColor) {
+		this.id = id;
+		this.name = name;
+		this.description = description;
+		this.fontColor = fontColor;
+		this.backgroundColor = backgroundColor;
+	}
 }

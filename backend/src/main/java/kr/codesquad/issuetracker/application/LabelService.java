@@ -27,8 +27,14 @@ public class LabelService {
 	}
 
 	@Transactional
-	public void register(String name, String description, String frontColor, String backgroundColor) {
-		Label label = new Label(name, description, frontColor, backgroundColor);
+	public void register(String name, String description, String fontColor, String backgroundColor) {
+		Label label = new Label(name, description, fontColor, backgroundColor);
 		labelRepository.save(label);
+	}
+
+	@Transactional
+	public void modify(Integer labelId, String name, String description, String fontColor, String backgroundColor) {
+		Label label = new Label(labelId, name, description, fontColor, backgroundColor);
+		labelRepository.update(label);
 	}
 }

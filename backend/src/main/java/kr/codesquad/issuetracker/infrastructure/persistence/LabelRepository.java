@@ -5,6 +5,7 @@ import java.util.List;
 import javax.sql.DataSource;
 
 import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
@@ -41,6 +42,19 @@ public class LabelRepository {
 
 	public void save(Label label) {
 		jdbcInsert.execute(new BeanPropertySqlParameterSource(label));
+	}
+
+	public void update(Label label) {
+		String sql = "UPDATE label SET name = :name, description = :description, font_color = :fontColor, "
+			+ "background_color = :backgroundColor WHERE id = :id";
+
+		MapSqlParameterSource param = new MapSqlParameterSource()
+			.addValue("id", label.getId())
+			.addValue("name", label.getName())
+			.addValue("description", label.getDescription())
+			.addValue("fontColor", label.getFontColor())
+			.addValue("backgroundColor", label.getBackgroundColor());
+		jdbcTemplate.update(sql, param);
 	}
 }
 
