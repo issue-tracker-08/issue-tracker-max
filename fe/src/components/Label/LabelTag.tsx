@@ -1,10 +1,13 @@
-import { Label as LabelType } from "@customTypes/index";
 import { styled } from "styled-components";
 
 export default function LabelTag({
-  label: { name, fontColor, backgroundColor },
+  name,
+  fontColor,
+  backgroundColor,
 }: {
-  label: LabelType;
+  name: string;
+  fontColor: string;
+  backgroundColor: string;
 }) {
   return (
     <StyledLabelTag $fontColor={fontColor} $backgroundColor={backgroundColor}>

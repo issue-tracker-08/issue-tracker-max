@@ -1,13 +1,17 @@
 import alertIcon from "@assets/icon/alertCircle.svg";
 import archiveIcon from "@assets/icon/archive.svg";
 import milestoneIcon from "@assets/icon/milestone.svg";
-import LabelTag from "@components/LabelTag";
+import LabelTag from "@components/Label/LabelTag";
 import InputCheckbox from "@components/common/Input/InputCheckbox";
 import { IssueItem as IssueItemType } from "@customTypes/index";
 import { convertPastTimestamp } from "@utils/time";
 import { styled } from "styled-components";
 
-export default function TableBodyItemIssue({ issue }: { issue: IssueItemType }) {
+export default function TableBodyItemIssue({
+  issue,
+}: {
+  issue: IssueItemType;
+}) {
   const {
     issueNumber,
     isOpen,
@@ -31,8 +35,8 @@ export default function TableBodyItemIssue({ issue }: { issue: IssueItemType }) 
               <img className="alert-icon" src={archiveIcon} alt="닫힌 이슈" />
             )}
             <IssueTitle href={`/issues/${issueNumber}`}>{title}</IssueTitle>
-            {labels.map((label) => (
-              <LabelTag key={label.name} label={label} />
+            {labels.map(({ name, fontColor, backgroundColor }) => (
+              <LabelTag {...{ key: name, name, fontColor, backgroundColor }} />
             ))}
           </div>
         </IssueHeader>
