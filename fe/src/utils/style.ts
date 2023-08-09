@@ -7,3 +7,14 @@ export const decToHex = (opacity: number) => {
     .toUpperCase()
     .padStart(2, "0");
 };
+
+export const isValidHexColor = (string: string) => {
+  return /^#([0-9A-F]{3}){1,2}$/i.test(string);
+};
+
+export const generateRandomHexColor = () => {
+  return `#${Math.floor(Math.random() * 16777215)
+    .toString(16)
+    .padStart(6, "0")
+    .toUpperCase()}`;
+};
