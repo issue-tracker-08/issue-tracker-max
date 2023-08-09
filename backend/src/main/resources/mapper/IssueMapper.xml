@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.codesquad.issuetracker.infrastructure.persistence.mapper.IssueDAO">
+    <resultMap id="issueResultMap" type="issueSimpleMapper">
+        <id property="issueNumber" column="issue_id" />
+        <result property="isOpen" column="issue_title" />
+<!--        <collection property="labels" ofType="labelSimpleMapper"/>-->
+        <result property="title" column="issue_content" />
+        <result property="milestone" column="issue_is_open" />
+<!--        <collection property="assignees" ofType="assigneeSimpleMapper"/>-->
+        <result property="createdAt" column="issue_create_at" />
+    </resultMap>
+</mapper>

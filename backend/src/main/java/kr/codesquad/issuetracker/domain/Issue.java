@@ -6,7 +6,8 @@ import java.util.Objects;
 import lombok.Getter;
 
 @Getter
-public class Issue {
+public class
+Issue {
 
 	private Integer id;
 	private String title;

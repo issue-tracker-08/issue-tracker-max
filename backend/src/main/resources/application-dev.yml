@@ -8,6 +8,12 @@ spring:
     init:
       mode: always
 
+mybatis:
+  type-aliases-package:
+    kr.codesquad.issuetracker.domain,
+    kr.codesquad.issuetracker.infrastructure.persistence.mapper
+  mapper-locations: classpath:mapper/*.xml
+
 cloud:
   aws:
     credentials:

@@ -12,45 +12,23 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
+@Setter
 @AllArgsConstructor
 @Getter
 public class IssueSimpleMapper {
 
 	private Integer issueNumber;
-	private boolean isOpen;
+	private Boolean isOpen;
 	private List<LabelSimpleMapper> labels;
 	private String title;
 	private String milestone;
 	private List<AssigneeSimpleMapper> assignees;
 	private LocalDateTime createdAt;
-
-	@AllArgsConstructor
-	@NoArgsConstructor
-	@Getter
-	public static class LabelSimpleMapper {
-		private String name;
-		private String fontColor;
-		private String backgroundColor;
-
-		public boolean hasValue() {
-			return StringUtils.hasText(name);
-		}
-	}
-
-	@AllArgsConstructor
-	@NoArgsConstructor
-	@Getter
-	public static class AssigneeSimpleMapper {
-		private String username;
-		private String profileUrl;
-
-		public boolean hasValue() {
-			return StringUtils.hasText(username);
-		}
-	}
 
 	public static IssueSimpleMapper of(Integer issueNumber, boolean isOpen, String labels, String title,
 		String milestone, String assignees, LocalDateTime createdAt) {
