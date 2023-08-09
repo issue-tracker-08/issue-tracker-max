@@ -38,6 +38,7 @@ const border = {
 const font = {
   displayBold32: "700 32px Pretendard, sans-serif",
   displayBold24: "700 24px Pretendard, sans-serif",
+  displayBold20: "700 20px Pretendard, sans-serif",
   displayBold16: "700 16px Pretendard, sans-serif",
   displayBold14: "700 14px Pretendard, sans-serif",
   displayBold12: "700 12px Pretendard, sans-serif",
