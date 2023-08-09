@@ -19,12 +19,12 @@ public class AuthPrincipalArgumentResolver implements HandlerMethodArgumentResol
 	@Override
 	public boolean supportsParameter(MethodParameter parameter) {
 		return parameter.hasParameterAnnotation(AuthPrincipal.class)
-			&& parameter.getParameterType().equals(Integer.class);
+			&& parameter.getParameterType().equals(Principal.class);
 	}
 
 	@Override
 	public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer,
 		NativeWebRequest webRequest, WebDataBinderFactory binderFactory) {
-		return Integer.valueOf(authenticationContext.getPrincipal());
+		return authenticationContext.getPrincipal();
 	}
 }

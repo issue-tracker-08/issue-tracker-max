@@ -1,9 +1,11 @@
 package kr.codesquad.issuetracker.infrastructure.security.jwt;
 
 import static org.assertj.core.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.nio.charset.StandardCharsets;
 import java.util.Date;
+import java.util.Map;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -14,6 +16,7 @@ import io.jsonwebtoken.security.Keys;
 import kr.codesquad.issuetracker.exception.ApplicationException;
 import kr.codesquad.issuetracker.exception.ErrorCode;
 import kr.codesquad.issuetracker.infrastructure.config.jwt.JwtProperties;
+import kr.codesquad.issuetracker.presentation.auth.Principal;
 import kr.codesquad.issuetracker.presentation.response.LoginSuccessResponse;
 
 class JwtProviderTest {
@@ -27,7 +30,7 @@ class JwtProviderTest {
 		// given
 
 		// when
-		LoginSuccessResponse.TokenResponse token = jwtProvider.createToken("1");
+		LoginSuccessResponse.TokenResponse token = jwtProvider.createToken(Map.of("userId", "1"));
 
 		// then
 		assertThat(token.getAccessToken()).isNotBlank();
@@ -62,16 +65,22 @@ class JwtProviderTest {
 			.extracting("errorCode").isEqualTo(ErrorCode.EXPIRED_JWT);
 	}
 
-	@DisplayName("토큰에서 userId를 추출한다.")
+	@DisplayName("토큰에서 유저 정보가 담긴 Principal을 추출한다.")
 	@Test
 	void givenToken_thenExtractUserId() {
 		// given
-		LoginSuccessResponse.TokenResponse token = jwtProvider.createToken("13");
+		LoginSuccessResponse.TokenResponse token = jwtProvider.createToken(Map.of(
+			"userId", "13",
+			"loginId", "bean1234"
+		));
 
 		// when
-		String userId = jwtProvider.extractUserId(token.getAccessToken());
+		Principal principal = jwtProvider.extractPrincipal(token.getAccessToken());
 
 		// then
-		assertThat(userId).isEqualTo("13");
+		assertAll(
+			() -> assertThat(principal.getUserId()).isEqualTo(13),
+			() -> assertThat(principal.getLoginId()).isEqualTo("bean1234")
+		);
 	}
 }

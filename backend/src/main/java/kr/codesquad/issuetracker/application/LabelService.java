@@ -6,6 +6,7 @@ import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import kr.codesquad.issuetracker.domain.Label;
 import kr.codesquad.issuetracker.infrastructure.persistence.LabelRepository;
 import kr.codesquad.issuetracker.presentation.response.LabelResponse;
 import lombok.RequiredArgsConstructor;
@@ -23,5 +24,11 @@ public class LabelService {
 				label.getId(), label.getName(), label.getFontColor(), label.getBackgroundColor()
 			))
 			.collect(Collectors.toList());
+	}
+
+	@Transactional
+	public void register(String name, String description, String frontColor, String backgroundColor) {
+		Label label = new Label(name, description, frontColor, backgroundColor);
+		labelRepository.save(label);
 	}
 }

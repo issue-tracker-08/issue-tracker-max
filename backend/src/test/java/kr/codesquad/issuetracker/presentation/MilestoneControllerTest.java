@@ -6,6 +6,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 import java.time.LocalDateTime;
+import java.util.Map;
 
 import org.apache.http.HttpHeaders;
 import org.junit.jupiter.api.DisplayName;
@@ -38,9 +39,8 @@ class MilestoneControllerTest extends ControllerTest {
 			mockMvc.perform(
 					post("/api/milestones")
 						.contentType(MediaType.APPLICATION_JSON)
-						.header(HttpHeaders.AUTHORIZATION, "Bearer " + jwtProvider.createToken("1").getAccessToken())
-						.content(objectMapper.writeValueAsBytes(
-							FixtureFactory.createMilestoneCommonRequest("1주차 마일스톤"))))
+						.header(HttpHeaders.AUTHORIZATION, "Bearer " + jwtProvider.createToken(Map.of("userId", "1")).getAccessToken())
+						.content(objectMapper.writeValueAsBytes(FixtureFactory.createMilestoneRegisterRequest("1주차 마일스톤"))))
 				.andExpect(status().isCreated())
 				.andDo(print());
 		}
@@ -55,7 +55,7 @@ class MilestoneControllerTest extends ControllerTest {
 			mockMvc.perform(
 					post("/api/milestones")
 						.contentType(MediaType.APPLICATION_JSON)
-						.header(HttpHeaders.AUTHORIZATION, "Bearer " + jwtProvider.createToken("1").getAccessToken())
+						.header(HttpHeaders.AUTHORIZATION, "Bearer " + jwtProvider.createToken(Map.of("userId", "1")).getAccessToken())
 						.content(objectMapper.writeValueAsString(FixtureFactory.createMilestoneCommonRequest(""))))
 				.andExpect(status().isBadRequest())
 				.andDo(print());
@@ -77,7 +77,7 @@ class MilestoneControllerTest extends ControllerTest {
 			mockMvc.perform(
 					put("/api/milestones/1")
 						.contentType(MediaType.APPLICATION_JSON)
-						.header(HttpHeaders.AUTHORIZATION, "Bearer " + jwtProvider.createToken("1").getAccessToken())
+						.header(HttpHeaders.AUTHORIZATION, "Bearer " + jwtProvider.createToken(Map.of("userId", "1")).getAccessToken())
 						.content(objectMapper.writeValueAsBytes(
 							FixtureFactory.createMilestoneCommonRequest("1주차 마일스톤"))))
 				.andExpect(status().isOk())
@@ -95,8 +95,8 @@ class MilestoneControllerTest extends ControllerTest {
 			mockMvc.perform(
 					put("/api/milestones/1")
 						.contentType(MediaType.APPLICATION_JSON)
-						.header(HttpHeaders.AUTHORIZATION, "Bearer " + jwtProvider.createToken("1").getAccessToken())
-						.content(objectMapper.writeValueAsString(FixtureFactory.createMilestoneCommonRequest(""))))
+						.header(HttpHeaders.AUTHORIZATION, "Bearer " + jwtProvider.createToken(Map.of("userId", "1")).getAccessToken())
+						.content(objectMapper.writeValueAsString(FixtureFactory.createMilestoneRegisterRequest(""))))
 				.andExpect(status().isBadRequest())
 				.andDo(print());
 		}

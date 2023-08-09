@@ -1,5 +1,7 @@
 package kr.codesquad.issuetracker.application;
 
+import java.util.Map;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -39,7 +41,11 @@ public class AuthService {
 			throw new ApplicationException(ErrorCode.FAILED_LOGIN);
 		}
 
-		LoginSuccessResponse.TokenResponse token = jwtProvider.createToken(String.valueOf(findUserAccount.getId()));
+		LoginSuccessResponse.TokenResponse token = jwtProvider.createToken(Map.of(
+			"userId", String.valueOf(findUserAccount.getId()),
+			"loginId", loginId
+		));
+
 		return new LoginSuccessResponse(token, findUserAccount.getProfileUrl(), findUserAccount.getLoginId());
 	}
 }
