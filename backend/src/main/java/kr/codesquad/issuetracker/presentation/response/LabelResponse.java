@@ -8,7 +8,8 @@ import lombok.Getter;
 public class LabelResponse {
 
 	private Integer labelId;
-	private String labelName;
+	private String name;
+	private String description;
 	private String fontColor;
 	private String backgroundColor;
 }

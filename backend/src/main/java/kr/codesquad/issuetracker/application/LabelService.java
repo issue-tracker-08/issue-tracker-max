@@ -21,7 +21,11 @@ public class LabelService {
 	public List<LabelResponse> findAll() {
 		return labelRepository.findAll().stream()
 			.map(label -> new LabelResponse(
-				label.getId(), label.getName(), label.getFontColor(), label.getBackgroundColor()
+				label.getId(),
+				label.getName(),
+				label.getDescription(),
+				label.getFontColor(),
+				label.getBackgroundColor()
 			))
 			.collect(Collectors.toList());
 	}
