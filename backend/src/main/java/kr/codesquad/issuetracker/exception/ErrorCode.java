@@ -25,7 +25,10 @@ public enum ErrorCode {
 	EXPIRED_JWT(401, "만료된 토큰입니다"),
 
 	// ISSUE
-	ISSUE_NOT_FOUND(404, "존재하지 않는 이슈입니다.");
+	ISSUE_NOT_FOUND(404, "존재하지 않는 이슈입니다."),
+
+	// MILESTONE
+	MILESTONE_NOT_FOUND(404, "존재하지 않는 마일스톤입니다.");
 
 	private final int statusCode;
 	private final String message;

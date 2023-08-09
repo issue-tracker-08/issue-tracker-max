@@ -7,6 +7,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import kr.codesquad.issuetracker.domain.Milestone;
+import kr.codesquad.issuetracker.exception.ApplicationException;
+import kr.codesquad.issuetracker.exception.ErrorCode;
 import kr.codesquad.issuetracker.infrastructure.persistence.MilestoneRepository;
 import kr.codesquad.issuetracker.presentation.response.MilestoneResponse;
 import lombok.RequiredArgsConstructor;
@@ -26,6 +28,15 @@ public class MilestoneService {
 	public void register(String name, String description, LocalDateTime dueDate) {
 		Milestone milestone = new Milestone(name, description, dueDate);
 		milestoneRepository.save(milestone);
+	}
+
+	@Transactional
+	public void modify(Integer milestoneId, String milestoneName, String description, LocalDateTime dueDate) {
+		Milestone milestone = milestoneRepository.findById(milestoneId)
+			.orElseThrow(() -> new ApplicationException(ErrorCode.MILESTONE_NOT_FOUND));
+
+		milestone.modify(milestoneName, description, dueDate);
+		milestoneRepository.update(milestone);
 	}
 }
 

@@ -1,10 +1,13 @@
 package kr.codesquad.issuetracker.infrastructure.persistence;
 
 import java.util.List;
+import java.util.Optional;
 
 import javax.sql.DataSource;
 
+import org.springframework.dao.support.DataAccessUtils;
 import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
@@ -39,7 +42,7 @@ public class MilestoneRepository {
 			rs.getInt("id"),
 			rs.getString("name"),
 			rs.getString("description"),
-			rs.getTimestamp("due_date").toLocalDateTime(),
+			rs.getTimestamp("due_date"),
 			rs.getInt("open_count"),
 			rs.getInt("closed_count")
 		));
@@ -47,5 +50,32 @@ public class MilestoneRepository {
 
 	public void save(Milestone milestone) {
 		jdbcInsert.execute(new BeanPropertySqlParameterSource(milestone));
+	}
+
+	public Optional<Milestone> findById(Integer milestoneId) {
+		String sql = "SELECT id, name, description, due_date "
+			+ "FROM milestone "
+			+ "WHERE id = :milestoneId AND is_deleted = FALSE";
+
+		MapSqlParameterSource params = new MapSqlParameterSource().addValue("milestoneId", milestoneId);
+		return Optional.ofNullable(DataAccessUtils.singleResult(
+			jdbcTemplate.query(sql, params, (rs, rowNum) -> new Milestone(
+				rs.getInt("id"),
+				rs.getString("name"),
+				rs.getString("description"),
+				rs.getTimestamp("due_date")))));
+	}
+
+	public void update(Milestone milestone) {
+		String sql = "UPDATE milestone "
+			+ "SET name = :name, description = :description, due_date = :dueDate "
+			+ "WHERE id = :id";
+
+		MapSqlParameterSource params = new MapSqlParameterSource()
+			.addValue("name", milestone.getName())
+			.addValue("description", milestone.getDescription())
+			.addValue("dueDate", milestone.getDueDate())
+			.addValue("id", milestone.getId());
+		jdbcTemplate.update(sql, params);
 	}
 }
