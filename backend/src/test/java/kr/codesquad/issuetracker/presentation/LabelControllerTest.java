@@ -35,5 +35,4 @@ class LabelControllerTest extends ControllerTest {
 					.content(objectMapper.writeValueAsString(request)))
 			.andExpect(status().isCreated());
 	}
-
 }
