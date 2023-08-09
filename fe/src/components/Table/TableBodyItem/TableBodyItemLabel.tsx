@@ -7,9 +7,6 @@ import { styled } from "styled-components";
 import TableBodyItem from "./TableBodyItem";
 
 export default function TableBodyItemLabel({ label }: { label: Label }) {
-  // TODO: onEdit
-  // TODO: onDelete
-
   return (
     <StyledTableBodyItemLabel>
       <LeftWrapper>
@@ -71,7 +68,7 @@ const RightWrapper = styled.div`
   }
 
   .tab-button-text {
-    font: ${({ theme: { font } }) => font.availableMD16};
+    font: ${({ theme: { font } }) => font.availableMD12};
     color: ${({ theme: { neutral } }) => neutral.text.default};
 
     &.delete {

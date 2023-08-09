@@ -1,4 +1,5 @@
+import EmptyTableBodyItem from "./EmptyTableBodyItem";
+import TableBodyItemIssue from "./TableBodyIssueItem";
 import TableBodyItemLabel from "./TableBodyItemLabel";
-// TODO: import TableBodyItemIssue
 
-export { TableBodyItemLabel };
+export { EmptyTableBodyItem, TableBodyItemIssue, TableBodyItemLabel };

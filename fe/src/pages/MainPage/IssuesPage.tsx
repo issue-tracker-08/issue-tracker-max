@@ -36,7 +36,7 @@ export default function IssuesPage() {
   const moveToNewIssuePage = () => navigate("/issues/new");
 
   return (
-    <div>
+    <>
       <IssuesNavBar>
         <FilterBar />
 
@@ -53,13 +53,11 @@ export default function IssuesPage() {
         </div>
       </IssuesNavBar>
 
-      {issuesList && (
-        <Table>
-          <TableHeaderIssues {...{ numOpen, numClosed }} />
-          <TableBodyIssues issuesList={issuesList} />
-        </Table>
-      )}
-    </div>
+      <Table>
+        <TableHeaderIssues {...{ numOpen, numClosed }} />
+        <TableBodyIssues issuesList={issuesList} />
+      </Table>
+    </>
   );
 }
 

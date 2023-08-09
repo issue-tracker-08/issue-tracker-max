@@ -1,7 +1,6 @@
 import { Label } from "@customTypes/index";
-import EmptyTableBodyItem from "./EmptyTableBodyItem";
-import TableBody from "./TableBody";
-import { TableBodyItemLabel } from "./TableBodyItem";
+import TableBody from "../TableBody/TableBody";
+import { EmptyTableBodyItem, TableBodyItemLabel } from "../TableBodyItem";
 
 export default function TableBodyLabels({
   labelsList,
@@ -22,5 +21,3 @@ export default function TableBodyLabels({
     </TableBody>
   );
 }
-
-// solve filename capitalization
