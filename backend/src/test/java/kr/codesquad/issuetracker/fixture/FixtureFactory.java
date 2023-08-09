@@ -5,7 +5,7 @@ import java.util.List;
 
 import kr.codesquad.issuetracker.presentation.request.IssueRegisterRequest;
 import kr.codesquad.issuetracker.presentation.request.LoginRequest;
-import kr.codesquad.issuetracker.presentation.request.MilestoneRegisterRequest;
+import kr.codesquad.issuetracker.presentation.request.MilestoneCommonRequest;
 import kr.codesquad.issuetracker.presentation.request.SignupRequest;
 import kr.codesquad.issuetracker.presentation.response.IssueDetailResponse;
 
@@ -35,7 +35,7 @@ public class FixtureFactory {
 			new IssueDetailResponse.Author("작성자", "url"));
 	}
 
-	public static MilestoneRegisterRequest createMilestoneRegisterRequest(String title) {
-		return new MilestoneRegisterRequest(title, null, null);
+	public static MilestoneCommonRequest createMilestoneCommonRequest(String title) {
+		return new MilestoneCommonRequest(title, null, null);
 	}
 }
