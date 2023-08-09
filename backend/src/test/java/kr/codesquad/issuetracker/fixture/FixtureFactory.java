@@ -32,7 +32,7 @@ public class FixtureFactory {
 
 	public static IssueDetailResponse createIssueDetailResponse() {
 		return new IssueDetailResponse(1, "이슈 제목", true, LocalDateTime.now(), "이슈 내용",
-			new IssueDetailResponse.Author("작성자", "url"));
+			new IssueDetailResponse.Author("작성자", "url"), 10);
 	}
 
 	public static MilestoneCommonRequest createMilestoneCommonRequest(String title) {

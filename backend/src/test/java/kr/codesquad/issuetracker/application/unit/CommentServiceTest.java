@@ -31,7 +31,7 @@ class CommentServiceTest {
 	@Test
 	void register() {
 		// given
-		willDoNothing().given(commentRepository).save(any(Comment.class));
+		given(commentRepository.save(any(Comment.class))).willReturn(1);
 
 		// when & then
 		assertThatCode(() -> commentService.register(1, "안녕하세요", 2))

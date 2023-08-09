@@ -17,6 +17,7 @@ import kr.codesquad.issuetracker.application.CommentService;
 import kr.codesquad.issuetracker.presentation.auth.AuthPrincipal;
 import kr.codesquad.issuetracker.presentation.auth.Principal;
 import kr.codesquad.issuetracker.presentation.request.CommentRequest;
+import kr.codesquad.issuetracker.presentation.response.CommentRegisterResponse;
 import kr.codesquad.issuetracker.presentation.response.CommentsResponse;
 import kr.codesquad.issuetracker.presentation.response.Slice;
 import lombok.RequiredArgsConstructor;
@@ -29,10 +30,10 @@ public class CommentController {
 	private final CommentService commentService;
 
 	@PostMapping
-	public ResponseEntity<Void> register(@AuthPrincipal Principal principal,
+	public ResponseEntity<CommentRegisterResponse> register(@AuthPrincipal Principal principal,
 		@Valid @RequestBody CommentRequest request, @PathVariable Integer issueId) {
-		commentService.register(principal.getUserId(), request.getContent(), issueId);
-		return ResponseEntity.status(HttpStatus.CREATED).build();
+		return ResponseEntity.status(HttpStatus.CREATED)
+			.body(commentService.register(principal.getUserId(), request.getContent(), issueId));
 	}
 
 	@PutMapping("/{commentId}")

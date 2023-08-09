@@ -1,8 +1,8 @@
 package kr.codesquad.issuetracker.presentation.response;
 
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 
+import kr.codesquad.issuetracker.presentation.support.DateTimeFormatterUtil;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -10,8 +10,6 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 public class IssueDetailResponse {
-
-	private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
 	private Integer issueId;
 	private String title;
@@ -27,7 +25,7 @@ public class IssueDetailResponse {
 		this.issueId = issueId;
 		this.title = title;
 		this.isOpen = isOpen;
-		this.createdAt = formatter.format(createdAt);
+		this.createdAt = DateTimeFormatterUtil.toString(createdAt);
 		this.content = content;
 		this.author = author;
 		this.commentCount = commentCount;
