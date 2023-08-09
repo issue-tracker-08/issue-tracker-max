@@ -79,7 +79,10 @@ public class IssueRepository {
 	public Optional<IssueDetailResponse> findIssueDetailResponseById(Integer issueId) {
 		String sql =
 			"SELECT issue.id, issue.title, issue.is_open, issue.created_at, issue.content, " +
-				"user_account.login_id, user_account.profile_url " +
+				"user_account.login_id, user_account.profile_url, ("
+				+ "SELECT COUNT(1) "
+				+ "FROM comment "
+				+ "WHERE comment.issue_id = :issueId AND comment.is_deleted = FALSE) AS comment_count " +
 				"FROM issue " +
 				"JOIN user_account ON issue.user_account_id = user_account.id AND user_account.is_deleted = FALSE " +
 				"WHERE issue.id = :issueId";
@@ -91,7 +94,8 @@ public class IssueRepository {
 				rs.getBoolean("is_open"),
 				rs.getTimestamp("created_at").toLocalDateTime(),
 				rs.getString("content"),
-				new IssueDetailResponse.Author(rs.getString("login_id"), rs.getString("profile_url"))
+				new IssueDetailResponse.Author(rs.getString("login_id"), rs.getString("profile_url")),
+				rs.getInt("comment_count")
 			))));
 	}
 

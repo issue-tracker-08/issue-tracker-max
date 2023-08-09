@@ -19,15 +19,18 @@ public class IssueDetailResponse {
 	private String createdAt;
 	private String content;
 	private Author author;
+	private Integer commentCount;
 
 	public IssueDetailResponse(Integer issueId, String title, Boolean isOpen, LocalDateTime createdAt, String content,
-		Author author) {
+		Author author,
+		Integer commentCount) {
 		this.issueId = issueId;
 		this.title = title;
 		this.isOpen = isOpen;
 		this.createdAt = formatter.format(createdAt);
 		this.content = content;
 		this.author = author;
+		this.commentCount = commentCount;
 	}
 
 	@Getter
