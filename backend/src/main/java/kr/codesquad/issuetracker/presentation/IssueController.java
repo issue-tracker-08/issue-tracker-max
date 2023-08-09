@@ -6,12 +6,14 @@ import java.util.Map;
 import javax.validation.Valid;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import kr.codesquad.issuetracker.application.IssueService;
@@ -35,7 +37,13 @@ public class IssueController {
 	private final IssueService issueService;
 
 	@GetMapping
-	public ResponseEntity<List<IssueSimpleMapper>> findAll() {
+	public ResponseEntity<List<IssueSimpleMapper>> findAll(@AuthPrincipal Principal principal,
+		@RequestParam(value = "q", required = false) String searchBar) {
+		System.out.println(searchBar);
+		if (StringUtils.hasText(searchBar)) {
+			return ResponseEntity.ok(issueService.findAll(principal.getLoginId(), searchBar));
+		}
+
 		return ResponseEntity.ok(issueService.findAll());
 	}
 

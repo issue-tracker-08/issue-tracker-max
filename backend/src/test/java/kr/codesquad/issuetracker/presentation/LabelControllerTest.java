@@ -4,6 +4,8 @@ import static org.mockito.BDDMockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
+import java.util.Map;
+
 import org.apache.http.HttpHeaders;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -31,7 +33,7 @@ class LabelControllerTest extends ControllerTest {
 		mockMvc.perform(
 				post("/api/labels")
 					.contentType(MediaType.APPLICATION_JSON)
-					.header(HttpHeaders.AUTHORIZATION, "Bearer " + jwtProvider.createToken("1").getAccessToken())
+					.header(HttpHeaders.AUTHORIZATION, "Bearer " + jwtProvider.createToken(Map.of("userId", "1")).getAccessToken())
 					.content(objectMapper.writeValueAsString(request)))
 			.andExpect(status().isCreated());
 	}
