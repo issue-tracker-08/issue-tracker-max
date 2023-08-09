@@ -1,10 +1,11 @@
 package kr.codesquad.issuetracker.application;
 
 import static org.assertj.core.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.Comparator;
+import java.util.List;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,15 +27,24 @@ class LabelServiceTest {
 	@MockBean
 	private S3Service s3Service;
 
-	@BeforeEach
-	void setUp() {
-		databaseInitializer.initTables();
-	}
-
 	@DisplayName("label 목록 조회시 이름순으로 정렬이 된다.")
 	@Test
 	void findLabelsSortedNameAscending() {
 		assertThat(labelService.findAll())
 			.isSortedAccordingTo(Comparator.comparing(LabelResponse::getLabelName));
+	}
+
+	@DisplayName("label 수정에 성공한다.")
+	@Test
+	void modify() {
+		labelService.register("before", null, "white", "1234");
+		labelService.modify(1, "after", null, "black", "1111");
+		List<LabelResponse> result = labelService.findAll();
+
+		assertAll(
+			() -> assertThat(result.get(0).getLabelName()).isEqualTo("after"),
+			() -> assertThat(result.get(0).getFontColor()).isEqualTo("black"),
+			() -> assertThat(result.get(0).getBackgroundColor()).isEqualTo("1111"));
+
 	}
 }

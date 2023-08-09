@@ -33,4 +33,15 @@ class LabelServiceTest {
 		assertThatCode(() -> labelService.register("feat", null, "#1234", "black"))
 			.doesNotThrowAnyException();
 	}
+
+	@DisplayName("레이블 수정에 성공한다.")
+	@Test
+	void modify() {
+		// given
+		willDoNothing().given(labelRepository).update(any(Label.class));
+
+		// when & then
+		assertThatCode(() -> labelService.modify(1, "after", null, "1111", "black"))
+			.doesNotThrowAnyException();
+	}
 }
