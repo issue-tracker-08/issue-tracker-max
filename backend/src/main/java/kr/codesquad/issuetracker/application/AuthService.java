@@ -17,8 +17,6 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 @Service
 public class AuthService {
-	private static final String USER_ID = "userId";
-	private static final String LOGIN_ID = "loginId";
 
 	private final PasswordEncoder passwordEncoder;
 	private final JwtProvider jwtProvider;
@@ -44,8 +42,8 @@ public class AuthService {
 		}
 
 		LoginSuccessResponse.TokenResponse token = jwtProvider.createToken(Map.of(
-			USER_ID, String.valueOf(findUserAccount.getId()),
-			LOGIN_ID, loginId
+			"userId", String.valueOf(findUserAccount.getId()),
+			"loginId", loginId
 		));
 
 		return new LoginSuccessResponse(token, findUserAccount.getProfileUrl(), findUserAccount.getLoginId());
