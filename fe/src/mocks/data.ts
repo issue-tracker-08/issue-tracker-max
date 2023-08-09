@@ -142,36 +142,42 @@ export const labelList = [
     name: "bug",
     fontColor: "#FFF",
     backgroundColor: "#D73A4A",
+    description: "bug fix",
   },
   {
     labelId: 2,
     name: "docs",
     fontColor: "#FFF",
     backgroundColor: "#2675CA",
+    description: "documentation",
   },
   {
     labelId: 3,
     name: "feat",
     fontColor: "#000",
     backgroundColor: "#FACA02",
+    description: "new feature",
   },
   {
     labelId: 4,
     name: "style",
     fontColor: "#FFF",
     backgroundColor: "#0025E6",
+    description: "changes unrelated to source code",
   },
   {
     labelId: 5,
     name: "asdf",
     fontColor: "#FFF",
     backgroundColor: "#0025E6",
+    description: "",
   },
   {
     labelId: 6,
     name: "qerqer",
     fontColor: "#000",
     backgroundColor: "#FF3B30",
+    description: "",
   },
 ];
 
