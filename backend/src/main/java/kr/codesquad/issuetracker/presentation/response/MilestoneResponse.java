@@ -18,23 +18,25 @@ public class MilestoneResponse {
 	private String description;
 	@JsonInclude(value = JsonInclude.Include.NON_NULL)
 	private LocalDateTime dueDate;
+	private Boolean isOpen;
 	private Integer openIssueCount;
 	private Integer closedIssueCount;
 
-	public MilestoneResponse(Integer milestoneId, String milestoneName, String description, Timestamp dueDate,
-		Integer openIssueCount, Integer closedIssueCount) {
+	public MilestoneResponse(Integer milestoneId,
+		String milestoneName,
+		String description,
+		Timestamp dueDate,
+		Boolean isOpen,
+		Integer openIssueCount,
+		Integer closedIssueCount) {
 		this.milestoneId = milestoneId;
 		this.milestoneName = milestoneName;
 		this.description = description;
 		if (dueDate != null) {
 			this.dueDate = dueDate.toLocalDateTime();
 		}
+		this.isOpen = isOpen;
 		this.openIssueCount = openIssueCount;
 		this.closedIssueCount = closedIssueCount;
-	}
-
-	public MilestoneResponse(Integer milestoneId, String milestoneName, Integer openIssueCount,
-		Integer closedIssueCount) {
-		this(milestoneId, milestoneName, null, null, openIssueCount, closedIssueCount);
 	}
 }
