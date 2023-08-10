@@ -1,7 +1,5 @@
 package kr.codesquad.issuetracker.infrastructure.persistence;
 
-import java.util.Collections;
-import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
@@ -9,7 +7,6 @@ import java.util.Optional;
 import javax.sql.DataSource;
 
 import org.springframework.dao.support.DataAccessUtils;
-import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
@@ -17,7 +14,6 @@ import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
 
 import kr.codesquad.issuetracker.domain.Issue;
-import kr.codesquad.issuetracker.infrastructure.persistence.mapper.IssueSimpleMapper;
 import kr.codesquad.issuetracker.presentation.response.IssueDetailResponse;
 
 @Repository
@@ -32,38 +28,6 @@ public class IssueRepository {
 			.withTableName("issue")
 			.usingGeneratedKeyColumns("id")
 			.usingColumns("title", "is_open", "content", "user_account_id", "milestone_id");
-	}
-
-	public List<IssueSimpleMapper> findAll() {
-		String sql = "SELECT issue.id, issue.is_open, issue.title, issue.created_at, milestone.name as milestone, "
-			+ "CONCAT('[', GROUP_CONCAT(DISTINCT JSON_OBJECT( "
-			+ "'name', label.name, 'fontColor', label.font_color, 'backgroundColor', label.background_color)), ']') as labels, "
-			+ "IFNULL(author.login_id, '(알수없음)') as author_name, "
-			+ "CONCAT('[', GROUP_CONCAT(DISTINCT JSON_OBJECT( "
-			+ "'username', user_account.login_id, 'profileUrl', user_account.profile_url)), ']') as assignee "
-			+ "FROM issue "
-			+ "LEFT JOIN issue_label ON issue.id = issue_label.issue_id "
-			+ "LEFT JOIN label ON label.id = issue_label.label_id AND label.is_deleted = false "
-			+ "LEFT JOIN issue_assignee assignee ON issue.id = assignee.issue_id "
-			+ "LEFT JOIN user_account ON user_account.id = assignee.user_account_id AND user_account.is_deleted = false "
-			+ "LEFT JOIN milestone ON issue.milestone_id = milestone.id AND milestone.is_deleted = false "
-			+ "LEFT JOIN user_account author ON author.id = issue.user_account_id AND author.is_deleted = false "
-			+ "WHERE issue.is_deleted = false "
-			+ "GROUP BY issue.id "
-			+ "ORDER BY issue.id DESC";
-
-		return jdbcTemplate.query(sql, Collections.emptyMap(), mapSimpleIssue());
-	}
-
-	private static RowMapper<IssueSimpleMapper> mapSimpleIssue() {
-		return (rs, rowNum) -> IssueSimpleMapper.of(
-			rs.getInt("id"),
-			rs.getBoolean("is_open"),
-			rs.getString("labels"),
-			rs.getString("title"),
-			rs.getString("milestone"),
-			rs.getString("assignee"),
-			rs.getTimestamp("created_at").toLocalDateTime());
 	}
 
 	public Integer save(Issue issue) {

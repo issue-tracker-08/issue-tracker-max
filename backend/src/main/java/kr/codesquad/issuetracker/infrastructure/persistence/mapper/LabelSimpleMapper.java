@@ -12,11 +12,8 @@ import lombok.Setter;
 @NoArgsConstructor
 @Getter
 public class LabelSimpleMapper {
+	private Integer id;
 	private String name;
 	private String fontColor;
 	private String backgroundColor;
-
-	public boolean hasValue() {
-		return StringUtils.hasText(name);
-	}
 }

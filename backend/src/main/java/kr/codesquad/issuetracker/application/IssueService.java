@@ -74,7 +74,8 @@ public class IssueService {
 
 	@Transactional(readOnly = true)
 	public List<IssueSimpleMapper> findAll() {
-		return issueRepository.findAll();
+		return issueMapper.findAll(null);
+		// return issueRepository.findAll();
 	}
 
 	@Transactional(readOnly = true)
