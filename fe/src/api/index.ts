@@ -100,7 +100,7 @@ export const patchLabel = async (
 };
 
 export const deleteLabel = async (labelId: number) => {
-  return await fetcherWithBearer.patch(`/labels/${labelId}`);
+  return await fetcherWithBearer.delete(`/labels/${labelId}`);
 };
 
 export const getMilestones = async () => {
