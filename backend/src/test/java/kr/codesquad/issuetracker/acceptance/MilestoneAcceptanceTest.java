@@ -25,7 +25,7 @@ public class MilestoneAcceptanceTest extends AcceptanceTest {
 			.body(Map.of(
 				"milestoneName", "BE 1주차 스프린트",
 				"description", "화이팅!",
-				"dueDate", "2023-09-01 00:00:00"));
+				"dueDate", "2023-09-01"));
 
 		// when
 		var response = given

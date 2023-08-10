@@ -5,7 +5,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.Map;
 
 import org.apache.http.HttpHeaders;
@@ -33,7 +33,7 @@ class MilestoneControllerTest extends ControllerTest {
 		@Test
 		void register() throws Exception {
 			// given
-			willDoNothing().given(milestoneService).register(anyString(), anyString(), any(LocalDateTime.class));
+			willDoNothing().given(milestoneService).register(anyString(), anyString(), any(LocalDate.class));
 
 			// when & then
 			mockMvc.perform(
@@ -51,7 +51,7 @@ class MilestoneControllerTest extends ControllerTest {
 		@Test
 		void givenInvalidRegisterInfo_thenResponse400() throws Exception {
 			// given
-			willDoNothing().given(milestoneService).register(anyString(), anyString(), any(LocalDateTime.class));
+			willDoNothing().given(milestoneService).register(anyString(), anyString(), any(LocalDate.class));
 
 			// when & then
 			mockMvc.perform(
@@ -74,7 +74,7 @@ class MilestoneControllerTest extends ControllerTest {
 		void modify() throws Exception {
 			// given
 			willDoNothing().given(milestoneService)
-				.modify(anyInt(), anyString(), anyString(), any(LocalDateTime.class));
+				.modify(anyInt(), anyString(), anyString(), any(LocalDate.class));
 
 			// when & then
 			mockMvc.perform(
@@ -93,7 +93,7 @@ class MilestoneControllerTest extends ControllerTest {
 		void givenInvalidRegisterInfo_thenResponse400() throws Exception {
 			// given
 			willDoNothing().given(milestoneService)
-				.modify(anyInt(), anyString(), anyString(), any(LocalDateTime.class));
+				.modify(anyInt(), anyString(), anyString(), any(LocalDate.class));
 
 			// when & then
 			mockMvc.perform(

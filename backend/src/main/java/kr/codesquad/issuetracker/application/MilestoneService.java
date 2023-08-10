@@ -1,6 +1,6 @@
 package kr.codesquad.issuetracker.application;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
@@ -25,13 +25,13 @@ public class MilestoneService {
 	}
 
 	@Transactional
-	public void register(String name, String description, LocalDateTime dueDate) {
+	public void register(String name, String description, LocalDate dueDate) {
 		Milestone milestone = new Milestone(name, description, dueDate);
 		milestoneRepository.save(milestone);
 	}
 
 	@Transactional
-	public void modify(Integer milestoneId, String milestoneName, String description, LocalDateTime dueDate) {
+	public void modify(Integer milestoneId, String milestoneName, String description, LocalDate dueDate) {
 		Milestone milestone = milestoneRepository.findById(milestoneId)
 			.orElseThrow(() -> new ApplicationException(ErrorCode.MILESTONE_NOT_FOUND));
 

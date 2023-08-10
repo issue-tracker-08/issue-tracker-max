@@ -44,7 +44,7 @@ class LabelServiceTest {
 		List<LabelResponse> result = labelService.findAll();
 
 		assertAll(
-			() -> assertThat(result.get(0).getLabelName()).isEqualTo("after"),
+			() -> assertThat(result.get(0).getName()).isEqualTo("after"),
 			() -> assertThat(result.get(0).getFontColor()).isEqualTo("black"),
 			() -> assertThat(result.get(0).getBackgroundColor()).isEqualTo("1111"));
 

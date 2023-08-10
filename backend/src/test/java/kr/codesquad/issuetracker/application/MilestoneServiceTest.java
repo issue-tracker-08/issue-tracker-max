@@ -3,7 +3,7 @@ package kr.codesquad.issuetracker.application;
 import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.List;
 
 import org.junit.jupiter.api.DisplayName;
@@ -30,7 +30,7 @@ class MilestoneServiceTest {
 	@Test
 	void register() {
 		// given
-		LocalDateTime dueDate = LocalDateTime.of(2023, 9, 1, 0, 0, 0);
+		LocalDate dueDate = LocalDate.of(2023, 9, 1);
 
 		// when
 		milestoneService.register("BE 1주차 스프린트", "열심히 하자", dueDate);
@@ -54,7 +54,7 @@ class MilestoneServiceTest {
 		@Test
 		void modify() {
 			// given
-			LocalDateTime dueDate = LocalDateTime.parse("2023-09-01T00:00:00");
+			LocalDate dueDate = LocalDate.of(2023, 9, 1);
 			milestoneService.register("BE 1주차 스프린트", null, null);
 
 			// when
