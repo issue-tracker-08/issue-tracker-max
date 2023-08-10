@@ -67,7 +67,7 @@ export default function DropdownIndicator({
 }
 
 const StyledDropdownIndicator = styled.div`
-  width: 80px;
+  min-width: 80px;
   height: 32px;
   position: relative;
 `;
@@ -80,6 +80,7 @@ const Button = styled.button<{ $isOpen: boolean }>`
   display: flex;
   justify-content: space-between;
   align-items: center;
+  gap: 4px;
   background: none;
   border: none;
   cursor: pointer;
