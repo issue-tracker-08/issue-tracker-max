@@ -8,6 +8,7 @@ import org.springframework.context.annotation.Import;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import kr.codesquad.config.JwtConfig;
+import kr.codesquad.config.OAuthConfig;
 import kr.codesquad.issuetracker.domain.AuthenticationContext;
 import kr.codesquad.issuetracker.infrastructure.security.hash.PasswordEncoder;
 import kr.codesquad.issuetracker.infrastructure.security.hash.SHA256;
@@ -17,7 +18,7 @@ import kr.codesquad.issuetracker.presentation.filter.JwtFilter;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
-@Import(JwtConfig.class)
+@Import({JwtConfig.class, OAuthConfig.class})
 @Configuration
 public class SecurityConfig {
 
