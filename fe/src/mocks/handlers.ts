@@ -164,4 +164,16 @@ export const handlers = [
   rest.put("/api/issues/:issueId/content", async (_, res, ctx) => {
     return res(ctx.status(200));
   }),
+
+  rest.post("/api/labels", async (_, res, ctx) => {
+    return res(ctx.status(201));
+  }),
+
+  rest.patch("/api/labels/:labelId", async (_, res, ctx) => {
+    return res(ctx.status(200));
+  }),
+
+  rest.delete("/api/labels/:labelId", async (_, res, ctx) => {
+    return res(ctx.status(204));
+  }),
 ];
