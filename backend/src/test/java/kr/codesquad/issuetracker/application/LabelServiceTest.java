@@ -39,10 +39,14 @@ class LabelServiceTest {
 	@DisplayName("label 수정에 성공한다.")
 	@Test
 	void modify() {
+		// given
 		labelService.register("before", null, "white", "1234");
-		labelService.modify(1, "after", null, "black", "1111");
-		List<LabelResponse> result = labelService.findAll();
 
+		// when
+		labelService.modify(1, "after", null, "black", "1111");
+
+		// then
+		List<LabelResponse> result = labelService.findAll();
 		assertAll(
 			() -> assertThat(result.get(0).getName()).isEqualTo("after"),
 			() -> assertThat(result.get(0).getFontColor()).isEqualTo("black"),
@@ -52,9 +56,13 @@ class LabelServiceTest {
 	@DisplayName("label 삭제에 성공한다.")
 	@Test
 	void remove() {
+		// given
 		labelService.register("before", null, "white", "1234");
+
+		// when
 		labelService.remove(1);
 
+		// then
 		assertThat(labelService.findAll()).isEmpty();
 	}
 }
