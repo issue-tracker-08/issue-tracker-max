@@ -20,8 +20,8 @@ public class MilestoneService {
 	private final MilestoneRepository milestoneRepository;
 
 	@Transactional(readOnly = true)
-	public List<MilestoneResponse> findAll() {
-		return milestoneRepository.findAll();
+	public List<MilestoneResponse> findAll(boolean isOpen) {
+		return milestoneRepository.findAll(isOpen);
 	}
 
 	@Transactional

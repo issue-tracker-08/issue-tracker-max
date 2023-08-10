@@ -36,7 +36,7 @@ class MilestoneServiceTest {
 		milestoneService.register("BE 1주차 스프린트", "열심히 하자", dueDate);
 
 		// then
-		List<MilestoneResponse> milestones = milestoneService.findAll();
+		List<MilestoneResponse> milestones = milestoneService.findAll(true);
 		assertAll(
 			() -> assertThat(milestones).hasSize(1),
 			() -> assertThat(milestones.get(0).getMilestoneId()).isEqualTo(1),
@@ -61,7 +61,7 @@ class MilestoneServiceTest {
 			milestoneService.modify(1, "BE 2주차 스프린트", "2주차", dueDate);
 
 			// then
-			List<MilestoneResponse> result = milestoneService.findAll();
+			List<MilestoneResponse> result = milestoneService.findAll(true);
 
 			assertAll(
 				() -> assertThat(result.get(0).getMilestoneName()).isEqualTo("BE 2주차 스프린트"),
@@ -92,6 +92,6 @@ class MilestoneServiceTest {
 		milestoneService.remove(1);
 
 		// then
-		assertThat(milestoneService.findAll()).hasSize(0);
+		assertThat(milestoneService.findAll(true)).hasSize(0);
 	}
 }

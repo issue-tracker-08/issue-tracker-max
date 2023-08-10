@@ -30,8 +30,9 @@ public class MilestoneController {
 	private final MilestoneService milestoneService;
 
 	@GetMapping
-	public ResponseEntity<List<MilestoneResponse>> findAll() {
-		return ResponseEntity.ok(milestoneService.findAll());
+	public ResponseEntity<List<MilestoneResponse>> findAll(
+		@RequestParam(value = "state", required = false, defaultValue = "open") OpenState state) {
+		return ResponseEntity.ok(milestoneService.findAll(state.isOpen()));
 	}
 
 	@PostMapping
