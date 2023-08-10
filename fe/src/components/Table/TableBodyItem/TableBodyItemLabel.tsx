@@ -1,38 +1,84 @@
 import editIcon from "@assets/icon/edit.svg";
 import trashIcon from "@assets/icon/trash.svg";
-import LabelTag from "@components/LabelTag";
+import LabelEditor from "@components/Label/LabelEditor";
+import LabelTag from "@components/Label/LabelTag";
 import Button from "@components/common/Button";
 import { Label } from "@customTypes/index";
+import { deleteLabel } from "api";
+import { AxiosError } from "axios";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { styled } from "styled-components";
 import TableBodyItem from "./TableBodyItem";
 
 export default function TableBodyItemLabel({ label }: { label: Label }) {
+  const navigate = useNavigate();
+
+  const [isEditing, setIsEditing] = useState(false);
+
+  const openEditor = () => {
+    setIsEditing(true);
+  };
+
+  const closeEditor = () => {
+    setIsEditing(false);
+  };
+
+  const onLabelDelete = async () => {
+    try {
+      const res = await deleteLabel(label.labelId);
+
+      if (res.status === 204) {
+        navigate(0);
+        return;
+      }
+
+      throw Error((res.data as AxiosError).message);
+    } catch (error) {
+      // TODO
+      console.error(error);
+    }
+  };
+
+  const { name, backgroundColor, fontColor } = label;
+
   return (
     <StyledTableBodyItemLabel>
-      <LeftWrapper>
-        <LabelTag label={label} />
-      </LeftWrapper>
+      {isEditing ? (
+        <LabelEditor variant="edit" label={label} closeEditor={closeEditor} />
+      ) : (
+        <>
+          <LeftWrapper>
+            <LabelTag
+              {...{
+                name,
+                backgroundColor,
+                fontColor,
+              }}
+            />
+          </LeftWrapper>
 
-      <CenterWrapper>
-        <p className="label-desc">label description</p>
-      </CenterWrapper>
+          <CenterWrapper>
+            <p className="label-desc">{label.description}</p>
+          </CenterWrapper>
 
-      <RightWrapper>
-        {/* TODO: onEditClick */}
-        <Button variant="ghost" size="S">
-          <img className="tab-button-icon" src={editIcon} alt="편집 취소" />
-          <span className="tab-button-text">편집</span>
-        </Button>
-        {/* TODO: onDeleteClick */}
-        <Button variant="ghost" size="S">
-          <img
-            className="tab-button-icon delete"
-            src={trashIcon}
-            alt="편집 완료"
-          />
-          <span className="tab-button-text delete">삭제</span>
-        </Button>
-      </RightWrapper>
+          <RightWrapper>
+            <Button variant="ghost" size="S" onClick={openEditor}>
+              <img className="tab-button-icon" src={editIcon} alt="편집 취소" />
+              <span className="tab-button-text">편집</span>
+            </Button>
+            {/* TODO: onDeleteClick */}
+            <Button variant="ghost" size="S" onClick={onLabelDelete}>
+              <img
+                className="tab-button-icon delete"
+                src={trashIcon}
+                alt="편집 완료"
+              />
+              <span className="tab-button-text delete">삭제</span>
+            </Button>
+          </RightWrapper>
+        </>
+      )}
     </StyledTableBodyItemLabel>
   );
 }

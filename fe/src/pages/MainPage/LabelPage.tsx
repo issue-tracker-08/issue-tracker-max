@@ -1,6 +1,7 @@
 import labelIcon from "@assets/icon/label.svg";
 import milestoneIcon from "@assets/icon/milestone.svg";
 import plusIcon from "@assets/icon/plus.svg";
+import LabelEditor from "@components/Label/LabelEditor";
 import { Table, TableBodyLabels, TableHeaderLabels } from "@components/Table";
 import Button from "@components/common/Button";
 import TabBar from "@components/common/TabBar";
@@ -15,7 +16,7 @@ export default function LabelPage() {
 
   const { data: labelsList } = useFetch(getLabels);
   const { data: milestonesList } = useFetch(getMilestones);
-  const [isAddNewLabel, setIsAddNewLabel] = useState(false);
+  const [isLabelEditorOpen, setIsLabelEditorOpen] = useState(false);
 
   const tabBarLeftInfo = {
     name: "레이블",
@@ -30,8 +31,12 @@ export default function LabelPage() {
     callback: () => navigate("/milestones"),
   };
 
-  const openAddNewLabel = () => {
-    setIsAddNewLabel(true);
+  const openLabelEditor = () => {
+    setIsLabelEditorOpen(true);
+  };
+
+  const closeLabelEditor = () => {
+    setIsLabelEditorOpen(false);
   };
 
   return (
@@ -46,14 +51,18 @@ export default function LabelPage() {
         <Button
           variant="container"
           size="S"
-          disabled={isAddNewLabel === true}
-          onClick={openAddNewLabel}>
+          disabled={isLabelEditorOpen === true}
+          onClick={openLabelEditor}>
           <img src={plusIcon} alt="편집 취소" />
           <span>레이블 추가</span>
         </Button>
       </LabelNav>
 
-      {isAddNewLabel && <div>add new label component</div>}
+      {isLabelEditorOpen && (
+        <LabelEditorContainer>
+          <LabelEditor variant="add" closeEditor={closeLabelEditor} />
+        </LabelEditorContainer>
+      )}
 
       <Table>
         <TableHeaderLabels numLabels={labelsList ? labelsList.length : 0} />
@@ -72,4 +81,12 @@ const StyledLabelPage = styled.div`
 const LabelNav = styled.nav`
   display: flex;
   justify-content: space-between;
+`;
+
+const LabelEditorContainer = styled.div`
+  padding: 32px;
+  background-color: ${({ theme: { neutral } }) => neutral.surface.strong};
+  border: ${({ theme: { border, neutral } }) =>
+    `${border.default} ${neutral.border.default}`};
+  border-radius: ${({ theme: { radius } }) => radius.m};
 `;
