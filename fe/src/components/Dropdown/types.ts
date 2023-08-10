@@ -5,6 +5,7 @@ export enum DropdownNameKOR {
   milestone = "마일스톤",
   issueState = "상태",
   issue = "이슈",
+  fontColor = "텍스트 색상",
 }
 
 export type DropdownName = keyof typeof DropdownNameKOR;
