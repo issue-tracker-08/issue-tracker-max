@@ -28,8 +28,8 @@ public class UserAccountRepository {
 			.usingGeneratedKeyColumns("id");
 	}
 
-	public void save(UserAccount userAccount) {
-		jdbcInsert.execute(new BeanPropertySqlParameterSource(userAccount));
+	public Integer save(UserAccount userAccount) {
+		return jdbcInsert.executeAndReturnKey(new BeanPropertySqlParameterSource(userAccount)).intValue();
 	}
 
 	public Boolean existsByLoginId(String loginId) {

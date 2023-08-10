@@ -5,12 +5,14 @@ import java.util.Map;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import kr.codesquad.issuetracker.domain.GithubUser;
 import kr.codesquad.issuetracker.domain.UserAccount;
 import kr.codesquad.issuetracker.exception.ApplicationException;
 import kr.codesquad.issuetracker.exception.ErrorCode;
 import kr.codesquad.issuetracker.infrastructure.persistence.UserAccountRepository;
 import kr.codesquad.issuetracker.infrastructure.security.hash.PasswordEncoder;
 import kr.codesquad.issuetracker.infrastructure.security.jwt.JwtProvider;
+import kr.codesquad.issuetracker.infrastructure.security.oauth.GithubClient;
 import kr.codesquad.issuetracker.presentation.response.LoginSuccessResponse;
 import lombok.RequiredArgsConstructor;
 
@@ -18,6 +20,7 @@ import lombok.RequiredArgsConstructor;
 @Service
 public class AuthService {
 
+	private final GithubClient githubClient;
 	private final PasswordEncoder passwordEncoder;
 	private final JwtProvider jwtProvider;
 	private final UserAccountRepository userAccountRepository;
@@ -47,5 +50,32 @@ public class AuthService {
 		));
 
 		return new LoginSuccessResponse(token, findUserAccount.getProfileUrl(), findUserAccount.getLoginId());
+	}
+
+	@Transactional
+	public LoginSuccessResponse oauthLogin(final String code) {
+		GithubUser oAuthUser = githubClient.getOAuthUser(code);
+		String username = oAuthUser.getUsername();
+
+		UserAccount userAccount = userAccountRepository.findByLoginId(username)
+			.orElseGet(() -> new UserAccount(username, ""));
+		Integer userId = userAccount.getId();
+		if (userAccount.getId() == null) {
+			userId = userAccountRepository.save(new UserAccount(username, ""));
+		}
+
+		LoginSuccessResponse.TokenResponse token = jwtProvider.createToken(Map.of(
+			"userId", String.valueOf(userId),
+			"loginid", username
+		));
+
+		return new LoginSuccessResponse(token, userAccount.getProfileUrl(), username);
+	}
+
+	public String getOAuthLoginPageUrl() {
+		return new StringBuilder().append(githubClient.getGithubLoginBaseUrl())
+			.append("/authorize")
+			.append("?client_id=").append(githubClient.getClientId())
+			.append("&scope=user:email").toString();
 	}
 }
