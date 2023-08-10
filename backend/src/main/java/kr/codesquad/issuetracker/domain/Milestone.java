@@ -12,6 +12,7 @@ public class Milestone {
 	private String name;
 	private String description;
 	private LocalDateTime dueDate;
+	private Boolean isOpen;
 	private Boolean isDeleted;
 
 	public Milestone(Integer id, String name, String description, Timestamp dueDate) {

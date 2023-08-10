@@ -40,6 +40,7 @@ CREATE TABLE IF NOT EXISTS `issue_tracker`.`milestone`
     `name`        VARCHAR(45)  NOT NULL,
     `description` VARCHAR(256) NULL,
     `due_date`    TIMESTAMP    NULL,
+    `is_open`     TINYINT      NOT NULL DEFAULT 1,
     `is_deleted`  TINYINT      NOT NULL DEFAULT 0,
     PRIMARY KEY (`id`)
 ) ENGINE = InnoDB;
