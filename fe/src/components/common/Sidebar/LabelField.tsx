@@ -1,6 +1,6 @@
 import DropdownIndicator from "@components/Dropdown/DropdownIndicator";
 import { DropdownItemType } from "@components/Dropdown/types";
-import LabelTag from "@components/LabelTag";
+import LabelTag from "@components/Label/LabelTag";
 import { Label } from "@customTypes/index";
 import useFetch from "@hooks/useFetch";
 import { getLabels } from "api";
@@ -33,9 +33,20 @@ export default function LabelField({
     const currentLabels = labelList.filter((label) =>
       labels.has(label.labelId)
     );
-    return currentLabels.map((label) => {
-      return <LabelTag key={label.labelId} label={label} />;
-    });
+    return currentLabels.map(
+      ({ labelId, name, backgroundColor, fontColor }) => {
+        return (
+          <LabelTag
+            {...{
+              key: labelId,
+              name,
+              backgroundColor,
+              fontColor,
+            }}
+          />
+        );
+      }
+    );
   };
 
   return (

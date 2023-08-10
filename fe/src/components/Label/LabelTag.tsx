@@ -1,3 +1,4 @@
+import { isHexColorLight } from "@utils/style";
 import { styled } from "styled-components";
 
 export default function LabelTag({
@@ -24,8 +25,11 @@ const StyledLabelTag = styled.span<{
   height: 24px;
   padding-inline: 12px;
   background-color: ${({ $backgroundColor }) => $backgroundColor};
+  border: ${({ theme: { border, neutral }, $backgroundColor }) =>
+    isHexColorLight($backgroundColor) &&
+    `${border.default} ${neutral.border.default}`};
+  border-radius: ${({ theme: { radius } }) => radius.l};
   color: ${({ $fontColor }) => $fontColor};
   font: ${({ theme: { font } }) => font.displayMD12};
-  border-radius: ${({ theme: { radius } }) => radius.l};
   line-height: 24px;
 `;
