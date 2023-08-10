@@ -4,9 +4,7 @@ import java.util.Optional;
 
 import kr.codesquad.issuetracker.domain.IssueSearch;
 import kr.codesquad.issuetracker.domain.IssueSearchFilter;
-import lombok.RequiredArgsConstructor;
 
-@RequiredArgsConstructor
 public class IssueSearchParser {
 
 	private static final String ENTRY_SEPARATOR = ":";
