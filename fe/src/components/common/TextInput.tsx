@@ -1,34 +1,48 @@
+import { ChangeEvent, ReactNode } from "react";
 import styled from "styled-components";
 import { Label } from "./Label.style";
 
-interface TextInputProps extends React.InputHTMLAttributes<HTMLInputElement> {
+interface TextInputProps extends React.HTMLAttributes<HTMLElement> {
   name: string;
+  value: string;
+  placeholder: string;
   variant: "tall" | "short";
+  onChange: (e: ChangeEvent<HTMLInputElement>) => void;
   hasError?: boolean;
   helpText?: string;
+  children?: ReactNode;
 }
 
 export default function TextInput({
   name,
   value,
+  placeholder,
   variant,
+  onChange,
   hasError,
   helpText,
+  children,
   ...props
 }: TextInputProps) {
   const isTallType = variant === "tall";
 
   return (
-    <StyledTextInput>
+    <StyledTextInput {...props}>
       <InputContainer $variant={variant} $hasError={hasError}>
-        {isTallType && value && (
-          <Label htmlFor={name}>{props.placeholder}</Label>
-        )}
-        {!isTallType && <Label htmlFor={name}>{props.placeholder}</Label>}
-        <Input id={name} value={value} {...props} />
+        {isTallType && value && <Label htmlFor={name}>{name}</Label>}
+        {!isTallType && <Label htmlFor={name}>{name}</Label>}
+        <Input
+          {...{
+            id: name,
+            value,
+            placeholder,
+            onChange,
+          }}
+        />
+        {children}
       </InputContainer>
       {hasError && helpText && (
-        <HelpTextArea $hasError={hasError}>{helpText}</HelpTextArea>
+        <HelpText $hasError={hasError}>{helpText}</HelpText>
       )}
     </StyledTextInput>
   );
@@ -50,21 +64,22 @@ const InputContainer = styled.div<{
   $variant: "tall" | "short";
   $hasError?: boolean;
 }>`
+  width: 100%;
+  height: ${({ $variant }) => INPUT_HEIGHT[$variant]}px;
+  padding: 0px 16px;
   display: flex;
   flex-direction: ${({ $variant }) => ($variant === "tall" ? "column" : "row")};
-  width: 100%;
   justify-content: ${({ $variant }) =>
-    $variant === "tall" ? "center" : "space-between"};
-  padding: 0px 16px;
+    $variant === "tall" ? "center" : "flex-start"};
   gap: 8px;
   color: ${({ theme: { neutral } }) => neutral.text.weak};
-  height: ${({ $variant }) => INPUT_HEIGHT[$variant]}px;
+  background-color: ${({ $hasError, theme: { neutral } }) =>
+    $hasError ? neutral.surface.strong : neutral.surface.bold};
   border: ${({ $hasError, theme: { border, danger } }) =>
     $hasError && `${border.default} ${danger.text.default}`};
   border-radius: ${({ $variant, theme: { radius } }) =>
     $variant === "tall" ? `${radius.l}` : `${radius.m}`};
-  background-color: ${({ $hasError, theme: { neutral } }) =>
-    $hasError ? neutral.surface.strong : neutral.surface.bold};
+
   &:focus-within {
     border: ${({ $hasError, theme: { neutral, border, danger } }) =>
       $hasError
@@ -72,15 +87,16 @@ const InputContainer = styled.div<{
         : `${border.default} ${neutral.border.defaultActive}`};
     background-color: ${({ theme: { neutral } }) => neutral.surface.strong};
   }
+
   &:disabled {
-    opacity: ${({ theme: { opacity } }) => opacity.disabled};
     background-color: ${({ theme: { neutral } }) => neutral.surface.bold};
+    opacity: ${({ theme: { opacity } }) => opacity.disabled};
   }
 `;
 
 const Input = styled.input`
+  width: 100%;
   display: flex;
-  flex-grow: 1;
   color: ${({ theme: { neutral } }) => neutral.text.default};
   font: ${({ theme: { font } }) => font.displayMD16};
   caret-color: ${({ theme: { palette } }) => palette.blue};
@@ -92,7 +108,7 @@ const Input = styled.input`
   }
 `;
 
-const HelpTextArea = styled.span<{
+const HelpText = styled.span<{
   $hasError?: boolean;
 }>`
   display: flex;
