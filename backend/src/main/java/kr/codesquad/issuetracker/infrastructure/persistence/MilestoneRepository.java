@@ -90,4 +90,15 @@ public class MilestoneRepository {
 			.addValue("milestoneId", milestoneId);
 		jdbcTemplate.update(sql, params);
 	}
+
+	public void updateOpenState(Integer milestoneId, boolean milestone) {
+		String sql = "UPDATE milestone "
+			+ "SET milestone.is_open = :openState "
+			+ "WHERE id = :milestoneId";
+
+		MapSqlParameterSource params = new MapSqlParameterSource()
+			.addValue("openState", milestone)
+			.addValue("milestoneId", milestoneId);
+		jdbcTemplate.update(sql, params);
+	}
 }

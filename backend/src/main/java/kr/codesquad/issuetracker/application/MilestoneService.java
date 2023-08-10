@@ -43,5 +43,9 @@ public class MilestoneService {
 	public void remove(Integer milestoneId) {
 		milestoneRepository.deleteById(milestoneId);
 	}
-}
 
+	@Transactional
+	public void changeOpenState(Integer milestoneId, boolean isOpen) {
+		milestoneRepository.updateOpenState(milestoneId, isOpen);
+	}
+}
