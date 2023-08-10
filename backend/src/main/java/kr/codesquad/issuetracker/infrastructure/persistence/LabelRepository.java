@@ -56,5 +56,15 @@ public class LabelRepository {
 			.addValue("backgroundColor", label.getBackgroundColor());
 		jdbcTemplate.update(sql, param);
 	}
+
+	public void deleteById(Integer labelId) {
+		String sql = "UPDATE label "
+			+ "SET label.is_deleted = TRUE "
+			+ "WHERE id = :labelId";
+
+		MapSqlParameterSource param = new MapSqlParameterSource()
+			.addValue("labelId", labelId);
+		jdbcTemplate.update(sql, param);
+	}
 }
 

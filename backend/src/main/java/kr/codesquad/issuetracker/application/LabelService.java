@@ -41,4 +41,9 @@ public class LabelService {
 		Label label = new Label(labelId, name, description, fontColor, backgroundColor);
 		labelRepository.update(label);
 	}
+
+	@Transactional
+	public void remove(Integer labelId) {
+		labelRepository.deleteById(labelId);
+	}
 }
