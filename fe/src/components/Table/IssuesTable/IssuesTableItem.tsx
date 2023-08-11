@@ -15,7 +15,7 @@ export default function IssuesTableItem({ issue }: { issue: IssueItemType }) {
     title,
     labels,
     milestone,
-    authorName,
+    author,
     assignees,
     createdAt,
   } = issue;
@@ -43,8 +43,8 @@ export default function IssuesTableItem({ issue }: { issue: IssueItemType }) {
         <IssueDetails>
           <span>#{issueNumber}</span>
           <span>
-            이 이슈는 {convertPastTimestamp(createdAt)}, {authorName}님에 의해
-            작성되었습니다
+            이 이슈는 {convertPastTimestamp(createdAt)}, {author.username}님에
+            의해 작성되었습니다
           </span>
           {milestone && (
             <span>

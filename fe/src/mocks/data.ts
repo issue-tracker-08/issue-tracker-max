@@ -30,7 +30,11 @@ export const issueList = [
       },
     ],
     milestone: "Sprint #1",
-    authorName: "bruni",
+    author: {
+      id: 1,
+      username: "bruni",
+      profileUrl: "https://avatars.githubusercontent.com/u/79886384?v=4",
+    },
     assignees: [
       {
         username: "bruni",
@@ -51,7 +55,11 @@ export const issueList = [
       },
     ],
     milestone: "Sprint #2",
-    authorName: "Kakamotobi",
+    author: {
+      id: 2,
+      username: "Kakamotobi",
+      profileUrl: "https://avatars.githubusercontent.com/u/79886384?v=4",
+    },
     assignees: [
       {
         username: "Kakamotobi",
@@ -76,7 +84,11 @@ export const issueList = [
       },
     ],
     milestone: "Sprint #2",
-    authorName: "Zoey",
+    author: {
+      id: 3,
+      username: "Zoey",
+      profileUrl: "https://avatars.githubusercontent.com/u/79886384?v=4",
+    },
     assignees: [
       {
         username: "Kakamotobi",
@@ -101,7 +113,11 @@ export const issueList = [
       },
     ],
     milestone: "",
-    authorName: "Kakamotobi",
+    author: {
+      id: 4,
+      username: "Kakamotobi",
+      profileUrl: "https://avatars.githubusercontent.com/u/79886384?v=4",
+    },
     assignees: [
       {
         username: "Kakamotobi",

@@ -26,7 +26,11 @@ export type IssueItem = {
   issueNumber: number;
   isOpen: boolean;
   title: string;
-  authorName: string;
+  author: {
+    id: number;
+    username: string;
+    profileUrl: string;
+  };
   createdAt: string;
   labels: Label[];
   milestone: string;
