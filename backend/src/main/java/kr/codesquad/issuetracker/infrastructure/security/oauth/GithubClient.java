@@ -40,7 +40,7 @@ public class GithubClient {
 
 	private WebClient buildGithubOpenApiClient(OauthProperties oauthProperties, WebClient webClient) {
 		return webClient.mutate()
-			.baseUrl(oauthProperties.getGithubOpenApiUrl())
+			.baseUrl(oauthProperties.getGithubResourceUrl())
 			.defaultHeader(HttpHeaders.ACCEPT, MediaType.APPLICATION_JSON_VALUE)
 			.build();
 	}
