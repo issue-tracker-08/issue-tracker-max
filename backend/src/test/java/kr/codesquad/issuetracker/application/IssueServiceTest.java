@@ -54,7 +54,7 @@ class IssueServiceTest {
 		List<IssueSimpleMapper> result = issueService.findAll();
 		assertAll(
 			() -> assertThat(result.get(0).getIssueNumber()).isNotNull(),
-			() -> assertThat(result.get(0).isOpen()).isTrue(),
+			() -> assertThat(result.get(0).getIsOpen()).isTrue(),
 			() -> assertThat(result.get(0).getTitle()).isEqualTo("프로젝트 세팅하기")
 		);
 	}
