@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 import kr.codesquad.issuetracker.domain.Issue;
 import kr.codesquad.issuetracker.domain.IssueAssignee;
 import kr.codesquad.issuetracker.domain.IssueLabel;
+import kr.codesquad.issuetracker.domain.IssueSearch;
 import kr.codesquad.issuetracker.exception.ApplicationException;
 import kr.codesquad.issuetracker.exception.ErrorCode;
 import kr.codesquad.issuetracker.infrastructure.persistence.IssueAssigneeRepository;
@@ -74,8 +75,7 @@ public class IssueService {
 
 	@Transactional(readOnly = true)
 	public List<IssueSimpleMapper> findAll() {
-		return issueMapper.findAll(null);
-		// return issueRepository.findAll();
+		return issueMapper.findAll(new IssueSearch());
 	}
 
 	@Transactional(readOnly = true)
