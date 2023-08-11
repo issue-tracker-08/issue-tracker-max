@@ -31,7 +31,7 @@ export default function Header() {
           $size="M"
         />
         <Button variant="ghost" size="M" onClick={onLogout}>
-          로그아웃
+          <span className="logout-btn-text">로그아웃</span>
         </Button>
       </div>
     </StyledHeader>
@@ -48,5 +48,9 @@ const StyledHeader = styled.header`
     display: flex;
     align-items: center;
     gap: 20px;
+
+    .logout-btn-text {
+      color: ${({ theme: { neutral } }) => neutral.text.default};
+    }
   }
 `;
