@@ -81,7 +81,7 @@ export default function IssueDetailHeader({
         {isEditTitle ? (
           <form action="" onSubmit={onNewTitleSubmit}>
             <TextInput
-              name="issueTitle"
+              name="제목"
               variant="short"
               placeholder="제목"
               value={newTitle}
