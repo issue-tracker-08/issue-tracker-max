@@ -4,27 +4,27 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="kr.codesquad.issuetracker.infrastructure.persistence.mapper.IssueDAO">
     <resultMap id="issueResultMap" type="issueSimpleMapper">
-        <id property="issueNumber" column="issue_id" />
-        <result property="isOpen" column="issue_is_open" />
-        <result property="title" column="issue_title" />
-        <result property="createdAt" column="issue_created_at" />
-        <result property="milestone" column="milestone_name" />
+        <id property="issueNumber" column="issue_id"/>
+        <result property="isOpen" column="issue_is_open"/>
+        <result property="title" column="issue_title"/>
+        <result property="createdAt" column="issue_created_at"/>
+        <result property="milestone" column="milestone_name"/>
 
         <association property="author" javaType="authorMapper">
-            <id property="id" column="author_id" />
+            <id property="id" column="author_id"/>
             <result property="username" column="author_login_id"/>
             <result property="profileUrl" column="author_profile_url"/>
         </association>
 
         <collection property="labels" ofType="labelSimpleMapper">
-            <id property="id" column="label_id" />
-            <result property="name" column="label_name" />
+            <id property="id" column="label_id"/>
+            <result property="name" column="label_name"/>
             <result property="fontColor" column="label_font_color"/>
             <result property="backgroundColor" column="label_background_color"/>
         </collection>
 
         <collection property="assignees" ofType="assigneeSimpleMapper">
-            <id property="id" column="assignee_id" />
+            <id property="id" column="assignee_id"/>
             <result property="username" column="assignee_login_id"/>
             <result property="profileUrl" column="assignee_profile_url"/>
         </collection>
@@ -32,29 +32,80 @@
 
     <select id="findAll" resultMap="issueResultMap" parameterType="IssueSearch">
         SELECT DISTINCT
-            issue.id as issue_id,
-            issue.is_open as issue_is_open,
-            issue.title as issue_title,
-            issue.created_at as issue_created_at,
-            milestone.name as milestone_name,
-            author.id as author_id,
-            author.login_id as author_login_id,
-            author.profile_url as author_profile_url,
-            label.id as label_id,
-            label.name as label_name,
-            label.font_color as label_font_color,
-            label.background_color as label_background_color,
-            assignee.id as assignee_id,
-            assignee.login_id as assignee_login_id,
-            assignee.profile_url as assignee_profile_url
+        issue.id as issue_id,
+        issue.is_open as issue_is_open,
+        issue.title as issue_title,
+        issue.created_at as issue_created_at,
+        milestone.name as milestone_name,
+        author.id as author_id,
+        author.login_id as author_login_id,
+        author.profile_url as author_profile_url,
+        label.id as label_id,
+        label.name as label_name,
+        label.font_color as label_font_color,
+        label.background_color as label_background_color,
+        assignee.id as assignee_id,
+        assignee.login_id as assignee_login_id,
+        assignee.profile_url as assignee_profile_url
         FROM issue
-            LEFT JOIN issue_label ON issue.id = issue_label.issue_id
-			LEFT JOIN label ON label.id = issue_label.label_id AND label.is_deleted = false
-			LEFT JOIN issue_assignee ON issue.id = issue_assignee.issue_id
-			LEFT JOIN user_account assignee ON assignee.id = issue_assignee.user_account_id AND assignee.is_deleted = false
-			LEFT JOIN milestone ON issue.milestone_id = milestone.id AND milestone.is_deleted = false
-			LEFT JOIN user_account author ON author.id = issue.user_account_id AND author.is_deleted = false
+        LEFT JOIN issue_label ON issue.id = issue_label.issue_id
+        LEFT JOIN label ON label.id = issue_label.label_id AND label.is_deleted = false
+        LEFT JOIN issue_assignee ON issue.id = issue_assignee.issue_id
+        LEFT JOIN user_account assignee ON assignee.id = issue_assignee.user_account_id AND assignee.is_deleted = false
+        LEFT JOIN milestone ON issue.milestone_id = milestone.id AND milestone.is_deleted = false
+        JOIN user_account author ON author.id = issue.user_account_id AND author.is_deleted = false
+        <if test="author != null">
+            AND author.login_id = #{author}
+        </if>
         WHERE issue.is_deleted = false
+        <if test="isOpen != null">
+            AND issue.is_open = #{isOpen}
+        </if>
+        <if test="milestoneName != null">
+            AND milestone.name = #{milestoneName}
+        </if>
+        <if test="commenter != null">
+            AND issue.id IN
+            (
+            SELECT issue_id
+            FROM comment
+            WHERE user_account_id =
+            (
+            SELECT id
+            FROM user_account
+            WHERE login_id = #{commenter}
+            )
+            )
+        </if>
+        <if test="!labelNames.isEmpty()">
+            AND issue.id IN
+            (
+            SELECT issue_label.issue_id
+            FROM issue_label
+            JOIN label ON issue_label.label_id = label.id AND label.is_deleted = false
+            WHERE label.name IN
+            <foreach collection="labelNames" item="labelName" open="(" close=")" separator=",">
+                #{labelName}
+            </foreach>
+            GROUP BY issue_label.issue_id
+            HAVING COUNT(DISTINCT label.name) >= ${labelNames.size()}
+            )
+        </if>
+        <if test="!assigneeNames.isEmpty()">
+            AND issue.id IN
+            (
+            SELECT issue_assignee.issue_id
+            FROM issue_assignee
+            JOIN user_account ON issue_assignee.user_account_id = user_account.id AND user_account.is_deleted =
+            false
+            WHERE user_account.login_id IN
+            <foreach collection="assigneeNames" item="assigneeName" open="(" close=")" separator=",">
+                #{assigneeName}
+            </foreach>
+            GROUP BY issue_assignee.issue_id
+            HAVING COUNT(DISTINCT user_account.login_id) >= ${assigneeNames.size()}
+            )
+        </if>
         ORDER BY issue.id DESC;
     </select>
 </mapper>
