@@ -68,7 +68,7 @@ export default function SignupPage() {
           회원가입
         </Button>
       </AuthForm>
-      <Link to="/auth">
+      <Link to="/">
         <Button variant="ghost" size="M" className="change-auth-btn">
           이미 계정이 있으신가요? 로그인
         </Button>
