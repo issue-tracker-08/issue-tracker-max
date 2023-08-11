@@ -145,7 +145,7 @@ export default function IssueDetailBody({
   };
 
   return (
-    <Body>
+    <StyledIssueDetailBody>
       <IssueCommentContainer
         {...{
           issueNumber,
@@ -167,15 +167,15 @@ export default function IssueDetailBody({
           onEditMilestone,
         }}
       />
-    </Body>
+    </StyledIssueDetailBody>
   );
 }
 
-const Body = styled.div`
+const StyledIssueDetailBody = styled.div`
   width: 100%;
   padding-top: 24px;
   display: flex;
-  justify-content: center;
+  // justify-content: center;
   gap: 32px;
   border-top: ${({ theme: { border, neutral } }) =>
     `${border.default} ${neutral.border.default}`};

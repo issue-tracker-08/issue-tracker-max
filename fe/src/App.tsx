@@ -19,7 +19,7 @@ import {
   createBrowserRouter,
   createRoutesFromElements,
 } from "react-router-dom";
-import { ThemeProvider } from "styled-components";
+import { ThemeProvider, styled } from "styled-components";
 
 export default function App() {
   const { themeMode } = useContext(ThemeModeContext);
@@ -51,7 +51,16 @@ export default function App() {
   return (
     <ThemeProvider theme={themeMode === "light" ? lightMode : darkMode}>
       <GlobalStyle />
-      <RouterProvider router={router} />
+      <StyledApp>
+        <RouterProvider router={router} />
+      </StyledApp>
     </ThemeProvider>
   );
 }
+
+const StyledApp = styled.div`
+  width: 100%;
+  min-width: 960px;
+  max-width: 1440px;
+  margin: auto;
+`;

@@ -147,6 +147,8 @@ export default function IssueCommentContainer({
 }
 
 const StyledIssueCommentContainer = styled.div`
+  width: 100%;
+  max-width: 960px;
   display: flex;
   flex-direction: column;
   gap: 24px;

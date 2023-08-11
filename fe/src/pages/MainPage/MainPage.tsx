@@ -18,7 +18,6 @@ const StyledMainPage = styled.div`
   width: 100%;
   min-height: 100vh;
   padding: 27px 80px;
-  background-color: ${({ theme: { neutral } }) => neutral.surface.default};
 
   main {
     width: 100%;

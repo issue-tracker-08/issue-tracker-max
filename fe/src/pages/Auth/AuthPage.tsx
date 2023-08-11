@@ -20,7 +20,6 @@ export const StyledAuthPage = styled.div`
   justify-content: center;
   width: 100vw;
   height: 100vh;
-  background: ${({ theme: { neutral } }) => neutral.surface.default};
 
   .login-area {
     display: flex;

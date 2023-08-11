@@ -82,4 +82,8 @@ export default createGlobalStyle`
       box-sizing: inherit;
     }
   }
+
+  #root {
+    background-color: ${({ theme: { neutral } }) => neutral.surface.default};
+  }
 `;
