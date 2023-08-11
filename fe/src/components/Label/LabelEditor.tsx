@@ -10,7 +10,7 @@ import RadioGroup from "@components/common/Group/RadioGroup";
 import TextInput from "@components/common/TextInput";
 import { Label } from "@customTypes/index";
 import { generateRandomHexColor, isValidHexColor } from "@utils/style";
-import { patchLabel, postLabel } from "api";
+import { postLabel, putLabel } from "api";
 import { AxiosError } from "axios";
 import { ChangeEvent, FormEvent, useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -117,7 +117,7 @@ export default function LabelEditor({
       const res =
         variant === "add"
           ? await postLabel(newLabel)
-          : await patchLabel(label!.labelId, newLabel);
+          : await putLabel(label!.labelId, newLabel);
 
       if (res.status === 200 || res.status === 201) {
         navigate(0);

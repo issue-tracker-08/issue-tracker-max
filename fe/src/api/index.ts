@@ -85,7 +85,7 @@ export const postLabel = async (body: {
   return await fetcherWithBearer.post("/labels", body);
 };
 
-export const patchLabel = async (
+export const putLabel = async (
   labelId: number,
   body: {
     name: string;
@@ -94,7 +94,7 @@ export const patchLabel = async (
     backgroundColor: string;
   }
 ) => {
-  return await fetcherWithBearer.patch(`/labels/${labelId}`, body);
+  return await fetcherWithBearer.put(`/labels/${labelId}`, body);
 };
 
 export const deleteLabel = async (labelId: number) => {
