@@ -45,7 +45,7 @@ public class CommentService {
 		if (comments.isEmpty()) {
 			return new Slice<>(List.of(), false, 0);
 		}
-		cursor = comments.get(comments.size() - 1).getId();
+		cursor = comments.get(comments.size() - 1).getCommentId();
 
 		return new Slice<>(comments, cursor);
 	}
