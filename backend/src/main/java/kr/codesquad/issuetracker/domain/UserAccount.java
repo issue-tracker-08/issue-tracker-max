@@ -8,6 +8,8 @@ import lombok.Getter;
 @Getter
 public class UserAccount {
 
+	private static final String DEFAULT_PROFILE_URL = "https://issue-tracker-s3.s3.ap-northeast-2.amazonaws.com/public/profile/default_profile.png";
+
 	private Integer id;
 	private String loginId;
 	private String password;
@@ -22,9 +24,11 @@ public class UserAccount {
 	}
 
 	public UserAccount(String loginId, String password) {
-		this.loginId = loginId;
-		this.password = password;
-		this.profileUrl = "https://issue-tracker-s3.s3.ap-northeast-2.amazonaws.com/public/profile/default_profile.png";
+		this(loginId, password, DEFAULT_PROFILE_URL);
+	}
+
+	public UserAccount(String loginId, String password, String avatarUrl) {
+		this(null, loginId, password, avatarUrl);
 	}
 
 	public boolean isSamePassword(String password) {

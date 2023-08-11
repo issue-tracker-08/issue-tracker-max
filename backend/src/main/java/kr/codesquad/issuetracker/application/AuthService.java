@@ -58,15 +58,15 @@ public class AuthService {
 		String username = oAuthUser.getUsername();
 
 		UserAccount userAccount = userAccountRepository.findByLoginId(username)
-			.orElseGet(() -> new UserAccount(username, ""));
+			.orElseGet(() -> new UserAccount(username, "", oAuthUser.getAvatarUrl()));
 		Integer userId = userAccount.getId();
 		if (userAccount.getId() == null) {
-			userId = userAccountRepository.save(new UserAccount(username, ""));
+			userId = userAccountRepository.save(userAccount);
 		}
 
 		LoginSuccessResponse.TokenResponse token = jwtProvider.createToken(Map.of(
 			"userId", String.valueOf(userId),
-			"loginid", username
+			"loginId", username
 		));
 
 		return new LoginSuccessResponse(token, userAccount.getProfileUrl(), username);

@@ -15,4 +15,8 @@ public class GithubUser {
 		String id = userInfo.get("id").toString();
 		return login + id;
 	}
+
+	public String getAvatarUrl() {
+		return userInfo.get("avatar_url").toString();
+	}
 }
