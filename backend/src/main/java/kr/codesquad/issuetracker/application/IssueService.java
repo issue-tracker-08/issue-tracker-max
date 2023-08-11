@@ -118,9 +118,9 @@ public class IssueService {
 			throw new ApplicationException(ErrorCode.ISSUE_NOT_FOUND);
 		}
 
-		assigneeRepository.saveAll(toEntityList(request.getAddUserAccountsId(),
+		assigneeRepository.saveAll(toEntityList(request.getAddUserAccountId(),
 			id -> new IssueAssignee(issueId, id)));
-		assigneeRepository.deleteAll(toEntityList(request.getRemoveUserAccountsId(),
+		assigneeRepository.deleteAll(toEntityList(request.getRemoveUserAccountId(),
 			id -> new IssueAssignee(issueId, id)));
 	}
 

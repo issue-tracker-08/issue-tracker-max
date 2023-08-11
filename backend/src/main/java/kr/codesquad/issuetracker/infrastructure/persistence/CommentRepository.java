@@ -29,8 +29,8 @@ public class CommentRepository {
 			.usingGeneratedKeyColumns("id");
 	}
 
-	public void save(Comment comment) {
-		jdbcInsert.execute(new BeanPropertySqlParameterSource(comment));
+	public int save(Comment comment) {
+		return jdbcInsert.executeAndReturnKey(new BeanPropertySqlParameterSource(comment)).intValue();
 	}
 
 	public Optional<Comment> findById(Integer commentId) {

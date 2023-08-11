@@ -13,16 +13,16 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class AssigneeRequest {
 
-	private List<Integer> addUserAccountsId;
-	private List<Integer> removeUserAccountsId;
+	private List<Integer> addUserAccountId;
+	private List<Integer> removeUserAccountId;
 
-	public List<Integer> getAddUserAccountsId() {
-		return Optional.ofNullable(addUserAccountsId)
+	public List<Integer> getAddUserAccountId() {
+		return Optional.ofNullable(addUserAccountId)
 			.orElseGet(Collections::emptyList);
 	}
 
-	public List<Integer> getRemoveUserAccountsId() {
-		return Optional.ofNullable(removeUserAccountsId)
+	public List<Integer> getRemoveUserAccountId() {
+		return Optional.ofNullable(removeUserAccountId)
 			.orElseGet(Collections::emptyList);
 	}
 }

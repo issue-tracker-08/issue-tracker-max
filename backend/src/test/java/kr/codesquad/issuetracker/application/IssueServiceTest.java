@@ -105,7 +105,8 @@ class IssueServiceTest {
 			assertAll(
 				() -> assertThat(result.getIssueId()).isNotNull(),
 				() -> assertThat(result.getAuthor().getUsername()).isNotNull(),
-				() -> assertThat(result.getAuthor().getProfileUrl()).isNotNull()
+				() -> assertThat(result.getAuthor().getProfileUrl()).isNotNull(),
+				() -> assertThat(result.getCommentCount()).isNotNull()
 			);
 		}
 

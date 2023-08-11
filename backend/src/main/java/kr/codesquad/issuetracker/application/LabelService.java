@@ -21,14 +21,29 @@ public class LabelService {
 	public List<LabelResponse> findAll() {
 		return labelRepository.findAll().stream()
 			.map(label -> new LabelResponse(
-				label.getId(), label.getName(), label.getFontColor(), label.getBackgroundColor()
+				label.getId(),
+				label.getName(),
+				label.getDescription(),
+				label.getFontColor(),
+				label.getBackgroundColor()
 			))
 			.collect(Collectors.toList());
 	}
 
 	@Transactional
-	public void register(String name, String description, String frontColor, String backgroundColor) {
-		Label label = new Label(name, description, frontColor, backgroundColor);
+	public void register(String name, String description, String fontColor, String backgroundColor) {
+		Label label = new Label(name, description, fontColor, backgroundColor);
 		labelRepository.save(label);
+	}
+
+	@Transactional
+	public void modify(Integer labelId, String name, String description, String fontColor, String backgroundColor) {
+		Label label = new Label(labelId, name, description, fontColor, backgroundColor);
+		labelRepository.update(label);
+	}
+
+	@Transactional
+	public void remove(Integer labelId) {
+		labelRepository.deleteById(labelId);
 	}
 }

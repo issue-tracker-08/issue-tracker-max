@@ -5,7 +5,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.Map;
 
 import org.apache.http.HttpHeaders;
@@ -33,14 +33,16 @@ class MilestoneControllerTest extends ControllerTest {
 		@Test
 		void register() throws Exception {
 			// given
-			willDoNothing().given(milestoneService).register(anyString(), anyString(), any(LocalDateTime.class));
+			willDoNothing().given(milestoneService).register(anyString(), anyString(), any(LocalDate.class));
 
 			// when & then
 			mockMvc.perform(
 					post("/api/milestones")
 						.contentType(MediaType.APPLICATION_JSON)
-						.header(HttpHeaders.AUTHORIZATION, "Bearer " + jwtProvider.createToken(Map.of("userId", "1")).getAccessToken())
-						.content(objectMapper.writeValueAsBytes(FixtureFactory.createMilestoneRegisterRequest("1주차 마일스톤"))))
+						.header(HttpHeaders.AUTHORIZATION,
+							"Bearer " + jwtProvider.createToken(Map.of("userId", "1")).getAccessToken())
+						.content(objectMapper.writeValueAsBytes(
+							FixtureFactory.createMilestoneCommonRequest("1주차 마일스톤"))))
 				.andExpect(status().isCreated())
 				.andDo(print());
 		}
@@ -49,15 +51,79 @@ class MilestoneControllerTest extends ControllerTest {
 		@Test
 		void givenInvalidRegisterInfo_thenResponse400() throws Exception {
 			// given
-			willDoNothing().given(milestoneService).register(anyString(), anyString(), any(LocalDateTime.class));
+			willDoNothing().given(milestoneService).register(anyString(), anyString(), any(LocalDate.class));
 
 			// when & then
 			mockMvc.perform(
 					post("/api/milestones")
 						.contentType(MediaType.APPLICATION_JSON)
-						.header(HttpHeaders.AUTHORIZATION, "Bearer " + jwtProvider.createToken(Map.of("userId", "1")).getAccessToken())
-						.content(objectMapper.writeValueAsString(FixtureFactory.createMilestoneRegisterRequest(""))))
+						.header(HttpHeaders.AUTHORIZATION,
+							"Bearer " + jwtProvider.createToken(Map.of("userId", "1")).getAccessToken())
+						.content(objectMapper.writeValueAsString(FixtureFactory.createMilestoneCommonRequest(""))))
 				.andExpect(status().isBadRequest())
+				.andDo(print());
+		}
+	}
+
+	@DisplayName("마일스톤을 수정할 때 ")
+	@Nested
+	class MilestoneModifyTest {
+
+		@DisplayName("마일스톤 수정에 성공한다.")
+		@Test
+		void modify() throws Exception {
+			// given
+			willDoNothing().given(milestoneService)
+				.modify(anyInt(), anyString(), anyString(), any(LocalDate.class));
+
+			// when & then
+			mockMvc.perform(
+					put("/api/milestones/1")
+						.contentType(MediaType.APPLICATION_JSON)
+						.header(HttpHeaders.AUTHORIZATION,
+							"Bearer " + jwtProvider.createToken(Map.of("userId", "1")).getAccessToken())
+						.content(objectMapper.writeValueAsBytes(
+							FixtureFactory.createMilestoneCommonRequest("1주차 마일스톤"))))
+				.andExpect(status().isOk())
+				.andDo(print());
+		}
+
+		@DisplayName("빈 마일스톤 이름이 들어오면 400응답을 한다.")
+		@Test
+		void givenInvalidRegisterInfo_thenResponse400() throws Exception {
+			// given
+			willDoNothing().given(milestoneService)
+				.modify(anyInt(), anyString(), anyString(), any(LocalDate.class));
+
+			// when & then
+			mockMvc.perform(
+					put("/api/milestones/1")
+						.contentType(MediaType.APPLICATION_JSON)
+						.header(HttpHeaders.AUTHORIZATION,
+							"Bearer " + jwtProvider.createToken(Map.of("userId", "1")).getAccessToken())
+						.content(objectMapper.writeValueAsString(FixtureFactory.createMilestoneCommonRequest(""))))
+				.andExpect(status().isBadRequest())
+				.andDo(print());
+		}
+	}
+
+	@DisplayName("마일스톤을 삭제할 때 ")
+	@Nested
+	class MilestoneRemoveTest {
+
+		@DisplayName("마일스톤 삭제에 성공한다.")
+		@Test
+		void remove() throws Exception {
+			// given
+			willDoNothing().given(milestoneService).remove(anyInt());
+
+			// when & then
+			mockMvc.perform(
+					delete("/api/milestones/1")
+						.contentType(MediaType.APPLICATION_JSON)
+						.header(HttpHeaders.AUTHORIZATION,
+							"Bearer " + jwtProvider.createToken(Map.of("userId", "1")).getAccessToken()))
+				.andExpect(status().isNoContent())
 				.andDo(print());
 		}
 	}

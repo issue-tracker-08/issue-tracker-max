@@ -22,4 +22,11 @@ public class GlobalExceptionHandler {
 		return ResponseEntity.status(errorCode.getStatusCode())
 			.body(new ErrorResponse(errorCode));
 	}
+
+	@ExceptionHandler(OAuthAccessTokenException.class)
+	public ResponseEntity<ErrorResponse> handleApplicationException(OAuthAccessTokenException e) {
+		ErrorCode errorCode = e.getErrorCode();
+		return ResponseEntity.status(errorCode.getStatusCode())
+			.body(new ErrorResponse(errorCode, e.getMessage()));
+	}
 }
