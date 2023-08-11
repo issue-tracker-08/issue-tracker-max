@@ -59,7 +59,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     const expirationTime = localStorage.getItem("expirationTime");
     const userInfo = localStorage.getItem("userInfo");
 
-    if (expirationTime && new Date().getTime() < parseInt(expirationTime, 10)) {
+    if (expirationTime && Date.now() < parseInt(expirationTime, 10)) {
       setIsLoggedIn(true);
       setUserInfo(
         userInfo ? JSON.parse(userInfo) : { username: "", profileUrl: "" }
