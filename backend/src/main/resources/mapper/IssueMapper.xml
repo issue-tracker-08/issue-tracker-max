@@ -77,34 +77,17 @@
             )
             )
         </if>
-        <if test="!labelNames.isEmpty()">
-            AND issue.id IN
-            (
-            SELECT issue_label.issue_id
-            FROM issue_label
-            JOIN label ON issue_label.label_id = label.id AND label.is_deleted = false
-            WHERE label.name IN
-            <foreach collection="labelNames" item="labelName" open="(" close=")" separator=",">
+        <if test="!issueSearch.labelNames.isEmpty()">
+            AND label.name IN
+            <foreach collection="issueSearch.labelNames" item="labelName" open="(" close=")" separator=",">
                 #{labelName}
             </foreach>
-            GROUP BY issue_label.issue_id
-            HAVING COUNT(DISTINCT label.name) >= ${labelNames.size()}
-            )
         </if>
-        <if test="!assigneeNames.isEmpty()">
-            AND issue.id IN
-            (
-            SELECT issue_assignee.issue_id
-            FROM issue_assignee
-            JOIN user_account ON issue_assignee.user_account_id = user_account.id AND user_account.is_deleted =
-            false
-            WHERE user_account.login_id IN
-            <foreach collection="assigneeNames" item="assigneeName" open="(" close=")" separator=",">
+        <if test="!issueSearch.assigneeNames.isEmpty()">
+            AND assignee.login_id IN
+            <foreach collection="issueSearch.assigneeNames" item="assigneeName" open="(" close=")" separator=",">
                 #{assigneeName}
             </foreach>
-            GROUP BY issue_assignee.issue_id
-            HAVING COUNT(DISTINCT user_account.login_id) >= ${assigneeNames.size()}
-            )
         </if>
         ORDER BY issue.id DESC;
     </select>
