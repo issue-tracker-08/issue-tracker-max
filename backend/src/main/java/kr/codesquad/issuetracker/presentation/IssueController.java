@@ -39,7 +39,6 @@ public class IssueController {
 	@GetMapping
 	public ResponseEntity<List<IssueSimpleMapper>> findAll(@AuthPrincipal Principal principal,
 		@RequestParam(value = "q", required = false) String searchBar) {
-		System.out.println(searchBar);
 		if (StringUtils.hasText(searchBar)) {
 			return ResponseEntity.ok(issueService.findAll(principal.getLoginId(), searchBar));
 		}
