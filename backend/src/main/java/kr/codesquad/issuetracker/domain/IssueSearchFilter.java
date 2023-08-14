@@ -13,12 +13,13 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public enum IssueSearchFilter {
 
-	STATUS("is", IssueSearch::registerIssueStatus),
-	AUTHOR("author", IssueSearch::registerAuthor),
-	COMMENTER("commenter", IssueSearch::registerCommenter),
-	ASSIGNEE("assignee", IssueSearch::addAssignee),
-	LABEL("label", IssueSearch::addLabel),
-	MILESTONE("milestone", IssueSearch::registerMilestone);
+	STATUS("is:", IssueSearch::registerIssueStatus),
+	AUTHOR("author:", IssueSearch::registerAuthor),
+	COMMENTER("commenter:", IssueSearch::registerCommenter),
+	ASSIGNEE("assignee:", IssueSearch::addAssignee),
+	LABEL("label:", IssueSearch::addLabel),
+	MILESTONE("milestone:", IssueSearch::registerMilestone),
+	NO("no:", IssueSearch::registerNone);
 
 	private final String key;
 	private final BiConsumer<IssueSearch, String> register;
