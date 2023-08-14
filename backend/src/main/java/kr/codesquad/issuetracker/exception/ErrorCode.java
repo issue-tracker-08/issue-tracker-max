@@ -31,7 +31,9 @@ public enum ErrorCode {
 	MILESTONE_NOT_FOUND(404, "존재하지 않는 마일스톤입니다."),
 
 	// OAUTH
-	GITHUB_FAILED_LOGIN(500, "소셜 로그인에 실패했습니다.");
+	GITHUB_FAILED_LOGIN(500, "소셜 로그인에 실패했습니다."),
+	GITHUB_FAILED_GET_EMAIL(500, "Github email 정보를 가져오는데 실패했습니다."),
+	INITIAL_LOGIN(205, "최초 로그인이기 때문에 username 정보가 필요합니다.");
 
 	private final int statusCode;
 	private final String message;

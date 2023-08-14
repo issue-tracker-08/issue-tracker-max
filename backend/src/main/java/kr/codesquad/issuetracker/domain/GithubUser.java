@@ -10,10 +10,8 @@ public class GithubUser {
 		this.userInfo = userInfo;
 	}
 
-	public String getUsername() {
-		String login = userInfo.get("login").toString();
-		String id = userInfo.get("id").toString();
-		return login + id;
+	public String getEmail() {
+		return userInfo.get("email").toString();
 	}
 
 	public String getAvatarUrl() {

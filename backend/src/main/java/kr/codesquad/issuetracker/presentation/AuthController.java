@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import kr.codesquad.issuetracker.application.AuthService;
 import kr.codesquad.issuetracker.presentation.request.LoginRequest;
+import kr.codesquad.issuetracker.presentation.request.OauthSignupRequest;
 import kr.codesquad.issuetracker.presentation.request.SignupRequest;
 import kr.codesquad.issuetracker.presentation.response.LoginSuccessResponse;
 import lombok.RequiredArgsConstructor;
@@ -47,5 +48,11 @@ public class AuthController {
 	@GetMapping("/login/oauth/github")
 	public ResponseEntity<LoginSuccessResponse> oauthLogin(@RequestParam("code") String code) {
 		return ResponseEntity.ok(authService.oauthLogin(code));
+	}
+
+	@PostMapping("/login/oauth/signup")
+	public ResponseEntity<LoginSuccessResponse> oauthSignup(@RequestBody OauthSignupRequest request) {
+		return ResponseEntity.status(HttpStatus.CREATED)
+			.body(authService.oauthSignup(request.getEmail(), request.getUsername()));
 	}
 }
