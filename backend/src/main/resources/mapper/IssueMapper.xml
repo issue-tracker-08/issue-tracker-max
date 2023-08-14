@@ -30,9 +30,8 @@
         </collection>
     </resultMap>
 
-    <select id="findAll" resultMap="issueResultMap" parameterType="IssueSearch">
-        SELECT DISTINCT
-        issue.id as issue_id,
+    <select id="findAll" resultMap="issueResultMap">
+        SELECT DISTINCT issue.id as issue_id,
         issue.is_open as issue_is_open,
         issue.title as issue_title,
         issue.created_at as issue_created_at,
@@ -51,6 +50,13 @@
         <include refid="filter"></include>
 
         ORDER BY issue.id DESC
+        LIMIT #{offset}, #{size};
+    </select>
+
+    <select id="countAll" resultType="int">
+        SELECT COUNT(DISTINCT issue.id)
+        <include refid="filter"></include>;
+    </select>
 
     <sql id="filter">
         FROM issue
@@ -60,17 +66,17 @@
         LEFT JOIN user_account assignee ON assignee.id = issue_assignee.user_account_id AND assignee.is_deleted = false
         LEFT JOIN milestone ON issue.milestone_id = milestone.id AND milestone.is_deleted = false
         JOIN user_account author ON author.id = issue.user_account_id AND author.is_deleted = false
-        <if test="author != null">
-            AND author.login_id = #{author}
+        <if test="issueSearch.author != null">
+            AND author.login_id = #{issueSearch.author}
         </if>
         WHERE issue.is_deleted = false
-        <if test="isOpen != null">
-            AND issue.is_open = #{isOpen}
+        <if test="issueSearch.isOpen != null">
+            AND issue.is_open = #{issueSearch.isOpen}
         </if>
-        <if test="milestoneName != null">
-            AND milestone.name = #{milestoneName}
+        <if test="issueSearch.milestoneName != null">
+            AND milestone.name = #{issueSearch.milestoneName}
         </if>
-        <if test="commenter != null">
+        <if test="issueSearch.commenter != null">
             AND issue.id IN
             (
             SELECT issue_id
@@ -79,7 +85,7 @@
             (
             SELECT id
             FROM user_account
-            WHERE login_id = #{commenter}
+            WHERE login_id = #{issueSearch.commenter}
             )
             )
         </if>

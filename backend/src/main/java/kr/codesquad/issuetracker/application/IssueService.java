@@ -24,6 +24,7 @@ import kr.codesquad.issuetracker.presentation.request.IssueLabelRequest;
 import kr.codesquad.issuetracker.presentation.request.IssueRegisterRequest;
 import kr.codesquad.issuetracker.presentation.response.IssueDetailResponse;
 import kr.codesquad.issuetracker.presentation.response.IssueDetailSidebarResponse;
+import kr.codesquad.issuetracker.presentation.response.Page;
 import kr.codesquad.issuetracker.utils.IssueSearchParser;
 import lombok.RequiredArgsConstructor;
 
@@ -74,13 +75,19 @@ public class IssueService {
 	}
 
 	@Transactional(readOnly = true)
-	public List<IssueSimpleMapper> findAll() {
-		return issueMapper.findAll(new IssueSearch());
+	public Page<IssueSimpleMapper> findAll(int page, int size) {
+		int offset = (page - 1) * size;
+		List<IssueSimpleMapper> issues = issueMapper.findAll(new IssueSearch(), offset, size);
+		int totalCounts = issueMapper.countAll(new IssueSearch());
+		return Page.of(issues, totalCounts, page, size);
 	}
 
 	@Transactional(readOnly = true)
-	public List<IssueSimpleMapper> findAll(String loginId, String searchBar) {
-		return issueMapper.findAll(IssueSearchParser.parse(loginId, searchBar));
+	public Page<IssueSimpleMapper> findAll(String loginId, String searchBar, int page, int size) {
+		int offset = (page - 1) * size;
+		List<IssueSimpleMapper> issues = issueMapper.findAll(IssueSearchParser.parse(loginId, searchBar), offset, size);
+		int totalCounts = issueMapper.countAll(IssueSearchParser.parse(loginId, searchBar));
+		return Page.of(issues, totalCounts, page, size);
 	}
 
 	@Transactional
