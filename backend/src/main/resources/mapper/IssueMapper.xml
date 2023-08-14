@@ -47,6 +47,12 @@
         assignee.id as assignee_id,
         assignee.login_id as assignee_login_id,
         assignee.profile_url as assignee_profile_url
+
+        <include refid="filter"></include>
+
+        ORDER BY issue.id DESC
+
+    <sql id="filter">
         FROM issue
         LEFT JOIN issue_label ON issue.id = issue_label.issue_id
         LEFT JOIN label ON label.id = issue_label.label_id AND label.is_deleted = false
@@ -89,6 +95,15 @@
                 #{assigneeName}
             </foreach>
         </if>
-        ORDER BY issue.id DESC;
-    </select>
+        <if test="issueSearch.hasLabel == false">
+            AND label.id IS NULL
+        </if>
+        <if test="issueSearch.hasMilestone == false">
+            AND milestone.id IS NULL
+        </if>
+        <if test="issueSearch.hasAssignee == false">
+            AND assignee.id IS NULL
+        </if>
+    </sql>
+
 </mapper>
