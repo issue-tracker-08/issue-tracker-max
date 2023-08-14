@@ -27,6 +27,7 @@ CREATE TABLE IF NOT EXISTS `issue_tracker`.`user_account`
     `login_id`    VARCHAR(45)  NOT NULL,
     `password`    VARCHAR(512) NOT NULL,
     `profile_url` VARCHAR(512) NOT NULL,
+    `email`       VARCHAR(45)  NULL UNIQUE,
     `is_deleted`  TINYINT      NOT NULL DEFAULT 0,
     PRIMARY KEY (`id`)
 ) ENGINE = InnoDB;
