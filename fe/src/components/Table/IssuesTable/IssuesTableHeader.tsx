@@ -9,9 +9,15 @@ import { TableHeader } from "../Table.style";
 export default function IssuesTableHeader({
   numOpen,
   numClosed,
+  numSelectedIssues,
+  isAllIssuesSelected,
+  toggleSelectAll,
 }: {
   numOpen: number;
   numClosed: number;
+  numSelectedIssues: number;
+  isAllIssuesSelected: boolean;
+  toggleSelectAll: () => void;
 }) {
   const tabBarLeftInfo = {
     name: "열린 이슈",
@@ -30,53 +36,69 @@ export default function IssuesTableHeader({
     <TableHeader>
       <TableHeaderContents>
         <div className="left-wrapper">
-          <InputCheckbox />
-          <TabBar
-            currentTabName="열린 이슈"
-            left={tabBarLeftInfo}
-            right={tabBarRightInfo}
-            borderStyle="none"
+          <InputCheckbox
+            checked={isAllIssuesSelected}
+            onChange={toggleSelectAll}
           />
+          {numSelectedIssues > 0 ? (
+            <div className="num-selected-issues">
+              {numSelectedIssues}개 이슈 선택
+            </div>
+          ) : (
+            <TabBar
+              currentTabName="열린 이슈"
+              left={tabBarLeftInfo}
+              right={tabBarRightInfo}
+              borderStyle="none"
+            />
+          )}
         </div>
 
-        {/* TODO: dropdownList */}
         <div className="right-wrapper">
-          <DropdownIndicator
-            displayName="담당자"
-            dropdownPanelVariant="filter"
-            dropdownName="assignee"
-            dropdownList={[
-              {
-                id: 1,
-                variant: "withImg",
-                name: "assignee",
-                content: "Kakamotobi",
-                imgSrc: "https://avatars.githubusercontent.com/u/79886384?v=4",
-              },
-            ]}
-            dropdownPanelPosition="right"
-          />
-          <DropdownIndicator
-            displayName="레이블"
-            dropdownPanelVariant="filter"
-            dropdownName="label"
-            dropdownList={[]}
-            dropdownPanelPosition="right"
-          />
-          <DropdownIndicator
-            displayName="마일스톤"
-            dropdownPanelVariant="filter"
-            dropdownName="milestone"
-            dropdownList={[]}
-            dropdownPanelPosition="right"
-          />
-          <DropdownIndicator
-            displayName="작성자"
-            dropdownPanelVariant="filter"
-            dropdownName="author"
-            dropdownList={[]}
-            dropdownPanelPosition="right"
-          />
+          {/* TODO: dropdownList */}
+          {numSelectedIssues > 0 ? (
+            <div>dropdown</div>
+          ) : (
+            <>
+              <DropdownIndicator
+                displayName="담당자"
+                dropdownPanelVariant="filter"
+                dropdownName="assignee"
+                dropdownList={[
+                  {
+                    id: 1,
+                    variant: "withImg",
+                    name: "assignee",
+                    content: "Kakamotobi",
+                    imgSrc:
+                      "https://avatars.githubusercontent.com/u/79886384?v=4",
+                  },
+                ]}
+                dropdownPanelPosition="right"
+              />
+              <DropdownIndicator
+                displayName="레이블"
+                dropdownPanelVariant="filter"
+                dropdownName="label"
+                dropdownList={[]}
+                dropdownPanelPosition="right"
+              />
+              <DropdownIndicator
+                displayName="마일스톤"
+                dropdownPanelVariant="filter"
+                dropdownName="milestone"
+                dropdownList={[]}
+                dropdownPanelPosition="right"
+              />
+              <DropdownIndicator
+                displayName="작성자"
+                dropdownPanelVariant="filter"
+                dropdownName="author"
+                dropdownList={[]}
+                dropdownPanelPosition="right"
+              />
+            </>
+          )}
         </div>
       </TableHeaderContents>
     </TableHeader>
@@ -99,6 +121,11 @@ const TableHeaderContents = styled.div`
 
     > *:last-child {
       gap: 24px;
+    }
+
+    .num-selected-issues {
+      font: ${({ theme: { font } }) => font.displayBold16};
+      color: ${({ theme: { neutral } }) => neutral.text.default};
     }
   }
 

@@ -4,15 +4,26 @@ import IssuesTableItem from "./IssuesTableItem";
 
 export default function IssuesTableBody({
   issuesList,
+  selectedIssueIds,
+  toggleSelectIssue,
 }: {
   issuesList: IssueItemType[] | null;
+  selectedIssueIds: Set<number>;
+  toggleSelectIssue: (id: number) => void;
 }) {
   return (
     <TableBody>
       {issuesList ? (
         <ul>
           {issuesList.map((issue) => (
-            <IssuesTableItem key={issue.issueNumber} issue={issue} />
+            <IssuesTableItem
+              {...{
+                key: issue.issueNumber,
+                issue,
+                isSelected: selectedIssueIds.has(issue.issueNumber),
+                toggleSelectIssue,
+              }}
+            />
           ))}
         </ul>
       ) : (

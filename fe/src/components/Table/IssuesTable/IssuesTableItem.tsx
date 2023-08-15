@@ -8,7 +8,15 @@ import { convertPastTimestamp } from "@utils/time";
 import { Link } from "react-router-dom";
 import { styled } from "styled-components";
 
-export default function IssuesTableItem({ issue }: { issue: IssueItemType }) {
+export default function IssuesTableItem({
+  issue,
+  isSelected,
+  toggleSelectIssue,
+}: {
+  issue: IssueItemType;
+  isSelected: boolean;
+  toggleSelectIssue: (id: number) => void;
+}) {
   const {
     issueNumber,
     isOpen,
@@ -20,11 +28,19 @@ export default function IssuesTableItem({ issue }: { issue: IssueItemType }) {
     createdAt,
   } = issue;
 
+  // console.log(isSelected);
+
   return (
     <StyledIssueItem>
       <div className="left-wrapper">
         <IssueHeader>
-          <InputCheckbox />
+          {/* TODO:  */}
+          <InputCheckbox
+            checked={isSelected}
+            onChange={() => {
+              toggleSelectIssue(issueNumber);
+            }}
+          />
           <div className="header-inner-wrapper">
             {isOpen ? (
               <img className="alert-icon" src={alertIcon} alt="열린 이슈" />
