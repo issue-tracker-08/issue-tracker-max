@@ -48,6 +48,13 @@ export const putIssueIsOpen = async (
   return await fetcherWithBearer.put(`/issues/${issueId}/isOpen`, body);
 };
 
+export const putIssuesIsOpen = async (body: {
+  issueIds: number[];
+  state: "open" | "closed";
+}) => {
+  return await fetcherWithBearer.put(`/issues`, body);
+};
+
 export const putIssueContent = async (
   issueId: number,
   body: { content: string }
