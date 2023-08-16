@@ -5,7 +5,6 @@ import java.util.Map;
 import javax.validation.Valid;
 
 import org.springframework.http.ResponseEntity;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -40,11 +39,7 @@ public class IssueController {
 	public ResponseEntity<Page<IssueSimpleMapper>> findAll(@AuthPrincipal Principal principal,
 		@RequestParam(value = "q", required = false) String searchBar, @RequestParam(defaultValue = "1") int page,
 		@RequestParam(defaultValue = "20") int size) {
-		if (StringUtils.hasText(searchBar)) {
-			return ResponseEntity.ok(issueService.findAll(principal.getLoginId(), searchBar, page, size));
-		}
-
-		return ResponseEntity.ok(issueService.findAll(page, size));
+		return ResponseEntity.ok(issueService.findAll(principal.getLoginId(), searchBar, page, size));
 	}
 
 	@PostMapping
