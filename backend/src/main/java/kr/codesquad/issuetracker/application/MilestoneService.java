@@ -48,4 +48,8 @@ public class MilestoneService {
 	public void changeOpenState(Integer milestoneId, boolean isOpen) {
 		milestoneRepository.updateOpenState(milestoneId, isOpen);
 	}
+
+	public int countMilestones() {
+		return milestoneRepository.countAll();
+	}
 }

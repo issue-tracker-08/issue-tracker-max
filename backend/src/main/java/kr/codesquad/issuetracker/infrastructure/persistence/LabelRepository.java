@@ -1,6 +1,7 @@
 package kr.codesquad.issuetracker.infrastructure.persistence;
 
 import java.util.List;
+import java.util.Map;
 
 import javax.sql.DataSource;
 
@@ -67,6 +68,12 @@ public class LabelRepository {
 		MapSqlParameterSource param = new MapSqlParameterSource()
 			.addValue("labelId", labelId);
 		jdbcTemplate.update(sql, param);
+	}
+
+	public int countAll() {
+		String sql = "SELECT COUNT(id) FROM label WHERE is_deleted = FALSE";
+
+		return jdbcTemplate.queryForObject(sql, Map.of(), Integer.class);
 	}
 }
 
