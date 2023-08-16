@@ -1,24 +1,68 @@
 import alertIcon from "@assets/icon/alertCircle.svg";
 import archiveIcon from "@assets/icon/archive.svg";
 import DropdownIndicator from "@components/Dropdown/DropdownIndicator";
+import { DropdownItemType } from "@components/Dropdown/types";
+import RadioGroup from "@components/common/Group/RadioGroup";
 import InputCheckbox from "@components/common/Input/InputCheckbox";
 import TabBar from "@components/common/TabBar";
+import { putIssuesIsOpen } from "api";
+import { useState } from "react";
 import { styled } from "styled-components";
 import { TableHeader } from "../Table.style";
+
+const issueStateDropdownList: DropdownItemType[] = [
+  {
+    id: 0,
+    variant: "plain",
+    name: "issueState",
+    content: "선택한 이슈 열기",
+  },
+  {
+    id: 1,
+    variant: "plain",
+    name: "issueState",
+    content: "선택한 이슈 닫기",
+  },
+];
 
 export default function IssuesTableHeader({
   numOpen,
   numClosed,
-  numSelectedIssues,
   isAllIssuesSelected,
+  selectedIssueIds,
   toggleSelectAll,
+  refetchIssuesList,
 }: {
   numOpen: number;
   numClosed: number;
-  numSelectedIssues: number;
   isAllIssuesSelected: boolean;
+  selectedIssueIds: Set<number>;
   toggleSelectAll: () => void;
+  refetchIssuesList: () => void;
 }) {
+  const [issueStateDropdownIdx, setIssueStateDropdownIdx] = useState(0);
+
+  const onIssueStateSelect = (index: number) => {
+    setIssueStateDropdownIdx(index);
+  };
+
+  const onUpdateSelectedIssuesState = async () => {
+    try {
+      const res = await putIssuesIsOpen({
+        issueIds: selectedIssueIds ? [...selectedIssueIds] : [],
+        state: issueStateDropdownIdx === 0 ? "open" : "closed",
+      });
+
+      if (res.status === 200) {
+        refetchIssuesList();
+        setIssueStateDropdownIdx(0);
+      }
+    } catch (error) {
+      // TODO
+      console.error(error);
+    }
+  };
+
   const tabBarLeftInfo = {
     name: "열린 이슈",
     count: numOpen,
@@ -31,6 +75,8 @@ export default function IssuesTableHeader({
     iconSrc: archiveIcon,
     callback: () => console.log("닫힌 이슈"),
   };
+
+  const numSelectedIssues = selectedIssueIds.size;
 
   return (
     <TableHeader>
@@ -55,9 +101,19 @@ export default function IssuesTableHeader({
         </div>
 
         <div className="right-wrapper">
-          {/* TODO: dropdownList */}
           {numSelectedIssues > 0 ? (
-            <div>dropdown</div>
+            <RadioGroup
+              value={issueStateDropdownIdx}
+              onChange={onIssueStateSelect}>
+              <DropdownIndicator
+                displayName="상태수정"
+                dropdownPanelVariant="select"
+                dropdownName="issueState"
+                dropdownList={issueStateDropdownList}
+                dropdownPanelPosition="right"
+                outsideClickHandler={onUpdateSelectedIssuesState}
+              />
+            </RadioGroup>
           ) : (
             <>
               <DropdownIndicator

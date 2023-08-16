@@ -17,7 +17,7 @@ export default function IssuesPage() {
   const navigate = useNavigate();
   const moveToNewIssuePage = () => navigate("/issues/new");
 
-  const { data: issuesList } = useFetch(getIssues);
+  const { data: issuesList, reFetch: refetchIssuesList } = useFetch(getIssues);
   const { data: labelsList } = useFetch(getLabels);
   const { data: milestonesList } = useFetch(getMilestones);
 
@@ -96,9 +96,10 @@ export default function IssuesPage() {
           {...{
             numOpen,
             numClosed,
-            numSelectedIssues: selectedIssueIds.size,
+            selectedIssueIds,
             isAllIssuesSelected,
             toggleSelectAll,
+            refetchIssuesList,
           }}
         />
         <IssuesTableBody
