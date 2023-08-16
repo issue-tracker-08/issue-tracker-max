@@ -1,6 +1,7 @@
 package kr.codesquad.issuetracker.infrastructure.persistence;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import javax.sql.DataSource;
@@ -102,5 +103,11 @@ public class MilestoneRepository {
 			.addValue("openState", isOpen)
 			.addValue("milestoneId", milestoneId);
 		jdbcTemplate.update(sql, params);
+	}
+
+	public int countAll() {
+		String sql = "SELECT COUNT(id) FROM milestone WHERE is_deleted = FALSE";
+
+		return jdbcTemplate.queryForObject(sql, Map.of(), Integer.class);
 	}
 }

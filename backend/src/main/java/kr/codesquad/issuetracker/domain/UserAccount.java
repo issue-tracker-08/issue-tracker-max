@@ -13,6 +13,7 @@ public class UserAccount {
 	private Integer id;
 	private String loginId;
 	private String password;
+	private String email;
 	private String profileUrl;
 	private Boolean isDeleted;
 
@@ -31,11 +32,15 @@ public class UserAccount {
 		this(null, loginId, password, avatarUrl);
 	}
 
+	public static UserAccount fromOAuthData(String username, String email) {
+		return new UserAccount(null, username, "", email, DEFAULT_PROFILE_URL, false);
+	}
+
 	public boolean isSamePassword(String password) {
 		return this.password.equals(password);
 	}
 
 	public static UserAccount createUserProfile(Integer id, String loginId, String profileUrl) {
-		return new UserAccount(id, loginId, null, profileUrl, false);
+		return new UserAccount(id, loginId, null, null, profileUrl, false);
 	}
 }

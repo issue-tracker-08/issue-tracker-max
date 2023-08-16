@@ -46,4 +46,8 @@ public class LabelService {
 	public void remove(Integer labelId) {
 		labelRepository.deleteById(labelId);
 	}
+
+	public int countLabels() {
+		return labelRepository.countAll();
+	}
 }

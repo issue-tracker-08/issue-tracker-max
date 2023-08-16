@@ -1,6 +1,7 @@
 package kr.codesquad.issuetracker.presentation;
 
 import java.util.List;
+import java.util.Map;
 
 import javax.validation.Valid;
 
@@ -50,5 +51,10 @@ public class LabelController {
 	public ResponseEntity<Void> remove(@PathVariable Integer labelId) {
 		labelService.remove(labelId);
 		return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+	}
+
+	@GetMapping("/count")
+	public ResponseEntity<Map<String, Integer>> countLabels() {
+		return ResponseEntity.ok(Map.of("count", labelService.countLabels()));
 	}
 }

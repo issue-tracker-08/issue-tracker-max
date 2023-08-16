@@ -8,6 +8,7 @@ import javax.sql.DataSource;
 
 import org.springframework.dao.support.DataAccessUtils;
 import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
@@ -24,11 +25,12 @@ public class UserAccountRepository {
 		this.jdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
 		this.jdbcInsert = new SimpleJdbcInsert(dataSource)
 			.withTableName("user_account")
-			.usingColumns("login_id", "password", "profile_url")
+			.usingColumns("login_id", "password", "profile_url", "email")
 			.usingGeneratedKeyColumns("id");
 	}
 
-	public Integer save(UserAccount userAccount) {
+	public int save(UserAccount userAccount) {
+		// return user_account PK
 		return jdbcInsert.executeAndReturnKey(new BeanPropertySqlParameterSource(userAccount)).intValue();
 	}
 
@@ -39,7 +41,9 @@ public class UserAccountRepository {
 
 	public Optional<UserAccount> findByLoginId(String loginId) {
 		return Optional.ofNullable(DataAccessUtils.singleResult(jdbcTemplate.query(
-			"SELECT id, login_id, password, profile_url FROM user_account WHERE login_id = :loginId AND is_deleted = FALSE",
+			"SELECT id, login_id, password, profile_url "
+				+ "FROM user_account "
+				+ "WHERE login_id = :loginId AND is_deleted = FALSE",
 			Map.of("loginId", loginId), (rs, rowNum) -> new UserAccount(rs.getInt("id"),
 				rs.getString("login_id"),
 				rs.getString("password"),
@@ -52,5 +56,18 @@ public class UserAccountRepository {
 		return jdbcTemplate.query(sql, (rs, rowNum) -> UserAccount.createUserProfile(rs.getInt("id"),
 			rs.getString("login_id"),
 			rs.getString("profile_url")));
+	}
+
+	public Optional<UserAccount> findByEmail(String email) {
+		String sql = "SELECT id, login_id, profile_url FROM user_account WHERE email = :email AND is_deleted = FALSE";
+
+		MapSqlParameterSource params = new MapSqlParameterSource()
+			.addValue("email", email);
+		return Optional.ofNullable(
+			DataAccessUtils.singleResult(jdbcTemplate.query(sql, params, (rs, rowNum) -> UserAccount.createUserProfile(
+				rs.getInt("id"),
+				rs.getString("login_id"),
+				rs.getString("profile_url")
+			))));
 	}
 }

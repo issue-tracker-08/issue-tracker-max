@@ -1,5 +1,6 @@
 package kr.codesquad.issuetracker.infrastructure.security.oauth;
 
+import java.util.Arrays;
 import java.util.Map;
 
 import org.springframework.core.ParameterizedTypeReference;
@@ -86,7 +87,25 @@ public class GithubClient {
 			})
 			.blockOptional()
 			.orElseThrow(() -> new ApplicationException(ErrorCode.GITHUB_FAILED_LOGIN));
+		response.put("email", getEmail(token));
 		return new GithubUser(response);
+	}
+
+	private String getEmail(final String token) {
+		Map<String, Object>[] response = githubResourceClient
+			.get()
+			.uri("/user/emails")
+			.header(HttpHeaders.AUTHORIZATION, "Bearer " + token)
+			.retrieve()
+			.bodyToMono(new ParameterizedTypeReference<Map<String, Object>[]>() {
+			})
+			.blockOptional()
+			.orElseThrow(() -> new ApplicationException(ErrorCode.GITHUB_FAILED_GET_EMAIL));
+		return Arrays.stream(response)
+			.filter(elem -> elem.get("primary").toString().equals("true"))
+			.map(elem -> elem.get("email").toString())
+			.findFirst()
+			.orElseThrow(() -> new ApplicationException(ErrorCode.GITHUB_FAILED_GET_EMAIL));
 	}
 
 	public String getClientId() {

@@ -94,4 +94,18 @@ class MilestoneServiceTest {
 		// then
 		assertThat(milestoneService.findAll(true)).hasSize(0);
 	}
+
+	@DisplayName("마일스톤 개수를 세는데 성공한다.")
+	@Test
+	void count() {
+		// given
+		milestoneService.register("BE 4주차 스프린트", null, null);
+		milestoneService.register("BE 4주차 스프린트", null, null);
+
+		// when
+		int result = milestoneService.countMilestones();
+
+		// then
+		assertThat(result).isEqualTo(2);
+	}
 }

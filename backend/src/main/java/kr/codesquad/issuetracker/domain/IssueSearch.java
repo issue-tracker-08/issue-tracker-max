@@ -4,11 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-@EqualsAndHashCode
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
@@ -17,8 +17,14 @@ public class IssueSearch {
 	private Boolean isOpen;
 	private String author;
 	private String commenter;
-	private List<String> assigneeNames = new ArrayList<>();
 	private String milestoneName;
+	private Boolean hasAssignee;
+	private Boolean hasMilestone;
+	private Boolean hasLabel;
+
+	@Builder.Default()
+	private List<String> assigneeNames = new ArrayList<>();
+	@Builder.Default()
 	private List<String> labelNames = new ArrayList<>();
 
 	public void registerIssueStatus(String issueStatus) {
@@ -48,5 +54,19 @@ public class IssueSearch {
 
 	public void addLabel(String labelName) {
 		labelNames.add(labelName);
+	}
+
+	public void registerNone(String name) {
+		if ("assignee".equals(name)) {
+			hasAssignee = Boolean.FALSE;
+			return;
+		}
+		if ("label".equals(name)) {
+			hasLabel = Boolean.FALSE;
+			return;
+		}
+		if ("milestone".equals(name)) {
+			hasMilestone = Boolean.FALSE;
+		}
 	}
 }

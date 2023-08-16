@@ -63,6 +63,14 @@ class GithubClientTest {
 		+ "  \"error_description\": \"The client_id and/or client_secret passed are incorrect.\",\n"
 		+ "  \"error_uri\": \"/apps/managing-oauth-apps/troubleshooting-oauth-app-access-token-request-errors/#incorrect-client-credentials\"\n"
 		+ "}";
+	private static final String USER_EMAIL_RESPONSE = "[\n"
+		+ "  {\n"
+		+ "    \"email\": \"octocat@github.com\",\n"
+		+ "    \"verified\": true,\n"
+		+ "    \"primary\": true,\n"
+		+ "    \"visibility\": \"public\"\n"
+		+ "  }\n"
+		+ "]";
 
 	@DisplayName("코드와 함께 서버로 요청을 보낼 때 사용자의 정보를 가져오는데 성공한다.")
 	@Test
@@ -73,6 +81,7 @@ class GithubClientTest {
 
 		setUpMockWebServer(mockGithubServer, ACCESS_TOKEN_RESPONSE);
 		setUpMockWebServer(mockGithubServer, USER_INFO_RESPONSE);
+		setUpMockWebServer(mockGithubServer, USER_EMAIL_RESPONSE);
 
 		GithubClient githubClient = new GithubClient(
 			new OauthProperties(
@@ -88,7 +97,7 @@ class GithubClientTest {
 		GithubUser oAuthUser = githubClient.getOAuthUser("code");
 
 		// then
-		assertThat(oAuthUser.getUsername()).isEqualTo("23Yong");
+		assertThat(oAuthUser.getEmail()).isEqualTo("octocat@github.com");
 		mockGithubServer.shutdown();
 	}
 

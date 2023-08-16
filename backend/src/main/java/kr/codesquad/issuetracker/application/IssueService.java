@@ -11,7 +11,6 @@ import org.springframework.transaction.annotation.Transactional;
 import kr.codesquad.issuetracker.domain.Issue;
 import kr.codesquad.issuetracker.domain.IssueAssignee;
 import kr.codesquad.issuetracker.domain.IssueLabel;
-import kr.codesquad.issuetracker.domain.IssueSearch;
 import kr.codesquad.issuetracker.exception.ApplicationException;
 import kr.codesquad.issuetracker.exception.ErrorCode;
 import kr.codesquad.issuetracker.infrastructure.persistence.IssueAssigneeRepository;
@@ -24,6 +23,7 @@ import kr.codesquad.issuetracker.presentation.request.IssueLabelRequest;
 import kr.codesquad.issuetracker.presentation.request.IssueRegisterRequest;
 import kr.codesquad.issuetracker.presentation.response.IssueDetailResponse;
 import kr.codesquad.issuetracker.presentation.response.IssueDetailSidebarResponse;
+import kr.codesquad.issuetracker.presentation.response.Page;
 import kr.codesquad.issuetracker.utils.IssueSearchParser;
 import lombok.RequiredArgsConstructor;
 
@@ -74,13 +74,11 @@ public class IssueService {
 	}
 
 	@Transactional(readOnly = true)
-	public List<IssueSimpleMapper> findAll() {
-		return issueMapper.findAll(new IssueSearch());
-	}
-
-	@Transactional(readOnly = true)
-	public List<IssueSimpleMapper> findAll(String loginId, String searchBar) {
-		return issueMapper.findAll(IssueSearchParser.parse(loginId, searchBar));
+	public Page<IssueSimpleMapper> findAll(String loginId, String searchBar, int page, int size) {
+		int offset = (page - 1) * size;
+		int totalCounts = issueMapper.countAll(IssueSearchParser.parse(loginId, searchBar));
+		List<IssueSimpleMapper> issues = issueMapper.findAll(IssueSearchParser.parse(loginId, searchBar), offset, size);
+		return Page.of(issues, totalCounts, page, size);
 	}
 
 	@Transactional

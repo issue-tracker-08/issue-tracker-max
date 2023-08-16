@@ -1,6 +1,7 @@
 package kr.codesquad.issuetracker.presentation;
 
 import java.util.List;
+import java.util.Map;
 
 import javax.validation.Valid;
 
@@ -60,5 +61,10 @@ public class MilestoneController {
 		@RequestParam("state") OpenState state) {
 		milestoneService.changeOpenState(milestoneId, state.isOpen());
 		return ResponseEntity.ok().build();
+	}
+
+	@GetMapping("/count")
+	public ResponseEntity<Map<String, Integer>> countMilestones() {
+		return ResponseEntity.ok(Map.of("count", milestoneService.countMilestones()));
 	}
 }

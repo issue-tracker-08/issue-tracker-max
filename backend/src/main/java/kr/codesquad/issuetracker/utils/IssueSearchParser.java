@@ -7,7 +7,6 @@ import kr.codesquad.issuetracker.domain.IssueSearchFilter;
 
 public class IssueSearchParser {
 
-	private static final String ENTRY_SEPARATOR = ":";
 	private static final String EMPTY = "";
 	private static final String SEARCH_SEPARATOR = " ";
 	private static final String DOUBLE_QUOTE = "\"";
@@ -20,7 +19,7 @@ public class IssueSearchParser {
 
 		while (findSearchFilter.isPresent()) {
 			IssueSearchFilter searchFilter = findSearchFilter.get();
-			searchBar = searchBar.replaceFirst(searchFilter.getKey() + ENTRY_SEPARATOR, EMPTY);
+			searchBar = searchBar.replaceFirst(searchFilter.getKey(), EMPTY);
 			String value = extractValue(searchBar);
 			if (MY_LOGIN_ID.equals(value)) {
 				searchBar = searchBar.replaceFirst(MY_LOGIN_ID, loginId);

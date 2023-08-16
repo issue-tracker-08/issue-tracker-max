@@ -1,12 +1,10 @@
 package kr.codesquad.issuetracker.presentation;
 
-import java.util.List;
 import java.util.Map;
 
 import javax.validation.Valid;
 
 import org.springframework.http.ResponseEntity;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -27,6 +25,7 @@ import kr.codesquad.issuetracker.presentation.request.IssueModifyRequest;
 import kr.codesquad.issuetracker.presentation.request.IssueRegisterRequest;
 import kr.codesquad.issuetracker.presentation.response.IssueDetailResponse;
 import kr.codesquad.issuetracker.presentation.response.IssueDetailSidebarResponse;
+import kr.codesquad.issuetracker.presentation.response.Page;
 import lombok.RequiredArgsConstructor;
 
 @RequestMapping("/api/issues")
@@ -37,14 +36,10 @@ public class IssueController {
 	private final IssueService issueService;
 
 	@GetMapping
-	public ResponseEntity<List<IssueSimpleMapper>> findAll(@AuthPrincipal Principal principal,
-		@RequestParam(value = "q", required = false) String searchBar) {
-		System.out.println(searchBar);
-		if (StringUtils.hasText(searchBar)) {
-			return ResponseEntity.ok(issueService.findAll(principal.getLoginId(), searchBar));
-		}
-
-		return ResponseEntity.ok(issueService.findAll());
+	public ResponseEntity<Page<IssueSimpleMapper>> findAll(@AuthPrincipal Principal principal,
+		@RequestParam(value = "q", required = false) String searchBar, @RequestParam(defaultValue = "1") int page,
+		@RequestParam(defaultValue = "20") int size) {
+		return ResponseEntity.ok(issueService.findAll(principal.getLoginId(), searchBar, page, size));
 	}
 
 	@PostMapping

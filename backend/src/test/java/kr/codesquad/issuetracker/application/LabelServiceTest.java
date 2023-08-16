@@ -65,4 +65,18 @@ class LabelServiceTest {
 		// then
 		assertThat(labelService.findAll()).isEmpty();
 	}
+
+	@DisplayName("label 개수를 세는데 성공한다.")
+	@Test
+	void count() {
+		// given
+		labelService.register("feat", null, "#000", "#FFF");
+		labelService.register("docs", null, "#000", "#DDD");
+
+		// when
+		int result = labelService.countLabels();
+
+		// then
+		assertThat(result).isEqualTo(2);
+	}
 }

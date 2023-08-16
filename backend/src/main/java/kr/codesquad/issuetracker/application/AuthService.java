@@ -9,6 +9,7 @@ import kr.codesquad.issuetracker.domain.GithubUser;
 import kr.codesquad.issuetracker.domain.UserAccount;
 import kr.codesquad.issuetracker.exception.ApplicationException;
 import kr.codesquad.issuetracker.exception.ErrorCode;
+import kr.codesquad.issuetracker.exception.InitialLoginException;
 import kr.codesquad.issuetracker.infrastructure.persistence.UserAccountRepository;
 import kr.codesquad.issuetracker.infrastructure.security.hash.PasswordEncoder;
 import kr.codesquad.issuetracker.infrastructure.security.jwt.JwtProvider;
@@ -52,24 +53,33 @@ public class AuthService {
 		return new LoginSuccessResponse(token, findUserAccount.getProfileUrl(), findUserAccount.getLoginId());
 	}
 
-	@Transactional
+	@Transactional(readOnly = true)
 	public LoginSuccessResponse oauthLogin(final String code) {
 		GithubUser oAuthUser = githubClient.getOAuthUser(code);
-		String username = oAuthUser.getUsername();
+		String email = oAuthUser.getEmail();
 
-		UserAccount userAccount = userAccountRepository.findByLoginId(username)
-			.orElseGet(() -> new UserAccount(username, "", oAuthUser.getAvatarUrl()));
-		Integer userId = userAccount.getId();
-		if (userAccount.getId() == null) {
-			userId = userAccountRepository.save(userAccount);
-		}
+		UserAccount userAccount = userAccountRepository.findByEmail(email)  // 최초로그인의 경우 email 응답
+			.orElseThrow(() -> new InitialLoginException("최초 로그인입니다.", email));
 
 		LoginSuccessResponse.TokenResponse token = jwtProvider.createToken(Map.of(
-			"userId", String.valueOf(userId),
-			"loginId", username
+			"userId", String.valueOf(userAccount.getId()),
+			"loginId", userAccount.getLoginId()
 		));
 
-		return new LoginSuccessResponse(token, userAccount.getProfileUrl(), username);
+		return new LoginSuccessResponse(token, userAccount.getProfileUrl(), userAccount.getLoginId());
+	}
+
+	@Transactional
+	public LoginSuccessResponse oauthSignup(String email, String username) {
+		UserAccount userAccount = UserAccount.fromOAuthData(username, email);
+		int id = userAccountRepository.save(userAccount);
+
+		LoginSuccessResponse.TokenResponse token = jwtProvider.createToken(Map.of(
+			"userId", String.valueOf(id),
+			"loginId", userAccount.getLoginId()
+		));
+
+		return new LoginSuccessResponse(token, userAccount.getProfileUrl(), userAccount.getLoginId());
 	}
 
 	public String getOAuthLoginPageUrl() {

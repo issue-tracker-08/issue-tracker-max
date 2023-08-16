@@ -3,8 +3,8 @@ name: ci
 on:
   pull_request:
     branches:
-      - be-w3
-      - fe-w3
+      - be-w4
+      - fe-w4
 
 env:
   AWS_REGION: ap-northeast-2
