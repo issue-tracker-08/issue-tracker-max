@@ -31,34 +31,24 @@
     </resultMap>
 
     <select id="findAll" resultMap="issueResultMap">
-        SELECT DISTINCT issue.id as issue_id,
-        issue.is_open as issue_is_open,
-        issue.title as issue_title,
-        issue.created_at as issue_created_at,
-        milestone.name as milestone_name,
-        author.id as author_id,
-        author.login_id as author_login_id,
-        author.profile_url as author_profile_url,
-        label.id as label_id,
-        label.name as label_name,
-        label.font_color as label_font_color,
-        label.background_color as label_background_color,
-        assignee.id as assignee_id,
-        assignee.login_id as assignee_login_id,
-        assignee.profile_url as assignee_profile_url
-
-        <include refid="filter"></include>
-
-        ORDER BY issue.id DESC
-        LIMIT #{offset}, #{size};
-    </select>
-
-    <select id="countAll" resultType="int">
-        SELECT COUNT(DISTINCT issue.id)
-        <include refid="filter"></include>;
-    </select>
-
-    <sql id="filter">
+    SELECT * FROM (
+        SELECT DISTINCT
+            issue.id as issue_id,
+            issue.is_open as issue_is_open,
+            issue.title as issue_title,
+            issue.created_at as issue_created_at,
+            milestone.name as milestone_name,
+            author.id as author_id,
+            author.login_id as author_login_id,
+            author.profile_url as author_profile_url,
+            label.id as label_id,
+            label.name as label_name,
+            label.font_color as label_font_color,
+            label.background_color as label_background_color,
+            assignee.id as assignee_id,
+            assignee.login_id as assignee_login_id,
+            assignee.profile_url as assignee_profile_url,
+            DENSE_RANK() OVER (ORDER BY issue.id DESC) as row_num
         FROM issue
         LEFT JOIN issue_label ON issue.id = issue_label.issue_id
         LEFT JOIN label ON label.id = issue_label.label_id AND label.is_deleted = false
@@ -66,10 +56,58 @@
         LEFT JOIN user_account assignee ON assignee.id = issue_assignee.user_account_id AND assignee.is_deleted = false
         LEFT JOIN milestone ON issue.milestone_id = milestone.id AND milestone.is_deleted = false
         JOIN user_account author ON author.id = issue.user_account_id AND author.is_deleted = false
-        <if test="issueSearch.author != null">
-            AND author.login_id = #{issueSearch.author}
-        </if>
-        WHERE issue.is_deleted = false
+        <where>
+            <if test="issueSearch.isOpen != null">
+                AND issue.is_open = #{issueSearch.isOpen}
+            </if>
+            <if test="issueSearch.milestoneName != null">
+                AND milestone.name = #{issueSearch.milestoneName}
+            </if>
+            <if test="issueSearch.commenter != null">
+                AND issue.id IN (
+                    SELECT issue_id
+                    FROM user_account
+                    JOIN comment ON user_account.id = comment.user_account_id AND comment.is_deleted = FALSE
+                    WHERE login_id = #{issueSearch.commenter}
+                )
+            </if>
+            <if test="!issueSearch.labelNames.isEmpty()">
+                AND label.name IN
+                <foreach collection="issueSearch.labelNames" item="labelName" open="(" close=")" separator=",">
+                    #{labelName}
+                </foreach>
+            </if>
+            <if test="!issueSearch.assigneeNames.isEmpty()">
+                AND assignee.login_id IN
+                <foreach collection="issueSearch.assigneeNames" item="assigneeName" open="(" close=")" separator=",">
+                    #{assigneeName}
+                </foreach>
+            </if>
+            <if test="issueSearch.hasLabel == false">
+                AND label.id IS NULL
+            </if>
+            <if test="issueSearch.hasMilestone == false">
+                AND milestone.id IS NULL
+            </if>
+            <if test="issueSearch.hasAssignee == false">
+                AND assignee.id IS NULL
+            </if>
+        </where>
+    ) as result
+    WHERE result.row_num BETWEEN #{offset} + 1 AND #{offset} + #{size};
+    </select>
+
+    <select id="countAll" resultType="int">
+        SELECT COUNT(DISTINCT issue.id) FROM issue
+
+        LEFT JOIN issue_label ON issue.id = issue_label.issue_id
+        LEFT JOIN label ON label.id = issue_label.label_id AND label.is_deleted = false
+        LEFT JOIN issue_assignee ON issue.id = issue_assignee.issue_id
+        LEFT JOIN user_account assignee ON assignee.id = issue_assignee.user_account_id AND assignee.is_deleted = false
+        LEFT JOIN milestone ON issue.milestone_id = milestone.id AND milestone.is_deleted = false
+        JOIN user_account author ON author.id = issue.user_account_id AND author.is_deleted = false
+
+        WHERE issue.is_deleted = FALSE
         <if test="issueSearch.isOpen != null">
             AND issue.is_open = #{issueSearch.isOpen}
         </if>
@@ -77,16 +115,11 @@
             AND milestone.name = #{issueSearch.milestoneName}
         </if>
         <if test="issueSearch.commenter != null">
-            AND issue.id IN
-            (
-            SELECT issue_id
-            FROM comment
-            WHERE user_account_id =
-            (
-            SELECT id
-            FROM user_account
-            WHERE login_id = #{issueSearch.commenter}
-            )
+            AND issue.id IN (
+                SELECT issue_id
+                FROM user_account
+                JOIN comment ON user_account.id = comment.user_account_id AND comment.is_deleted = FALSE
+                WHERE login_id = #{issueSearch.commenter}
             )
         </if>
         <if test="!issueSearch.labelNames.isEmpty()">
@@ -110,6 +143,5 @@
         <if test="issueSearch.hasAssignee == false">
             AND assignee.id IS NULL
         </if>
-    </sql>
-
+    </select>
 </mapper>

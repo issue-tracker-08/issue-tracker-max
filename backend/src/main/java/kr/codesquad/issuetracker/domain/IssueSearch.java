@@ -27,11 +27,11 @@ public class IssueSearch {
 	@Builder.Default()
 	private List<String> labelNames = new ArrayList<>();
 
-	public void registerIssueStatus(String issueStatus) {
-		if ("open".equals(issueStatus)) {
+	public void registerState(String state) {
+		if ("open".equals(state)) {
 			isOpen = true;
 		}
-		if ("close".equals(issueStatus)) {
+		if ("closed".equals(state)) {
 			isOpen = false;
 		}
 	}

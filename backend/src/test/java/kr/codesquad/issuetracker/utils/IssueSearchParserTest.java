@@ -47,7 +47,7 @@ class IssueSearchParserTest {
 					.build()
 			),
 			Arguments.of(
-				"is:close commenter:tommy milestone:\"milestone name\" label:label1 label:label2",
+				"is:closed commenter:tommy milestone:\"milestone name\" label:label1 label:label2",
 				IssueSearch.builder()
 					.isOpen(false)
 					.commenter("tommy")

@@ -22,6 +22,7 @@ import kr.codesquad.issuetracker.infrastructure.persistence.mapper.IssueSimpleMa
 import kr.codesquad.issuetracker.presentation.request.AssigneeRequest;
 import kr.codesquad.issuetracker.presentation.request.IssueRegisterRequest;
 import kr.codesquad.issuetracker.presentation.response.IssueDetailResponse;
+import kr.codesquad.issuetracker.presentation.response.Page;
 
 @ApplicationTest
 class IssueServiceTest {
@@ -51,11 +52,13 @@ class IssueServiceTest {
 		issueService.register(1, request);
 
 		// then
-		List<IssueSimpleMapper> result = issueService.findAll();
+		Page<IssueSimpleMapper> result = issueService.findAll("bin1234", null, 1, 20);
+		List<IssueSimpleMapper> issues = result.getData();
+
 		assertAll(
-			() -> assertThat(result.get(0).getIssueNumber()).isNotNull(),
-			() -> assertThat(result.get(0).getIsOpen()).isTrue(),
-			() -> assertThat(result.get(0).getTitle()).isEqualTo("프로젝트 세팅하기")
+			() -> assertThat(issues.get(0).getIssueNumber()).isNotNull(),
+			() -> assertThat(issues.get(0).getIsOpen()).isTrue(),
+			() -> assertThat(issues.get(0).getTitle()).isEqualTo("프로젝트 세팅하기")
 		);
 	}
 
@@ -65,7 +68,8 @@ class IssueServiceTest {
 		@DisplayName("최근에 생성된 순서대로 조회가 된다.")
 		@Test
 		void sortedIssueNumbers() {
-			var issueNumbers = issueService.findAll().stream()
+			var issueNumbers = issueService.findAll("bin1234", null, 1, 20).getData()
+				.stream()
 				.mapToInt(IssueSimpleMapper::getIssueNumber)
 				.toArray();
 
@@ -75,12 +79,13 @@ class IssueServiceTest {
 		@DisplayName("이슈별 담당자, 레이블의 중복이 제거가 된다.")
 		@Test
 		void matchIssueLabelAndAssigneeCount() {
-			var issueSimpleMappers = issueService.findAll();
-			var firstIssue = issueSimpleMappers.get(0);
-			var lastIssue = issueSimpleMappers.get(2);
+			var issues = issueService.findAll("bin1234", null, 1, 20)
+				.getData();
+			var firstIssue = issues.get(0);
+			var lastIssue = issues.get(2);
 
 			assertAll(
-				() -> assertThat(issueSimpleMappers.size()).isEqualTo(3),
+				() -> assertThat(issues.size()).isEqualTo(3),
 				() -> assertThat(firstIssue.getLabels().size()).isEqualTo(0),
 				() -> assertThat(firstIssue.getAssignees().size()).isEqualTo(2),
 				() -> assertThat(lastIssue.getLabels().size()).isEqualTo(3),
