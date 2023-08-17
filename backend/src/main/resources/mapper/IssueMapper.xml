@@ -56,6 +56,9 @@
         LEFT JOIN user_account assignee ON assignee.id = issue_assignee.user_account_id AND assignee.is_deleted = false
         LEFT JOIN milestone ON issue.milestone_id = milestone.id AND milestone.is_deleted = false
         JOIN user_account author ON author.id = issue.user_account_id AND author.is_deleted = false
+        <if test="issueSearch.author != null">
+            AND author.login_id = #{issueSearch.author}
+        </if>
         <where>
             <if test="issueSearch.isOpen != null">
                 AND issue.is_open = #{issueSearch.isOpen}
@@ -106,6 +109,9 @@
         LEFT JOIN user_account assignee ON assignee.id = issue_assignee.user_account_id AND assignee.is_deleted = false
         LEFT JOIN milestone ON issue.milestone_id = milestone.id AND milestone.is_deleted = false
         JOIN user_account author ON author.id = issue.user_account_id AND author.is_deleted = false
+        <if test="issueSearch.author != null">
+            AND author.login_id = #{issueSearch.author}
+        </if>
 
         WHERE issue.is_deleted = FALSE
         <if test="issueSearch.isOpen != null">
