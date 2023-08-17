@@ -73,6 +73,10 @@ export const putIssueComment = async (
   );
 };
 
+export const deleteIssue = async (issueId: number) => {
+  return await fetcherWithBearer.delete(`/issues/${issueId}`);
+};
+
 export const getIssueSidebar = async (issueId: number) => {
   return await fetcherWithBearer.get<IssueSidebar>(
     `/issues/${issueId}/sidebar`
