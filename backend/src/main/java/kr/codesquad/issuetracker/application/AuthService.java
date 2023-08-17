@@ -86,6 +86,8 @@ public class AuthService {
 		return new StringBuilder().append(githubClient.getGithubLoginBaseUrl())
 			.append("/authorize")
 			.append("?client_id=").append(githubClient.getClientId())
-			.append("&scope=user:email").toString();
+			.append("&scope=user:email")
+			.append("redirect_uri=")
+			.append("http://3.36.145.244:8080/api/auth/login/oauth/github").toString();
 	}
 }
