@@ -20,7 +20,7 @@ export default function useInput({
   };
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const targetValue = e.target.value;
+    const targetValue = e.target.value.trim();
     validate(targetValue);
   };
 
