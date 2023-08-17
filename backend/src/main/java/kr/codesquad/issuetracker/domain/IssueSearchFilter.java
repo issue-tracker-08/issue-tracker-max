@@ -13,7 +13,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public enum IssueSearchFilter {
 
-	STATUS("is:", IssueSearch::registerIssueStatus),
+	STATE("is:", IssueSearch::registerState),
 	AUTHOR("author:", IssueSearch::registerAuthor),
 	COMMENTER("commenter:", IssueSearch::registerCommenter),
 	ASSIGNEE("assignee:", IssueSearch::addAssignee),

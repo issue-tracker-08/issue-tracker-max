@@ -1,7 +1,5 @@
 package kr.codesquad.issuetracker.infrastructure.persistence.mapper;
 
-import org.springframework.util.StringUtils;
-
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
