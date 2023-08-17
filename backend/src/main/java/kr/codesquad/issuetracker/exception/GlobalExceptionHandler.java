@@ -2,6 +2,7 @@ package kr.codesquad.issuetracker.exception;
 
 import java.util.Map;
 
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -34,7 +35,8 @@ public class GlobalExceptionHandler {
 
 	@ExceptionHandler(InitialLoginException.class)
 	public ResponseEntity<Map<String, String>> handleInitialLoginException(InitialLoginException e) {
-		return ResponseEntity.status(HttpStatus.ACCEPTED)
+		return ResponseEntity.status(HttpStatus.FOUND)
+			.header(HttpHeaders.LOCATION, "http://localhost:5173")
 			.body(Map.of("email", e.getEmail()));
 	}
 }
