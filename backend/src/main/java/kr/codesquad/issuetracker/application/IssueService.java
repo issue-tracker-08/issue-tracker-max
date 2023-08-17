@@ -19,6 +19,7 @@ import kr.codesquad.issuetracker.infrastructure.persistence.IssueLabelRepository
 import kr.codesquad.issuetracker.infrastructure.persistence.IssueRepository;
 import kr.codesquad.issuetracker.infrastructure.persistence.mapper.IssueDAO;
 import kr.codesquad.issuetracker.infrastructure.persistence.mapper.IssueSimpleMapper;
+import kr.codesquad.issuetracker.presentation.converter.OpenState;
 import kr.codesquad.issuetracker.presentation.request.AssigneeRequest;
 import kr.codesquad.issuetracker.presentation.request.IssueLabelRequest;
 import kr.codesquad.issuetracker.presentation.request.IssueRegisterRequest;
@@ -143,5 +144,10 @@ public class IssueService {
 		}
 
 		issueRepository.updateIssueMilestone(issueId, milestoneId);
+	}
+
+	@Transactional
+	public void modifyMultipleIssueState(OpenState openState, List<Integer> issueIds) {
+		issueRepository.updateAllIssue(openState, issueIds);
 	}
 }

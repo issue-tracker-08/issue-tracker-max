@@ -18,11 +18,13 @@ import kr.codesquad.issuetracker.application.IssueService;
 import kr.codesquad.issuetracker.infrastructure.persistence.mapper.IssueSimpleMapper;
 import kr.codesquad.issuetracker.presentation.auth.AuthPrincipal;
 import kr.codesquad.issuetracker.presentation.auth.Principal;
+import kr.codesquad.issuetracker.presentation.converter.OpenState;
 import kr.codesquad.issuetracker.presentation.request.AssigneeRequest;
 import kr.codesquad.issuetracker.presentation.request.IssueLabelRequest;
 import kr.codesquad.issuetracker.presentation.request.IssueMilestoneRequest;
 import kr.codesquad.issuetracker.presentation.request.IssueModifyRequest;
 import kr.codesquad.issuetracker.presentation.request.IssueRegisterRequest;
+import kr.codesquad.issuetracker.presentation.request.MultipleIssueModifyRequest;
 import kr.codesquad.issuetracker.presentation.response.IssueDetailResponse;
 import kr.codesquad.issuetracker.presentation.response.IssueDetailSidebarResponse;
 import kr.codesquad.issuetracker.presentation.response.Page;
@@ -102,6 +104,12 @@ public class IssueController {
 		@RequestBody IssueMilestoneRequest milestoneRequest) {
 		issueService.updateIssueMilestone(issueId, milestoneRequest.getMilestoneId());
 
+		return ResponseEntity.ok().build();
+	}
+
+	@PutMapping
+	public ResponseEntity<Void> modifyStateOfMultipleIssue(@RequestBody MultipleIssueModifyRequest request) {
+		issueService.modifyMultipleIssueState(OpenState.of(request.getState()), request.getIssueIds());
 		return ResponseEntity.ok().build();
 	}
 }
