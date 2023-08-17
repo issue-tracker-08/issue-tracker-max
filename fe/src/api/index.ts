@@ -26,8 +26,8 @@ export const postLogin = async (username: string, password: string) => {
   return await fetcher.post("/auth/login", { loginId: username, password });
 };
 
-export const getOAuthLogin = async () => {
-  return await fetcher.get("/auth/login/oauth");
+export const getGitHubLogin = async (code: string) => {
+  return await fetcher.get(`/auth/login/oauth/github?code=${code}`);
 };
 
 export const postOAuthUsername = async (body: {
