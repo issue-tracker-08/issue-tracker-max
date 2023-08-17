@@ -3,14 +3,11 @@ package kr.codesquad.issuetracker.infrastructure.persistence.mapper;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import lombok.AllArgsConstructor;
+import lombok.AccessLevel;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@Setter
-@AllArgsConstructor
-@NoArgsConstructor
+@Setter(value = AccessLevel.PRIVATE)
 @Getter
 public class IssueSimpleMapper {
 

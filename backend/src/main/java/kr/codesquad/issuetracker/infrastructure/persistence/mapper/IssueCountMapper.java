@@ -1,15 +1,17 @@
 package kr.codesquad.issuetracker.infrastructure.persistence.mapper;
 
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.Setter;
 
+@Setter(value = AccessLevel.PRIVATE)
 @Getter
 public class IssueCountMapper {
 
-	private int openIssueCounts;
 	private int totalCounts;
+	private int openCounts;
 
-	public IssueCountMapper(int openIssueCounts, int totalCounts) {
-		this.openIssueCounts = openIssueCounts;
-		this.totalCounts = totalCounts;
+	public int getClosedCounts() {
+		return totalCounts - openCounts;
 	}
 }

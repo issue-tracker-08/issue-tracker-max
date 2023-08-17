@@ -1,13 +1,10 @@
 package kr.codesquad.issuetracker.infrastructure.persistence.mapper;
 
-import lombok.AllArgsConstructor;
+import lombok.AccessLevel;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@Setter
-@AllArgsConstructor
-@NoArgsConstructor
+@Setter(value = AccessLevel.PRIVATE)
 @Getter
 public class AssigneeSimpleMapper {
 	private Integer id;
