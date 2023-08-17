@@ -76,7 +76,7 @@ public class IssueService {
 
 	@Transactional(readOnly = true)
 	public Page<IssueSimpleMapper> findAll(String loginId, String searchBar, int page, int size) {
-		int offset = (page - 1) * size; // 7 and 9
+		int offset = (page - 1) * size;
 		int totalCounts = issueMapper.countAll(IssueSearchParser.parse(loginId, searchBar));
 		final IssueSearch issueSearch = IssueSearchParser.parse(loginId, searchBar);
 		List<IssueSimpleMapper> issues = issueMapper.findAll(issueSearch, offset, size);
