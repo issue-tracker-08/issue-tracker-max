@@ -17,6 +17,7 @@ import kr.codesquad.issuetracker.exception.ErrorCode;
 import kr.codesquad.issuetracker.infrastructure.persistence.IssueAssigneeRepository;
 import kr.codesquad.issuetracker.infrastructure.persistence.IssueLabelRepository;
 import kr.codesquad.issuetracker.infrastructure.persistence.IssueRepository;
+import kr.codesquad.issuetracker.infrastructure.persistence.mapper.IssueCountMapper;
 import kr.codesquad.issuetracker.infrastructure.persistence.mapper.IssueDAO;
 import kr.codesquad.issuetracker.infrastructure.persistence.mapper.IssueSimpleMapper;
 import kr.codesquad.issuetracker.presentation.converter.OpenState;
@@ -78,10 +79,10 @@ public class IssueService {
 	@Transactional(readOnly = true)
 	public Page<IssueSimpleMapper> findAll(String loginId, String searchBar, int page, int size) {
 		int offset = (page - 1) * size;
-		int totalCounts = issueMapper.countAll(IssueSearchParser.parse(loginId, searchBar));
+		IssueCountMapper counts = issueMapper.countAll(IssueSearchParser.parse(loginId, searchBar));
 		final IssueSearch issueSearch = IssueSearchParser.parse(loginId, searchBar);
 		List<IssueSimpleMapper> issues = issueMapper.findAll(issueSearch, offset, size);
-		return Page.of(issues, totalCounts, page, size);
+		return Page.of(issues, counts, page, size);
 	}
 
 	@Transactional

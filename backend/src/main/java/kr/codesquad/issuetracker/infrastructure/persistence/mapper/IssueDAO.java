@@ -13,5 +13,5 @@ public interface IssueDAO {
 	List<IssueSimpleMapper> findAll(@Param("issueSearch") IssueSearch issueSearch, @Param("offset") int offset,
 		@Param("size") int size);
 
-	int countAll(@Param("issueSearch") IssueSearch issueSearch);
+	IssueCountMapper countAll(@Param("issueSearch") IssueSearch issueSearch);
 }

@@ -30,6 +30,11 @@
         </collection>
     </resultMap>
 
+    <resultMap id="countResultMap" type="issueCountMapper">
+        <result property="openIssueCounts" column="open_issue_counts"/>
+        <result property="totalCounts" column="total_counts"/>
+    </resultMap>
+
     <select id="findAll" resultMap="issueResultMap">
     SELECT * FROM (
         SELECT DISTINCT
@@ -100,8 +105,12 @@
     WHERE result.row_num BETWEEN #{offset} + 1 AND #{offset} + #{size};
     </select>
 
-    <select id="countAll" resultType="int">
-        SELECT COUNT(DISTINCT issue.id) FROM issue
+    <select id="countAll" resultMap="countResultMap">
+        SELECT
+        COUNT(DISTINCT issue.id) AS total_counts,
+        COUNT(DISTINCT CASE WHEN issue.is_open = TRUE THEN issue.id ELSE NULL END) AS open_issue_counts
+
+        FROM issue
 
         LEFT JOIN issue_label ON issue.id = issue_label.issue_id
         LEFT JOIN label ON label.id = issue_label.label_id AND label.is_deleted = false
