@@ -1,5 +1,7 @@
 package kr.codesquad.issuetracker.infrastructure.persistence;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
@@ -14,6 +16,7 @@ import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
 
 import kr.codesquad.issuetracker.domain.Issue;
+import kr.codesquad.issuetracker.presentation.converter.OpenState;
 import kr.codesquad.issuetracker.presentation.response.IssueDetailResponse;
 
 @Repository
@@ -110,5 +113,18 @@ public class IssueRepository {
 			.addValue("issueId", issueId);
 
 		jdbcTemplate.update(sql, params);
+	}
+
+	public void updateAllIssue(OpenState openState, List<Integer> issueIds) {
+		String sql = "UPDATE issue SET is_open = :openState WHERE id = :issueId";
+		List<MapSqlParameterSource> params = new ArrayList<>();
+		for (Integer issueId : issueIds) {
+			MapSqlParameterSource param = new MapSqlParameterSource();
+			param
+				.addValue("openState", openState.isOpen())
+				.addValue("issueId", issueId);
+			params.add(param);
+		}
+		jdbcTemplate.batchUpdate(sql, params.toArray(MapSqlParameterSource[]::new));
 	}
 }
