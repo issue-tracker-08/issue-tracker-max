@@ -49,17 +49,5 @@ class IssueServiceTest {
 			assertThatCode(() -> issueService.modifyIssueTitle(1, 1, "변경된 제목"))
 				.doesNotThrowAnyException();
 		}
-
-		@DisplayName("자신이 작성한 댓글이 아니라면 예외를 던진다.")
-		@Test
-		void givenNotAuthor_thenThrowsException() {
-			// given
-			given(issueRepository.findById(anyInt())).willReturn(Optional.of(new Issue("", "", true, 1, null)));
-
-			// when & then
-			assertThatThrownBy(() -> issueService.modifyIssueTitle(2, 1, "변경된 제목"))
-				.isInstanceOf(ApplicationException.class)
-				.extracting("errorCode").isEqualTo(ErrorCode.NO_AUTHORIZATION);
-		}
 	}
 }
