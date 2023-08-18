@@ -44,6 +44,10 @@ dependencies {
     implementation 'com.amazonaws:aws-java-sdk-s3:1.12.518'
     testImplementation 'com.amazonaws:aws-java-sdk-s3:1.12.518'
 
+    // image
+    implementation 'net.coobird:thumbnailator:0.4.19'
+    testImplementation 'net.coobird:thumbnailator:0.4.19'
+
     // mock web server
     testImplementation 'com.squareup.okhttp3:okhttp:4.0.1'
     testImplementation 'com.squareup.okhttp3:mockwebserver:4.0.1'

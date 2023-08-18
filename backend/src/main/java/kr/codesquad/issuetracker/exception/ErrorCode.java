@@ -16,6 +16,7 @@ public enum ErrorCode {
 	// File
 	EMPTY_FILE(400, "파일이 없습니다."),
 	FILE_INVALID(400, "파일이 유효하지 않습니다."),
+	NON_IMAGE_FILE(400, "이미지 파일이 아닙니다."),
 	INVALID_FILE_EXTENSION(400, "지원하지 않는 파일 확장자입니다."),
 	FILE_IO_EXCEPTION(500, "파일 입출력에 실패했습니다."),
 

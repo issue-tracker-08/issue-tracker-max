@@ -18,11 +18,10 @@ import lombok.RequiredArgsConstructor;
 @RestController
 public class FileController {
 
-    private final S3Service s3Service;
+	private final S3Service s3Service;
 
-    // 이미지 업로드
-    @PostMapping("/images/upload")
-    public ResponseEntity<Map<String, String>> uploadImage(@RequestPart MultipartFile image) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(Map.of("fileUrl", s3Service.uploadImage(image)));
-    }
+	@PostMapping("/images/upload")
+	public ResponseEntity<Map<String, String>> uploadImage(@RequestPart MultipartFile image) {
+		return ResponseEntity.status(HttpStatus.CREATED).body(Map.of("fileUrl", s3Service.uploadImage(image)));
+	}
 }
