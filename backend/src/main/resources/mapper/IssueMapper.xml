@@ -33,6 +33,7 @@
     <resultMap id="countResultMap" type="issueCountMapper">
         <result property="totalCounts" column="total_counts"/>
         <result property="openCounts" column="open_counts"/>
+        <result property="closedCounts" column="closed_counts"/>
     </resultMap>
 
     <select id="findAll" resultMap="issueResultMap">
@@ -106,11 +107,18 @@
     </select>
 
     <select id="countAll" resultMap="countResultMap">
-        SELECT DISTINCT
-            COUNT(DISTINCT issue.id) as total_counts,
-            COUNT(DISTINCT CASE WHEN issue.is_open = TRUE THEN issue.id ELSE NULL END) as open_counts
+        SELECT
+        COUNT(DISTINCT
+        CASE
+        WHEN #{issueSearch.isOpen} IS NULL THEN issue.id
+        WHEN #{issueSearch.isOpen} = TRUE AND issue.is_open = TRUE THEN issue.id
+        WHEN #{issueSearch.isOpen} = FALSE AND issue.is_open = FALSE THEN issue.id
+        ELSE NULL
+        END
+        ) as total_counts,
+        COUNT(DISTINCT CASE WHEN issue.is_open = TRUE THEN issue.id ELSE NULL END) as open_counts,
+        COUNT(DISTINCT CASE WHEN issue.is_open = FALSE THEN issue.id ELSE NULL END) as closed_counts
         FROM issue
-
         LEFT JOIN issue_label ON issue.id = issue_label.issue_id
         LEFT JOIN label ON label.id = issue_label.label_id AND label.is_deleted = false
         LEFT JOIN issue_assignee ON issue.id = issue_assignee.issue_id
@@ -122,9 +130,6 @@
         </if>
 
         WHERE issue.is_deleted = FALSE
-        <if test="issueSearch.isOpen != null">
-            AND issue.is_open = #{issueSearch.isOpen}
-        </if>
         <if test="issueSearch.milestoneName != null">
             AND milestone.name = #{issueSearch.milestoneName}
         </if>

@@ -10,8 +10,6 @@ public class IssueCountMapper {
 
 	private int totalCounts;
 	private int openCounts;
+	private int closedCounts;
 
-	public int getClosedCounts() {
-		return totalCounts - openCounts;
-	}
 }
