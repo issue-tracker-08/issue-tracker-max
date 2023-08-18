@@ -103,13 +103,7 @@ public class IssueService {
 		BiConsumer<Issue, String> modifyFunction) {
 		Issue issue = issueRepository.findById(issueId)
 			.orElseThrow(() -> new ApplicationException(ErrorCode.ISSUE_NOT_FOUND));
-
-		if (!issue.isAuthor(userId)) {
-			throw new ApplicationException(ErrorCode.NO_AUTHORIZATION);
-		}
-
 		modifyFunction.accept(issue, modifiedData);
-
 		issueRepository.updateIssue(issue);
 	}
 
@@ -149,5 +143,12 @@ public class IssueService {
 	@Transactional
 	public void modifyMultipleIssueState(OpenState openState, List<Integer> issueIds) {
 		issueRepository.updateAllIssue(openState, issueIds);
+	}
+
+	public void remove(Integer issueId) {
+		if (!issueRepository.existsById(issueId)) {
+			throw new ApplicationException(ErrorCode.ISSUE_NOT_FOUND);
+		}
+		issueRepository.delete(issueId);
 	}
 }

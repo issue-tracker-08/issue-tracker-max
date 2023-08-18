@@ -5,6 +5,7 @@ import java.util.Map;
 import javax.validation.Valid;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -110,6 +111,12 @@ public class IssueController {
 	@PutMapping
 	public ResponseEntity<Void> modifyStateOfMultipleIssue(@RequestBody MultipleIssueModifyRequest request) {
 		issueService.modifyMultipleIssueState(OpenState.of(request.getState()), request.getIssueIds());
+		return ResponseEntity.ok().build();
+	}
+
+	@DeleteMapping("{issueId}")
+	public ResponseEntity<Void> removeIssue(@PathVariable Integer issueId, @AuthPrincipal Principal principal) {
+		issueService.remove(issueId);
 		return ResponseEntity.ok().build();
 	}
 }
