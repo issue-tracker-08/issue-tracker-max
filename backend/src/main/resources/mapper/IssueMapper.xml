@@ -64,7 +64,7 @@
         <if test="issueSearch.author != null">
             AND author.login_id = #{issueSearch.author}
         </if>
-        <where>
+        WHERE issue.is_deleted = FALSE
             <if test="issueSearch.isOpen != null">
                 AND issue.is_open = #{issueSearch.isOpen}
             </if>
@@ -100,7 +100,6 @@
             <if test="issueSearch.hasAssignee == false">
                 AND assignee.id IS NULL
             </if>
-        </where>
     ) as result
     WHERE result.row_num BETWEEN #{offset} + 1 AND #{offset} + #{size};
     </select>

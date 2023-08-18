@@ -129,7 +129,7 @@ public class IssueRepository {
 	}
 
 	public void delete(Integer issueId) {
-		String sql = "DELETE FROM issue WHERE id = :issueId";
+		String sql = "UPDATE issue SET is_deleted = 1 WHERE id = :issueId";
 
 		MapSqlParameterSource param = new MapSqlParameterSource()
 			.addValue("issueId", issueId);

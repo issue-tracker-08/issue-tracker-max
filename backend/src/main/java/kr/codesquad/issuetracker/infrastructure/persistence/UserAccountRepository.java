@@ -35,7 +35,8 @@ public class UserAccountRepository {
 	}
 
 	public Boolean existsByLoginId(String loginId) {
-		return jdbcTemplate.queryForObject("SELECT EXISTS (SELECT 1 FROM user_account WHERE login_id = :loginId)",
+		return jdbcTemplate.queryForObject("SELECT EXISTS (SELECT 1 FROM user_account WHERE login_id = :loginId"
+				+ " AND is_deleted = FALSE)",
 			Map.of("loginId", loginId), Boolean.class);
 	}
 
@@ -69,5 +70,14 @@ public class UserAccountRepository {
 				rs.getString("login_id"),
 				rs.getString("profile_url")
 			))));
+	}
+
+	public void delete(Integer userId) {
+		String sql = "UPDATE user_account SET is_deleted = 1 WHERE id = :userId";
+
+		final MapSqlParameterSource param = new MapSqlParameterSource()
+			.addValue("userId", userId);
+
+		jdbcTemplate.update(sql, param);
 	}
 }

@@ -71,6 +71,9 @@ public class AuthService {
 
 	@Transactional
 	public LoginSuccessResponse oauthSignup(String email, String username) {
+		if (userAccountRepository.existsByLoginId(username)) {
+			throw new ApplicationException(ErrorCode.DUPLICATED_LOGIN_ID);
+		}
 		UserAccount userAccount = UserAccount.fromOAuthData(username, email);
 		int id = userAccountRepository.save(userAccount);
 

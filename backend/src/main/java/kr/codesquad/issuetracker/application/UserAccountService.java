@@ -25,4 +25,8 @@ public class UserAccountService {
 			))
 			.collect(Collectors.toList());
 	}
+
+	public void delete(Integer userId) {
+		userAccountRepository.delete(userId);
+	}
 }
